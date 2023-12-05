@@ -1,0 +1,130 @@
+<!--Para fazer com fetch-->
+<script src="/js/Departamento/listar.js"></script>
+
+<div>
+  <h1>Departamentos</h1>
+  <div>
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <form class="d-flex" role="search" method="post" action="/departamentos/buscardepartamentos">
+          <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca">
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          data-bs-whatever="@mdo"><i class="fas fa-plus"></i> Cadastrar</button>
+      </div>
+    </nav>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Novo Departamento</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="/departamentos/cadastrardepartamentos">
+              <div class="mb-3">
+                <label for="cpf" class="col-form-label">Departamento:</label>
+                <input name="nomeDepartamento" type="text" class="form-control" id="nomeDepartamento">
+              </div>
+              <button class="btn btn-primary" type="submit">Cadastrar</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive" style="margin-top: 15px;">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Departamento</th>
+
+
+        </tr>
+      </thead>
+      <tbody>
+        <% lista.map(function(value, index) { %>
+          <tr>
+            <td>
+              <%= value.idDepartamento %>
+            </td>
+            <td>
+              <%= value.nomeDepartamento %>
+            </td>
+
+            <td>
+              <div>
+                <div class="d-flex">
+                  <div class="me-1">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                      data-bs-target="#exampleAlterar<%= value.idDepartamento %>" data-bs-whatever="@alterar">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <div class="modal fade" id="exampleAlterar<%= value.idDepartamento %>" tabindex="-1"
+                      aria-labelledby="exampleAlterar<%= value.idDepartamento %>Label" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleAlterar<%= value.idDepartamento %>Label">Alterar
+                              Departamentos</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <form method="post" action="/departamentos/alterardepartamentos">
+                              <div class="mb-3">
+                                <input type="text" hidden="true" id="idDepartamento" name="idDepartamento"
+                                  value="<%= value.idDepartamento %>">
+                                <label for="alterarnome" class="col-form-label">Nome do Departamento:</label>
+                                <input id="nomeDepartamento" name="nomeDepartamento" type="text" class="form-control"
+                                  value="<%= value.nomeDepartamento %>">
+                              </div>
+                              <button class="btn btn-primary" type="submit">Alterar</button>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--excluir-->
+                  <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#ModalExclusao<%= value.idDepartamento %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="ModalExclusao<%= value.idDepartamento %>" tabindex="-1"
+                    aria-labelledby="ModalExclusaoLabel<%= value.idDepartamento %>" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="ModalExclusaoLabel">Exclusão</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Essa ação é permanente, deseja realmente excluir o registro?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                          <a class="btn btn-danger"
+                            href="/departamentos/deletardepartamentos/<%= value.idDepartamento %>" role="button"><i
+                              class="fas fa-trash"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

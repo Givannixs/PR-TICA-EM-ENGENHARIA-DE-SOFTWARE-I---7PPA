@@ -1,0 +1,153 @@
+<!--Para fazer com fetch-->
+<script src="/js/Departamento/listar.js"></script>
+
+<body onload="listardepartamento()">
+  <div>
+    <h1>Cargos</h1>
+    <div>
+      <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <form class="d-flex" role="search" method="post" action="/cargos/buscarcargos">
+            <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+          </form>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="@mdo"><i class="fas fa-plus"></i> Cadastrar</button>
+        </div>
+      </nav>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Novo Cargo</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form method="post" action="/cargos/cadastrarcargos">
+                <div class="mb-3">
+                  <label for="cpf" class="col-form-label">Cargo:</label>
+                  <input name="nomeCargo" type="text" class="form-control" id="nomeCargo" required="required">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Departamento:</label>
+                  <select id="departamento_idDepartamento" name="departamento_idDepartamento" class="form-select"
+                    aria-label="Default select example" required="required">
+
+                  </select>
+                </div>
+                <button class="btn btn-primary" type="submit">Cadastrar</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive" style="margin-top: 15px;">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Cargo</th>
+            <th>Departamento</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+          <% lista.map(function(value, index) { %>
+            <tr>
+              <td>
+                <%= value.idCargo %>
+              </td>
+              <td>
+                <%= value.nomeCargo %>
+              </td>
+              <td>
+                <%= value.departamento_idDepartamento %>
+              </td>
+
+
+              <td>
+                <div>
+                  <div class="d-flex">
+                    <div class="me-1">
+                      <button onclick="listardepartamentoalt('<%= value.idCargo %>')" type="button"
+                        class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleAlterar<%= value.idCargo %>" data-bs-whatever="@alterar">
+                        <i class="fas fa-pen"></i>
+                      </button>
+                      <div class="modal fade" id="exampleAlterar<%= value.idCargo %>" tabindex="-1"
+                        aria-labelledby="exampleAlterar<%= value.idCargo %>Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleAlterar<%= value.idCargo %>Label">Alterar Cargos
+                              </h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <form method="post" action="/cargos/alterarcargos">
+                                <div class="mb-3">
+                                  <input type="text" hidden="true" id="idCargo" name="idCargo"
+                                    value="<%= value.idCargo %>">
+                                  <label for="alterarnome" class="col-form-label">Nome do Cargo:</label>
+                                  <input id="nomeCargo" name="nomeCargo" type="text" class="form-control"
+                                    value="<%= value.nomeCargo %>">
+                                </div>
+                                <div class="mb-3">
+                                  <label for="message-text" class="col-form-label">Receita:</label>
+                                  <select id="departamentoalt<%= value.idCargo %>" name="departamentoalt"
+                                    class="form-select" aria-label="Default select example" required="required">
+
+                                  </select>
+                                </div>
+                                <button class="btn btn-primary" type="submit">Alterar</button>
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--excluir-->
+
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#ModalExclusao<%= value.idCargo %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="ModalExclusao<%= value.idCargo %>" tabindex="-1"
+                    aria-labelledby="ModalExclusaoLabel<%= value.idCargo %>" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="ModalExclusaoLabel<%= value.idCargo %>">Exclusão</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Essa ação é permanente, deseja realmente excluir o registro?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                          <a class="btn btn-danger"
+                            href="/cargos/deletarcargos/<%= value.idCargo %>" role="button"><i class="fas fa-trash"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </td>
+            </tr>
+            <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>

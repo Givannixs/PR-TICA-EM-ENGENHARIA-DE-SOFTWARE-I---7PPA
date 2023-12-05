@@ -1,0 +1,223 @@
+<!--Para fazer com fetch-->
+<script src="/js/Cargo/listar.js"></script>
+<script src="/js/Escalas/listar.js"></script>
+
+<body onload="listardepartamento(),listarescalas()">
+  <div>
+    <h1>Funcionários</h1>
+    <div>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+              <form class="d-flex" role="search" method="post" action="/funcionarios/buscarfuncionarios">
+                <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca">
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
+              </form>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                data-bs-whatever="@mdo"><i class="fas fa-plus"></i> Cadastrar</button>
+            </div>
+          </nav>
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Novo Funcionario</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form method="post" action="/funcionarios/cadastrarfuncionarios">
+                    <div class="mb-3">
+                      <label for="cpf" class="col-form-label">CPF:</label>
+                      <input name="funcionarioCPF" type="text" class="form-control" id="funcionarioCPF" required="required">
+                    </div>
+                    <div class="mb-3">
+                      <label for="cpf" class="col-form-label">Nome:</label>
+                      <input name="funcionarioNome" type="text" class="form-control" id="funcionarioNome" required="required">
+                    </div>
+                    <div class="mb-3">
+                      <label for="message-text" class="col-form-label">Cargo:</label>
+                      <select oninput="setardepartamento(document.getElementById('cargo_idCargo').value)"  id="cargo_idCargo" name="cargo_idCargo" class="form-select" aria-label="Default select example" required="required">
+                        
+                      </select>
+                    </div>   
+                    <div class="mb-3">
+                      <label for="message-text" class="col-form-label">Departamento:</label>
+                      <select id="departamento_idDepartamento" name="departamento_idDepartamento" class="form-select" aria-label="Default select example" required="required">
+                        <option id="dp" value=""></option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="message-text" class="col-form-label">Escala:</label>
+                      <select id="funcionarioEscala" name="funcionarioEscala" class="form-select" aria-label="Default select example" required="required">
+                        
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="cpf" class="col-form-label">Telefone:</label>
+                      <input name="funcionarioTelefone" type="text" class="form-control" id="funcionarioTelefone" required="required">
+                    </div> 
+                    <div class="mb-3">
+                      <label for="cpf" class="col-form-label">Data Admissao:</label>
+                      <input name="dataAdmissao" type="date" class="form-control" id="dataAdmissao" required="required">
+                    </div> 
+                    <div class="mb-3">
+                      <label for="cpf" class="col-form-label">Email:</label>
+                      <input name="funcionarioEmail" type="email" class="form-control" id="funcionarioEmail" required="required">
+                    </div> 
+                    <div class="mb-3">
+                      <label for="cpf" class="col-form-label">Senha:</label>
+                      <input name="funcionarioSenha" type="text" class="form-control" id="funcionarioSenha" required="required">
+                    </div> 
+                    <button class="btn btn-primary" type="submit">Cadastrar</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="table-responsive" style="margin-top: 15px;">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>CPF</th>
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                    <th>Departamento</th>
+                    <th>Escala</th>
+                    <th>Telefone</th>
+                    <th>Data admissão</th>
+                    <th>Email</th>
+                    <th>Senha</th>                    
+
+                </tr>
+            </thead>
+            <tbody>
+                <% lista.map(function(value, index) { %>
+                    <tr>
+                        <td><%= value.idFuncionario %></td>
+                        <td><%= value.funcionarioCPF %></td>
+                        <td><%= value.funcionarioNome %></td>
+                        <td><%= value.funcionarioCargo %></td>
+                        <td><%= value.funcionarioEscala %></td>
+                        <td><%= value.funcionarioDepartamento %></td>
+                        <td><%= value.funcionarioTelefone %></td>
+                        <td><%= value.dataAdmissao %></td>              
+                        <td><%= value.funcionarioEmail %></td>
+                        <td style="-webkit-text-security: disc;"><%= value.funcionarioSenha %></td>                                       
+                        <td>
+                            <div>
+                              <div class="me-1">
+                                <button onclick="/*listardepartamentoalt('<%= value.idCargo %>'),*/listarescalaalt('<%= value.idFuncionario %>')" type="button" class="btn btn-primary"
+                                  data-bs-toggle="modal" data-bs-target="#exampleAlterar<%= value.idFuncionario %>"
+                                  data-bs-whatever="@alterar">
+                                  <i class="fas fa-pen"></i>
+                                </button>
+                                <div class="modal fade" id="exampleAlterar<%= value.idFuncionario %>" tabindex="-1"
+                                  aria-labelledby="exampleAlterar<%= value.idFuncionario %>Label" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleAlterar<%= value.idFuncionario %>Label">Alterar Funcionario</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <form method="post" action="/funcionarios/alterarfuncionarios">
+                                          <div class="mb-3">
+                                            <input type="text" hidden="true" id="idFuncionario" name="idFuncionario" value="<%= value.idFuncionario %>">
+                                            <label for="cpf" class="col-form-label">CPF:</label>
+                                            <input name="funcionarioCPF" type="text" class="form-control" id="funcionarioCPF" value="<%= value.funcionarioCPF %>" required="required">
+                                          </div>
+                                          <div class="mb-3">
+                                            <label for="cpf" class="col-form-label">Nome:</label>
+                                            <input name="funcionarioNome" type="text" class="form-control" id="funcionarioNome" value="<%= value.funcionarioNome %>" required="required">
+                                          </div>
+                                          <!--
+                                            <div class="mb-3">
+                                            <label for="message-text" class="col-form-label">Cargo:</label>
+                                            <select oninput="setardepartamentoalt(document.getElementById('cargoalt<%= value.idCargo %>').value)" id="cargoalt<%= value.idCargo %>" name="cargoalt<%= value.idCargo %>" class="form-select" aria-label="Default select example">
+                                              
+                                            </select>
+                                          </div>   
+                                          <div class="mb-3">
+                                            <label for="message-text" class="col-form-label">Departamento:</label>
+                                            <select  class="form-select" aria-label="Default select example">
+                                              <option id="dpalt<%= value.idCargo %>" name="dpalt<%= value.idCargo %>" value=""></option>
+                                            </select>
+                                          </div>
+                                          -->
+                                          
+                                          <div class="mb-3">
+                                            <label for="message-text" class="col-form-label">Escala:</label>
+                                            <select id="escalaalt<%= value.idFuncionario %>" name="funcionarioEscala" class="form-select" aria-label="Default select example" required="required">
+                                              
+                                            </select>
+                                          </div>
+                                          <div class="mb-3">
+                                            <label for="cpf" class="col-form-label">Telefone:</label>
+                                            <input name="funcionarioTelefone" type="text" class="form-control" id="funcionarioTelefone" value="<%= value.funcionarioTelefone %>" >
+                                          </div> 
+                                          <!--
+                                             <div class="mb-3">
+                                            <label for="cpf" class="col-form-label">Data Admissao:</label>
+                                            <input name="dataAdmissao" type="date" class="form-control" id="dataAdmissao" value="<%= value.dataAdmissao %>">
+                                          </div> 
+                                          -->
+                                         
+                                          <div class="mb-3">
+                                            <label for="cpf" class="col-form-label">Email:</label>
+                                            <input name="funcionarioEmail" type="email" class="form-control" id="funcionarioEmail" value="<%= value.funcionarioEmail %>" required="required">
+                                          </div> 
+                                          <div class="mb-3">
+                                            <label for="cpf" class="col-form-label">Senha:</label>
+                                            <input name="funcionarioSenha" type="text" class="form-control" id="funcionarioSenha" value="<%= value.funcionarioSenha %>" required="required">
+                                          </div> 
+                                          <button class="btn btn-primary" type="submit">Alterar</button>
+                                        </form>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>   
+                                                            <!--excluir-->
+                                  
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExclusao">
+  <i class="fas fa-trash"></i>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalExclusao" tabindex="-1" aria-labelledby="ModalExclusaoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="ModalExclusaoLabel">Exclusão</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Essa ação é permanente, deseja realmente excluir o registro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+        <a class="btn btn-danger" href="/funcionarios/deletarfuncionarios/<%= value.idFuncionario %>" role="button"><i
+          class="fas fa-trash"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+                               
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>

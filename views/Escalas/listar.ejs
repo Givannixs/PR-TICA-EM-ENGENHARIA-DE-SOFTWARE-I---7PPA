@@ -1,0 +1,183 @@
+<!--Para fazer com fetch-->
+<script src="/js/Escala/listar.js"></script>
+
+<div>
+  <h1>Escalas</h1>
+  <div>
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <form class="d-flex" role="search" method="post" action="/escalas/buscarescalas">
+          <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca">
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          data-bs-whatever="@mdo"><i class="fas fa-plus"></i> Cadastrar</button>
+      </div>
+    </nav>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Novo Escala</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="/escalas/cadastrarescalas">
+              <div class="mb-3">
+                <label for="nomeEscala" class="col-form-label">Nome:</label>
+                <input name="nomeEscala" type="text" class="form-control" id="nomeEscala">
+              </div>
+              <div class="mb-3">
+                <label for="horarioEntrada" class="col-form-label">Entrada:</label>
+                <input name="horarioEntrada" type="time" class="form-control" id="horarioEntrada">
+              </div>
+              <div class="mb-3">
+                <label for="entradaRepouso" class="col-form-label">Entrada Repouso:</label>
+                <input name="entradaRepouso" type="time" class="form-control" id="entradaRepouso">
+              </div>
+              <div class="mb-3">
+                <label for="saidaRepouso" class="col-form-label">Saída Repouso:</label>
+                <input name="saidaRepouso" type="time" class="form-control" id="saidaRepouso">
+              </div>
+              <div class="mb-3">
+                <label for="horarioSaida" class="col-form-label">Horário Saida:</label>
+                <input name="horarioSaida" type="time" class="form-control" id="horarioSaida">
+              </div>
+              <button class="btn btn-primary" type="submit">Cadastrar</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive" style="margin-top: 15px;">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Escala</th>
+          <th>Entrada</th>
+          <th>Entrada Repouso</th>
+          <th>Saída Repouso</th>
+          <th>Saída</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% lista.map(function(value, index) { %>
+          <tr>
+            <td>
+              <%= value.idEscala %>
+            </td>
+            <td>
+              <%= value.nomeEscala %>
+            </td>
+            <td>
+              <%= value.horarioEntrada %>
+            </td>
+            <td>
+              <%= value.entradaRepouso %>
+            </td>
+            <td>
+              <%= value.saidaRepouso %>
+            </td>
+            <td>
+              <%= value.horarioSaida %>
+            </td>
+            <td>
+              <div>
+                <div class="d-flex">
+                  <div class="me-1">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                      data-bs-target="#exampleAlterar<%= value.idEscala %>" data-bs-whatever="@alterar">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <div class="modal fade" id="exampleAlterar<%= value.idEscala %>" tabindex="-1"
+                      aria-labelledby="exampleAlterar<%= value.idEscala %>Label" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleAlterar<%= value.idEscala %>Label">Alterar Escalas
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <form method="post" action="/escalas/alterarescalas">
+                              <div class="mb-3">
+                                <input type="text" hidden="true" id="idEscaça" name="idEscala"
+                                  value="<%= value.idEscala %>">
+                                <label for="alterarnome" class="col-form-label">Nome do Escala:</label>
+                                <input id="nomeEscala" name="nomeEscala" type="text" class="form-control"
+                                  value="<%= value.nomeEscala %>">
+                              </div>
+                              <div class="mb-3">
+                                <label for="alterarHoraEntrada" class="col-form-label">Entrada:</label>
+                                <input id="horarioEntrada" name="horarioEntrada" type="time" class="form-control"
+                                  value="<%= value.horarioEntrada %>">
+                              </div>
+                              <div class="mb-3">
+                                <label for="alterarEntradaRepouso" class="col-form-label">Entrada Repouso :</label>
+                                <input id="entradaRepouso" name="entradaRepouso" type="time" class="form-control"
+                                  value="<%= value.entradaRepouso %>">
+                              </div>
+                              <div class="mb-3">
+                                <label for="alterarSaidaRepouso" class="col-form-label">Saída Repouso:</label>
+                                <input id="saidaRepouso" name="saidaRepouso" type="time" class="form-control"
+                                  value="<%= value.saidaRepouso %>">
+                              </div>
+                              <div class="mb-3">
+                                <label for="alterarHoraSaida" class="col-form-label">Saída:</label>
+                                <input id="horarioSaida" name="horarioSaida" type="time" class="form-control"
+                                  value="<%= value.horarioSaida %>">
+                              </div>
+                              <button class="btn btn-primary" type="submit">Alterar</button>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--excluir-->
+                  <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#ModalExclusao<%= value.idEscala %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="ModalExclusao<%= value.idEscala %>" tabindex="-1"
+                    aria-labelledby="ModalExclusaoLabel<%= value.idEscala %>" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="ModalExclusaoLabel">Exclusão</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Essa ação é permanente, deseja realmente excluir o registro?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+                          <a class="btn btn-danger"
+                            href="/escalas/deletarescalas/<%= value.idEscala %>" role="button"><i
+                              class="fas fa-trash"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
