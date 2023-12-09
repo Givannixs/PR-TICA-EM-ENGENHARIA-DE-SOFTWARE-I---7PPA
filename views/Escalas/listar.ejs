@@ -29,19 +29,19 @@
               </div>
               <div class="mb-3">
                 <label for="horarioEntrada" class="col-form-label">Entrada:</label>
-                <input name="horarioEntrada" type="time" class="form-control" id="horarioEntrada">
+                <input name="horarioEntrada" type="time" class="form-control" id="horarioEntrada" onchange="document.getElementById('entradaRepouso').min=document.getElementById('horarioEntrada').value" required="required">
               </div>
               <div class="mb-3">
                 <label for="entradaRepouso" class="col-form-label">Entrada Repouso:</label>
-                <input name="entradaRepouso" type="time" class="form-control" id="entradaRepouso">
+                <input name="entradaRepouso" type="time" class="form-control"  min="" max="" id="entradaRepouso" onchange="document.getElementById('saidaRepouso').min=document.getElementById('entradaRepouso').value" required="required">
               </div>
               <div class="mb-3">
                 <label for="saidaRepouso" class="col-form-label">Saída Repouso:</label>
-                <input name="saidaRepouso" type="time" class="form-control" id="saidaRepouso">
+                <input name="saidaRepouso" type="time" class="form-control" id="saidaRepouso" onchange="document.getElementById('horarioSaida').min=document.getElementById('saidaRepouso').value" required="required">
               </div>
               <div class="mb-3">
                 <label for="horarioSaida" class="col-form-label">Horário Saida:</label>
-                <input name="horarioSaida" type="time" class="form-control" id="horarioSaida">
+                <input name="horarioSaida" type="time" class="form-control" id="horarioSaida" required="required">
               </div>
               <button class="btn btn-primary" type="submit">Cadastrar</button>
             </form>
