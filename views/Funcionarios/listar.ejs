@@ -68,6 +68,14 @@
                       <label for="cpf" class="col-form-label">Senha:</label>
                       <input name="funcionarioSenha" type="text" class="form-control" id="funcionarioSenha" required="required">
                     </div> 
+                    <div class="mb-3">
+                      <label  class="col-form-label">Acesso:</label>
+                      <select class="form-select" id="funcionarioAcesso" name="funcionarioAcesso" required="required">
+                        <option  value='' selected>Selecione um nivel de acesso</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="operador">Operador</option>
+                      </select>
+                    </div> 
                     <button class="btn btn-primary" type="submit">Cadastrar</button>
                   </form>
                 </div>
@@ -91,7 +99,8 @@
                     <th>Telefone</th>
                     <th>Data admissão</th>
                     <th>Email</th>
-                    <th>Senha</th>                    
+                    <th>Senha</th>
+                    <th>Acesso</th>                     
 
                 </tr>
             </thead>
@@ -107,7 +116,8 @@
                         <td><%= value.funcionarioTelefone %></td>
                         <td><%= value.dataAdmissao %></td>              
                         <td><%= value.funcionarioEmail %></td>
-                        <td style="-webkit-text-security: disc;"><%= value.funcionarioSenha %></td>                                       
+                        <td style="-webkit-text-security: disc;"><%= value.funcionarioSenha %></td>    
+                        <td><%= value.funcionarioAcesso %></td>                                   
                         <td>
                             <div>
                               <div class="me-1">
@@ -174,6 +184,14 @@
                                           <div class="mb-3">
                                             <label for="cpf" class="col-form-label">Senha:</label>
                                             <input name="funcionarioSenha" type="text" class="form-control" id="funcionarioSenha" value="<%= value.funcionarioSenha %>" required="required">
+                                          </div> 
+                                          <div class="mb-3">
+                                            <label  class="col-form-label">Acesso:</label>
+                                            <select class="form-select" id="funcionarioAcesso" name="funcionarioAcesso" required="required">
+                                              <option  value='' selected>Selecione um nivel de acesso</option>
+                                              <option value="administrador">Administrador</option>
+                                              <option value="operador">Operador</option>
+                                            </select>
                                           </div> 
                                           <button class="btn btn-primary" type="submit">Alterar</button>
                                         </form>

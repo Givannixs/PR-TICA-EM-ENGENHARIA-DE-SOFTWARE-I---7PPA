@@ -14,6 +14,7 @@ class FuncionariosModel {
     #dataAdmissao;
     #funcionarioEmail;
     #funcionarioSenha;
+    #funcionarioAcesso;
 
     get idFuncionario() { return this.#idFuncionario; } set idFuncionario(idFuncionario) {this.#idFuncionario = idFuncionario;}
     get funcionarioCPF() { return this.#funcionarioCPF; } set funcionarioCPF(funcionarioCPF) {this.#funcionarioCPF = funcionarioCPF;}
@@ -26,8 +27,9 @@ class FuncionariosModel {
     get dataAdmissao() { return this.#dataAdmissao; } set dataAdmissao(dataAdmissao) {this.#dataAdmissao = dataAdmissao;}
     get funcionarioEmail() { return this.#funcionarioEmail; } set funcionarioEmail(funcionarioEmail) {this.#funcionarioEmail = funcionarioEmail;}
     get funcionarioSenha() { return this.#funcionarioSenha; } set funcionarioSenha(funcionarioSenha) {this.#funcionarioSenha = funcionarioSenha;}
+    get funcionarioAcesso() { return this.#funcionarioAcesso; } set funcionarioAcesso(funcionarioAcesso) {this.#funcionarioAcesso = funcionarioAcesso;}
 
-    constructor(idFuncionario, funcionarioCPF, funcionarioNome, funcionarioCargo,funcionarioEscala, funcionarioDepartamento, funcionarioTelefone, dataAdmissao, funcionarioEmail, funcionarioSenha, idCargo) {
+    constructor(idFuncionario, funcionarioCPF, funcionarioNome, funcionarioCargo,funcionarioEscala, funcionarioDepartamento, funcionarioTelefone, dataAdmissao, funcionarioEmail, funcionarioSenha, idCargo,funcionarioAcesso) {
         this.#idFuncionario = idFuncionario;
         this.#funcionarioCPF = funcionarioCPF;
         this.#funcionarioNome = funcionarioNome;
@@ -39,6 +41,7 @@ class FuncionariosModel {
         this.#dataAdmissao = dataAdmissao;
         this.#funcionarioEmail = funcionarioEmail;
         this.#funcionarioSenha = funcionarioSenha;
+        this.#funcionarioAcesso = funcionarioAcesso;
     }
 
 
@@ -53,7 +56,7 @@ class FuncionariosModel {
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new FuncionariosModel(row['idFuncionario'], row['funcionarioCPF'], row['funcionarioNome'], row['nomeCargo'], row['nomeDepartamento'],row['nomeEscala'] , row['funcionarioTelefone'], row['dataAdmissao'], row['funcionarioEmail'], row['funcionarioSenha'], row['idCargo']));
+                listaRetorno.push(new FuncionariosModel(row['idFuncionario'], row['funcionarioCPF'], row['funcionarioNome'], row['nomeCargo'], row['nomeDepartamento'],row['nomeEscala'] , row['funcionarioTelefone'], row['dataAdmissao'], row['funcionarioEmail'], row['funcionarioSenha'], row['idCargo'],row['funcionarioAcesso']));
             }
         }
 
@@ -72,7 +75,7 @@ class FuncionariosModel {
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new FuncionariosModel(row['idFuncionario'], row['funcionarioCPF'], row['funcionarioNome'], row['nomeCargo'], row['nomeDepartamento'],row['nomeEscala'] , row['funcionarioTelefone'], row['dataAdmissao'], row['funcionarioEmail'], row['funcionarioSenha'], row['idCargo']));
+                listaRetorno.push(new FuncionariosModel(row['idFuncionario'], row['funcionarioCPF'], row['funcionarioNome'], row['nomeCargo'], row['nomeDepartamento'],row['nomeEscala'] , row['funcionarioTelefone'], row['dataAdmissao'], row['funcionarioEmail'], row['funcionarioSenha'], row['idCargo'],row['funcionarioAcesso']));
             }
         }
     
@@ -112,7 +115,7 @@ class FuncionariosModel {
         }
     
         // Agora, podemos realizar a inserção
-        let sql = "INSERT INTO `funcionario`(`funcionarioCPF`, `funcionarioNome`, `funcionarioTelefone`, `dataAdmissao`, `funcionarioEmail`, `funcionarioSenha`, `idDepartamento`, `idCargo`, `idEscala`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        let sql = "INSERT INTO `funcionario`(`funcionarioCPF`, `funcionarioNome`, `funcionarioTelefone`, `dataAdmissao`, `funcionarioEmail`, `funcionarioSenha`, `idDepartamento`, `idCargo`, `idEscala`,`funcionarioAcesso`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         var values = [
             this.funcionarioCPF,
@@ -123,7 +126,8 @@ class FuncionariosModel {
             this.#funcionarioSenha,
             this.funcionarioDepartamento,
             this.funcionarioCargo,
-            this.funcionarioEscala
+            this.funcionarioEscala,
+            this.funcionarioAcesso
         ];
         
         var rows = await conexao.ExecutaComando(sql, values);
@@ -145,9 +149,9 @@ class FuncionariosModel {
             throw new Error('ID da Escala não existe na tabela referenciada.');
         }
     
-        let sql = "UPDATE `funcionario` SET `funcionarioCPF`=?,`funcionarioNome`=?,`funcionarioTelefone`=?,`dataAdmissao`=?,`funcionarioEmail`=?,`funcionarioSenha`=?,`idDepartamento`=?,`idCargo`=?,`idEscala`=? WHERE `funcionario`.`idFuncionario` = ?";
+        let sql = "UPDATE `funcionario` SET `funcionarioCPF`=?,`funcionarioNome`=?,`funcionarioTelefone`=?,`dataAdmissao`=?,`funcionarioEmail`=?,`funcionarioSenha`=?,`idDepartamento`=?,`idCargo`=?,`idEscala`=?, `funcionarioAcesso`=? WHERE `funcionario`.`idFuncionario` = ?";
       
-        var values = [this.funcionarioCPF, this.funcionarioNome, this.funcionarioTelefone, this.dataAdmissao, this.funcionarioEmail, this.funcionarioSenha, this.funcionarioDepartamento,this.funcionarioCargo,this.funcionarioEscala, this.idFuncionario];
+        var values = [this.funcionarioCPF, this.funcionarioNome, this.funcionarioTelefone, this.dataAdmissao, this.funcionarioEmail, this.funcionarioSenha, this.funcionarioDepartamento,this.funcionarioCargo,this.funcionarioEscala,this.funcionarioAcesso, this.idFuncionario];
       
         var rows = await conexao.ExecutaComando(sql, values);
     

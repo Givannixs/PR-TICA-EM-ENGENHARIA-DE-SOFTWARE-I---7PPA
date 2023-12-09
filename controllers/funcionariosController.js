@@ -47,6 +47,7 @@ class FuncionariosController {
         funcionario.dataAdmissao=req.body.dataAdmissao;
         funcionario.funcionarioEmail=req.body.funcionarioEmail;
         funcionario.funcionarioSenha=req.body.funcionarioSenha;
+        funcionario.funcionarioAcesso=req.body.funcionarioAcesso;
 
         let retorno = await funcionario.cadastrarFuncionarios();
         let lista = await funcionario.listarFuncionarios();
@@ -68,6 +69,7 @@ class FuncionariosController {
         funcionario.dataAdmissao=req.body.dataAdmissao;
         funcionario.funcionarioEmail=req.body.funcionarioEmail;
         funcionario.funcionarioSenha=req.body.funcionarioSenha;
+        funcionario.funcionarioAcesso=req.body.funcionarioAcesso;
        
 
         let retorno = await funcionario.alterarFuncionarios();
