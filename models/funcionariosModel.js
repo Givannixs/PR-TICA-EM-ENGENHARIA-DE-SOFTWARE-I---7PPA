@@ -145,9 +145,9 @@ class FuncionariosModel {
             throw new Error('ID da Escala não existe na tabela referenciada.');
         }
     
-        let sql = "UPDATE `funcionario` SET `funcionarioCPF`=?,`funcionarioNome`=?,`funcionarioTelefone`=?,`funcionarioEmail`=?,`funcionarioSenha`=?,`idEscala`=? WHERE `funcionario`.`idFuncionario` = ?";
+        let sql = "UPDATE `funcionario` SET `funcionarioCPF`=?,`funcionarioNome`=?,`funcionarioTelefone`=?,`dataAdmissao`=?,`funcionarioEmail`=?,`funcionarioSenha`=?,`idDepartamento`=?,`idCargo`=?,`idEscala`=? WHERE `funcionario`.`idFuncionario` = ?";
       
-        var values = [this.funcionarioCPF, this.funcionarioNome, this.funcionarioTelefone, this.funcionarioEmail, this.funcionarioSenha,this.funcionarioEscala, this.idFuncionario];
+        var values = [this.funcionarioCPF, this.funcionarioNome, this.funcionarioTelefone, this.dataAdmissao, this.funcionarioEmail, this.funcionarioSenha, this.funcionarioDepartamento,this.funcionarioCargo,this.funcionarioEscala, this.idFuncionario];
       
         var rows = await conexao.ExecutaComando(sql, values);
     

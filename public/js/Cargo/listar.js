@@ -12,11 +12,11 @@ function carregarProduto() {
 
 let listdecargo;
 
-function listardepartamento()
+function listarcargo()
 {  
    
     const URL_TO_FETCH = '/cargos/listarfetch';
-    var html=" <option selected>Selecione o cargo</option>";
+    var html=" <option value='' selected>Selecione o cargo</option>";
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {
@@ -35,9 +35,9 @@ fetch(URL_TO_FETCH).then(function(response) {
 
 
 
-function listardepartamentoalt(cod)
+function listarcargoalt(cod)
 {  const URL_TO_FETCH = '/cargos/listarfetch';
-   var html=" <option selected>Selecione o cargo</option>";
+   var html=" <option value='' selected>Selecione o cargo</option>";
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {
@@ -54,7 +54,7 @@ fetch(URL_TO_FETCH).then(function(response) {
       
 }
 
-function setardepartamento(valor)
+/*function setardepartamento(valor)
 {
     console.log(valor);
 
@@ -67,7 +67,7 @@ function setardepartamento(valor)
         
     }
 
-}
+}*/
 
 
 

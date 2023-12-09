@@ -15,7 +15,7 @@ function listarescalas()
 {  
    
     const URL_TO_FETCH = '/escalas/listarfetch';
-    var html=" <option selected>Selecione a escala</option>";
+    var html=" <option value='' selected>Selecione a escala</option>";
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {
@@ -36,7 +36,7 @@ fetch(URL_TO_FETCH).then(function(response) {
 
 function listarescalaalt(cod)
 {  const URL_TO_FETCH = '/escalas/listarfetch';
-   var html=" <option selected>Selecione a escala</option>";
+   var html=" <option value='' selected>Selecione a escala</option>";
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {

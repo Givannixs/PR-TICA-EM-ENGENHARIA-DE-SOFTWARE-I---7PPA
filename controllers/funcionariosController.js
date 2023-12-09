@@ -61,11 +61,11 @@ class FuncionariosController {
         funcionario.idFuncionario = req.body.idFuncionario;
         funcionario.funcionarioCPF = req.body.funcionarioCPF;
         funcionario.funcionarioNome= req.body.funcionarioNome;
-        //funcionario.funcionarioCargo=req.body.cargo_idCargo;
+        funcionario.funcionarioCargo=req.body.cargo_idCargo;
         funcionario.funcionarioEscala=req.body.funcionarioEscala;
-       // funcionario.funcionarioDepartamento=req.body.departamento_idDepartamento;
+        funcionario.funcionarioDepartamento=req.body.departamento_idDepartamento;
         funcionario.funcionarioTelefone=req.body.funcionarioTelefone;
-       // funcionario.dataAdmissao=req.body.dataAdmissao;
+        funcionario.dataAdmissao=req.body.dataAdmissao;
         funcionario.funcionarioEmail=req.body.funcionarioEmail;
         funcionario.funcionarioSenha=req.body.funcionarioSenha;
        

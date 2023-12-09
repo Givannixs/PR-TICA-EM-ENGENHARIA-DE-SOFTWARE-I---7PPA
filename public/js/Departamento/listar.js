@@ -16,7 +16,7 @@ function listardepartamento()
 {  
    
     const URL_TO_FETCH = '/departamentos/listarfetch';
-    var html=" <option selected>Selecione o departamento</option>";
+    var html=" <option value='' selected>Selecione o departamento</option>";
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {
@@ -37,7 +37,7 @@ fetch(URL_TO_FETCH).then(function(response) {
 
 function listardepartamentoalt(cod)
 {  const URL_TO_FETCH = '/departamentos/listarfetch';
-   var html=" <option selected>Selecione o departamento</option>";
+   var html=" <option value='' selected>Selecione o departamento</option>";
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {

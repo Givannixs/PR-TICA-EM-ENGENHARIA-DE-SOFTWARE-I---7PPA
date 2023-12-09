@@ -5,26 +5,26 @@ class CargosModel {
 
     #idCargo;
     #nomeCargo;
-    #departamento_idDepartamento;
-    #nomeDepartamento;
+    //#departamento_idDepartamento;
+    //#nomeDepartamento;
 
     get idCargo() { return this.#idCargo; } set idCargo(idCargo) {this.#idCargo = idCargo;}
     get nomeCargo() { return this.#nomeCargo; } set nomeCargo(nomeCargo) {this.#nomeCargo = nomeCargo;}
-    get departamento_idDepartamento() { return this.#departamento_idDepartamento; } set departamento_idDepartamento(departamento_idDepartamento) {this.#departamento_idDepartamento = departamento_idDepartamento;}
-    get nomeDepartamento() { return this.#nomeDepartamento; } set nomeDepartamento(nomeDepartamento) {this.#nomeDepartamento = nomeDepartamento;}
+    //get departamento_idDepartamento() { return this.#departamento_idDepartamento; } set departamento_idDepartamento(departamento_idDepartamento) {this.#departamento_idDepartamento = departamento_idDepartamento;}
+    //get nomeDepartamento() { return this.#nomeDepartamento; } set nomeDepartamento(nomeDepartamento) {this.#nomeDepartamento = nomeDepartamento;}
 
-    constructor(idCargo, nomeCargo,departamento_idDepartamento,nomeDepartamento) {
+    constructor(idCargo, nomeCargo) {
         this.#idCargo = idCargo
         this.#nomeCargo = nomeCargo
-        this.#departamento_idDepartamento = departamento_idDepartamento
-        this.#nomeDepartamento = nomeDepartamento
+       // this.#departamento_idDepartamento = departamento_idDepartamento
+        //this.#nomeDepartamento = nomeDepartamento
    
     }
 
 
     async listarCargos() {
 
-        let sql = 'SELECT * FROM `cargo` JOIN `departamento` ON cargo.departamento_idDepartamento = departamento.idDepartamento';
+        let sql = 'SELECT * FROM `cargo`';
         
         var rows = await conexao.ExecutaComando(sql);
 
@@ -34,7 +34,7 @@ class CargosModel {
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
                 
-                listaRetorno.push(new CargosModel(row['idCargo'], row['nomeCargo'],row['departamento_idDepartamento'],row['nomeDepartamento']));
+                listaRetorno.push(new CargosModel(row['idCargo'], row['nomeCargo']));
             }
           
         }
@@ -53,7 +53,7 @@ class CargosModel {
 
     async cadastrarCargos() {
 
-        let sql = "INSERT INTO `cargo`(`nomeCargo`, `departamento_idDepartamento`) VALUES ('"+this.nomeCargo+"','"+this.departamento_idDepartamento+"');";
+        let sql = "INSERT INTO `cargo`(`nomeCargo`) VALUES ('"+this.nomeCargo+"');";
         
         var rows = await conexao.ExecutaComando(sql);
 
@@ -62,7 +62,7 @@ class CargosModel {
 
     async buscarCargos() {
 
-        let sql = "SELECT * FROM `cargo` JOIN `departamento` ON cargo.departamento_idDepartamento = departamento.idDepartamento WHERE `nomeCargo` LIKE '%"+this.nomeCargo+"%' ORDER BY `cargo`.`nomeCargo` ASC";
+        let sql = "SELECT * FROM `cargo`  WHERE `nomeCargo` LIKE '%"+this.nomeCargo+"%' ORDER BY `cargo`.`nomeCargo` ASC";
         
         var rows = await conexao.ExecutaComando(sql);
 
@@ -84,15 +84,15 @@ class CargosModel {
 
     async alterarCargos() {
         // Verifica se o departamento_idDepartamento existe na tabela departamento
-        const departamentoExists = await this.checkIfExists('departamento', 'idDepartamento', this.departamento_idDepartamento);
+       // const departamentoExists = await this.checkIfExists('departamento', 'idDepartamento', this.departamento_idDepartamento);
     
-        if (!departamentoExists) {
-            throw new Error('ID de Departamento não existe na tabela referenciada.');
-        }
+       // if (!departamentoExists) {
+         //   throw new Error('ID de Departamento não existe na tabela referenciada.');
+       // }
     
-        let sql = "UPDATE `cargo` SET `nomeCargo` = ?, `departamento_idDepartamento` = ? WHERE `cargo`.`idCargo` = ?";
+        let sql = "UPDATE `cargo` SET `nomeCargo` = ? WHERE `cargo`.`idCargo` = ?";
       
-        var values = [this.nomeCargo, this.departamento_idDepartamento, this.idCargo];
+        var values = [this.nomeCargo, this.idCargo];
       
         var rows = await conexao.ExecutaComando(sql, values);
       

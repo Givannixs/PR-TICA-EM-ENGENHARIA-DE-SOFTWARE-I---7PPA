@@ -1,8 +1,9 @@
 <!--Para fazer com fetch-->
 <script src="/js/Cargo/listar.js"></script>
 <script src="/js/Escalas/listar.js"></script>
+<script src="/js/Departamento/listar.js"></script>
 
-<body onload="listardepartamento(),listarescalas()">
+<body onload="listarcargo(),listarescalas(),listardepartamento()">
   <div>
     <h1>Funcionários</h1>
     <div>
@@ -35,7 +36,7 @@
                     </div>
                     <div class="mb-3">
                       <label for="message-text" class="col-form-label">Cargo:</label>
-                      <select oninput="setardepartamento(document.getElementById('cargo_idCargo').value)"  id="cargo_idCargo" name="cargo_idCargo" class="form-select" aria-label="Default select example" required="required">
+                      <select   id="cargo_idCargo" name="cargo_idCargo" class="form-select" aria-label="Default select example" required="required">
                         
                       </select>
                     </div>   
@@ -110,7 +111,7 @@
                         <td>
                             <div>
                               <div class="me-1">
-                                <button onclick="/*listardepartamentoalt('<%= value.idCargo %>'),*/listarescalaalt('<%= value.idFuncionario %>')" type="button" class="btn btn-primary"
+                                <button onclick="listarcargoalt('<%= value.idCargo %>'),listarescalaalt('<%= value.idFuncionario %>'),listardepartamentoalt('<%= value.idFuncionario %>')" type="button" class="btn btn-primary"
                                   data-bs-toggle="modal" data-bs-target="#exampleAlterar<%= value.idFuncionario %>"
                                   data-bs-whatever="@alterar">
                                   <i class="fas fa-pen"></i>
@@ -134,20 +135,20 @@
                                             <label for="cpf" class="col-form-label">Nome:</label>
                                             <input name="funcionarioNome" type="text" class="form-control" id="funcionarioNome" value="<%= value.funcionarioNome %>" required="required">
                                           </div>
-                                          <!--
+                                          
                                             <div class="mb-3">
                                             <label for="message-text" class="col-form-label">Cargo:</label>
-                                            <select oninput="setardepartamentoalt(document.getElementById('cargoalt<%= value.idCargo %>').value)" id="cargoalt<%= value.idCargo %>" name="cargoalt<%= value.idCargo %>" class="form-select" aria-label="Default select example">
+                                            <select  id="cargoalt<%= value.idCargo %>" name="cargo_idCargo" class="form-select" aria-label="Default select example"  required="required">
                                               
                                             </select>
                                           </div>   
                                           <div class="mb-3">
                                             <label for="message-text" class="col-form-label">Departamento:</label>
-                                            <select  class="form-select" aria-label="Default select example">
-                                              <option id="dpalt<%= value.idCargo %>" name="dpalt<%= value.idCargo %>" value=""></option>
+                                            <select id="departamentoalt<%= value.idFuncionario %>" name="departamento_idDepartamento"  class="form-select" aria-label="Default select example"  required="required">
+                                              
                                             </select>
                                           </div>
-                                          -->
+                                          
                                           
                                           <div class="mb-3">
                                             <label for="message-text" class="col-form-label">Escala:</label>
@@ -157,14 +158,14 @@
                                           </div>
                                           <div class="mb-3">
                                             <label for="cpf" class="col-form-label">Telefone:</label>
-                                            <input name="funcionarioTelefone" type="text" class="form-control" id="funcionarioTelefone" value="<%= value.funcionarioTelefone %>" >
+                                            <input name="funcionarioTelefone" type="text" class="form-control" id="funcionarioTelefone" value="<%= value.funcionarioTelefone %>" required="required">
                                           </div> 
-                                          <!--
+                                          
                                              <div class="mb-3">
                                             <label for="cpf" class="col-form-label">Data Admissao:</label>
-                                            <input name="dataAdmissao" type="date" class="form-control" id="dataAdmissao" value="<%= value.dataAdmissao %>">
+                                            <input name="dataAdmissao" type="date" class="form-control" id="dataAdmissao" value="<%= value.dataAdmissao %>" required="required">
                                           </div> 
-                                          -->
+                                          
                                          
                                           <div class="mb-3">
                                             <label for="cpf" class="col-form-label">Email:</label>
