@@ -114,22 +114,22 @@
                               </div>
                               <div class="mb-3">
                                 <label for="alterarHoraEntrada" class="col-form-label">Entrada:</label>
-                                <input id="horarioEntrada" name="horarioEntrada" type="time" class="form-control"
+                                <input id="horarioEntradaEditar" name="horarioEntrada" type="time" class="form-control"
                                   value="<%= value.horarioEntrada %>">
                               </div>
                               <div class="mb-3">
                                 <label for="alterarEntradaRepouso" class="col-form-label">Entrada Repouso :</label>
-                                <input id="entradaRepouso" name="entradaRepouso" type="time" class="form-control"
+                                <input id="entradaRepousoEditar" name="entradaRepouso" type="time" class="form-control"
                                   value="<%= value.entradaRepouso %>">
                               </div>
                               <div class="mb-3">
                                 <label for="alterarSaidaRepouso" class="col-form-label">Saída Repouso:</label>
-                                <input id="saidaRepouso" name="saidaRepouso" type="time" class="form-control"
+                                <input id="saidaRepousoEditar" name="saidaRepouso" type="time" class="form-control"
                                   value="<%= value.saidaRepouso %>">
                               </div>
                               <div class="mb-3">
                                 <label for="alterarHoraSaida" class="col-form-label">Saída:</label>
-                                <input id="horarioSaida" name="horarioSaida" type="time" class="form-control"
+                                <input id="horarioSaidaEditar" name="horarioSaida" type="time" class="form-control"
                                   value="<%= value.horarioSaida %>">
                               </div>
                               <button class="btn btn-primary" type="submit">Alterar</button>
@@ -177,7 +177,22 @@
             </td>
           </tr>
           <% }) %>
+          <script>
+            // Adiciona o evento onchange aos campos de horário no modal de edição
+            document.getElementById('horarioEntradaEditar').onchange = function () {
+              document.getElementById('entradaRepousoEditar').min = document.getElementById('horarioEntradaEditar').value;
+            };
+          
+            document.getElementById('entradaRepousoEditar').onchange = function () {
+              document.getElementById('saidaRepousoEditar').min = document.getElementById('entradaRepousoEditar').value;
+            };
+          
+            document.getElementById('saidaRepousoEditar').onchange = function () {
+              document.getElementById('horarioSaidaEditar').min = document.getElementById('saidaRepousoEditar').value;
+            };
+          </script>
       </tbody>
+     
     </table>
   </div>
 </div>
