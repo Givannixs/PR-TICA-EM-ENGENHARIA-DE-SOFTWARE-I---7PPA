@@ -14,9 +14,10 @@ let listdepartamento;
 
 function listardepartamento()
 {  
-   
-    const URL_TO_FETCH = '/departamentos/listarfetch';
     var html=" <option value='' selected>Selecione o departamento</option>";
+    const URL_TO_FETCH = '/departamentos/listarfetch';
+    
+    
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {
@@ -38,11 +39,22 @@ fetch(URL_TO_FETCH).then(function(response) {
 function listardepartamentoalt(cod)
 {  const URL_TO_FETCH = '/departamentos/listarfetch';
    var html=" <option value='' selected>Selecione o departamento</option>";
+    var i;
+
+   for (let index = 0; index < listdepartamento.length; index++) {
+   
+    if(listdepartamento[index][1]==document.getElementById('tlfuncionarioEscala'+cod).innerText)
+     {console.log(listdepartamento[index][1]+'=='+document.getElementById('tlfuncionarioEscala'+cod).innerText);
+      html=" <option value='"+listdepartamento[index][0]+"'selected>"+listdepartamento[index][1]+"</option>";
+      i=index;
+     } 
+  }
 
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {
       console.log(data);
       for (var index = 0; index < data.length; index++) {
+        if(index!=i)
         html =html+" <option value="+data[index][0]+">"+data[index][1]+"</option>";
         
       }

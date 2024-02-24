@@ -39,10 +39,22 @@ function listarcargoalt(cod)
 {  const URL_TO_FETCH = '/cargos/listarfetch';
    var html=" <option value='' selected>Selecione o cargo</option>";
 
+   var i;
+
+   for (let index = 0; index < listdecargo.length; index++) {
+    
+    if(listdecargo[index][1]==document.getElementById('tlfuncionarioCargo'+cod).innerText)
+     {console.log(listdecargo[index][1]+'=='+document.getElementById('tlfuncionarioCargo'+cod).innerText);
+      html=" <option value='"+listdecargo[index][0]+"'selected>"+listdecargo[index][1]+"</option>";
+      i=index;
+     } 
+  }
+
 fetch(URL_TO_FETCH).then(function(response) {
     response.json().then(function(data) {
       console.log(data);
       for (var index = 0; index < data.length; index++) {
+        if(index!=i)
         html =html+" <option value="+data[index][0]+">"+data[index][1]+"</option>";
         
       }

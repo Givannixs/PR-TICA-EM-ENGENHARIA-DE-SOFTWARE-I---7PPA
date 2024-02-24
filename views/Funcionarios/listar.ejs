@@ -107,17 +107,17 @@
             <tbody>
                 <% lista.map(function(value, index) { %>
                     <tr>
-                        <td><%= value.idFuncionario %></td>
-                        <td><%= value.funcionarioCPF %></td>
-                        <td><%= value.funcionarioNome %></td>
-                        <td><%= value.funcionarioCargo %></td>
-                        <td><%= value.funcionarioEscala %></td>
-                        <td><%= value.funcionarioDepartamento %></td>
-                        <td><%= value.funcionarioTelefone %></td>
-                        <td><%= value.dataAdmissao %></td>              
-                        <td><%= value.funcionarioEmail %></td>
-                        <td style="-webkit-text-security: disc;"><%= value.funcionarioSenha %></td>    
-                        <td><%= value.funcionarioAcesso %></td>                                   
+                        <td id="tlidFuncionario<%= value.idFuncionario %>"><%= value.idFuncionario %></td>
+                        <td id="tlfuncionarioCPF<%= value.idFuncionario %>"><%= value.funcionarioCPF %></td>
+                        <td id="tlfuncionarioNome<%= value.idFuncionario %>"><%= value.funcionarioNome %></td>
+                        <td id="tlfuncionarioCargo<%= value.idCargo %>"><%= value.funcionarioCargo %></td>
+                        <td id="tlfuncionarioEscala<%= value.idFuncionario %>"><%= value.funcionarioEscala %></td>
+                        <td id="tlfuncionarioDepartamento<%= value.idFuncionario %>"><%= value.funcionarioDepartamento %></td>
+                        <td id="tlfuncionarioTelefone<%= value.idFuncionario %>"><%= value.funcionarioTelefone %></td>
+                        <td id="tldataAdmissao<%= value.idFuncionario %>"><%= value.dataAdmissao %></td>              
+                        <td id="tlfuncionarioEmail<%= value.idFuncionario %>"><%= value.funcionarioEmail %></td>
+                        <td style="-webkit-text-security: disc;" id="tlfuncionarioSenha<%= value.idFuncionario %>"><%= value.funcionarioSenha %></td>    
+                        <td id="tlfuncionarioAcesso<%= value.idFuncionario %>"><%= value.funcionarioAcesso %></td>                                   
                         <td>
                             <div>
                               <div class="me-1">

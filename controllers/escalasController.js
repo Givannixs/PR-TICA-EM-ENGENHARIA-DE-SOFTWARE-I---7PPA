@@ -26,8 +26,18 @@ class EscalasController {
         console.log(req.params.id);
         let escala = new EscalasModel();
         let retorno = await escala.deletarEscalas(req.params.id);
-        let lista = await escala.listarEscalas();
-        res.render('escalas/listar', {lista: lista});
+
+        if(retorno == true)
+        {
+            let lista = await escala.listarEscalas();
+            res.render('escalas/listar', {lista: lista});
+        }
+
+        else
+        {
+            res.send('<script>alert("Não foi possível excluir o registro pois existem um ou mais registros vinculados a ele."); window.location.href = "/escalas"; </script>');
+        }
+        
         
     }
 

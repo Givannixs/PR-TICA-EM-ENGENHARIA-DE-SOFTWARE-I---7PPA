@@ -24,8 +24,15 @@ class DepartamentosController {
         console.log(req.params.id);
         let departamento = new DepartamentosModel();
         let retorno = await departamento.deletarDepartamentos(req.params.id);
-        let lista = await departamento.listarDepartamentos();
-        res.render('departamentos/listar', {lista: lista});
+
+        if(retorno == true)
+        {let lista = await departamento.listarDepartamentos();
+        res.render('departamentos/listar', {lista: lista});}
+
+        else
+        {                   
+            res.send('<script>alert("Não foi possível excluir o registro pois existem um ou mais registros vinculados a ele."); window.location.href = "/departamentos"; </script>');
+        }
         
     }
 

@@ -38,11 +38,19 @@ class DepartamentosModel {
 
     async deletarDepartamentos(id) {
 
-        let sql = "DELETE FROM `departamento` WHERE `departamento`.`idDepartamento` = '"+id+"'";
+        try {
+         let sql = "DELETE FROM `departamento` WHERE `departamento`.`idDepartamento` = '"+id+"'";
         
         var rows = await conexao.ExecutaComando(sql);
 
         return true;
+            
+        } catch (error) {
+        return false;
+            
+        }
+
+        
     }
     
     async cadastrarDepartamentos() {

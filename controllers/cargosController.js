@@ -27,8 +27,15 @@ class CargosController {
         //req.params.cpf
         let cargo = new CargosModel();
         let retorno = await cargo.deletarCargos(req.params.id);
-        let lista = await cargo.listarCargos();
-        res.render('cargos/listar', {lista: lista});
+
+        if(retorno == true)
+        {let lista = await cargo.listarCargos();
+        res.render('cargos/listar', {lista: lista});}
+
+        else
+        {
+            res.send('<script>alert("Não foi possível excluir o registro pois existem um ou mais registros vinculados a ele."); window.location.href = "/cargos"; </script>');
+        }
         
     }
 

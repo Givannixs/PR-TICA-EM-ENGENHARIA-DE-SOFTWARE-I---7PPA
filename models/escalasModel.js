@@ -51,11 +51,22 @@ class EscalasModel {
 
     async deletarEscalas(id) {
 
-        let sql = "DELETE FROM `escaladetrabalho` WHERE `escaladetrabalho`.`idEscala` = '"+id+"'";
+
+        try {
+
+            let sql = "DELETE FROM `escaladetrabalho` WHERE `escaladetrabalho`.`idEscala` = '"+id+"'";
         
         var rows = await conexao.ExecutaComando(sql);
 
         return true;
+            
+        } catch (error) {
+
+            return false;
+            
+        }
+
+        
     }
 
     async cadastrarEscalas() {

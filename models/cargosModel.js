@@ -44,11 +44,22 @@ class CargosModel {
 
     async deletarCargos(id) {
 
+
+        try {
+
         let sql = "DELETE FROM `cargo` WHERE `cargo`.`idCargo` = '"+id+"'";
         
         var rows = await conexao.ExecutaComando(sql);
 
         return true;
+            
+        } catch (error) {
+
+            return false;
+            
+        }
+
+        
     }
 
     async cadastrarCargos() {
