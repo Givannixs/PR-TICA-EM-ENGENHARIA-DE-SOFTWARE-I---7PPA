@@ -7,6 +7,7 @@ const CargosRoute = require('./routes/cargosRoute');
 const DepartamentosRoute = require('./routes/departamentosRoute');
 const EscalasRoute = require ('./routes/escalasRoute');
 const LoginRoute = require('./routes/loginRoute');
+const RegistropontoRoute = require('./routes/registropontoRoute');
 
 const app = express();
 
@@ -40,6 +41,9 @@ app.use('/departamentos', departamentosRota.router);
 
 let escalasRota = new EscalasRoute();
 app.use('/escalas', escalasRota.router);
+
+let registropontoRota = new RegistropontoRoute();
+app.use('/registroponto', registropontoRota.router);
 
 let loginRota = new LoginRoute();
 app.use('/login', loginRota.router);
