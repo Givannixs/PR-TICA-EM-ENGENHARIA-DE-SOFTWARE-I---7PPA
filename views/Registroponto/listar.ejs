@@ -11,7 +11,7 @@
           <button class="btn btn-outline-success" type="submit">Buscar</button>
         </form>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-          data-bs-whatever="@mdo"><i class="fas fa-plus"></i> Cadastrar</button>
+          data-bs-whatever="@mdo" onclick="document.getElementById('funcionario_idFuncionario').value=document.cookie.split('=')[1]"><i class="fas fa-plus"></i> Cadastrar</button>
       </div>
     </nav>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -32,8 +32,8 @@
                 <input name="dataHoraSaida" type="datetime-local" class="form-control" id="dataHoraSaida" onchange="document.getElementById('dataHoraSaida').min=document.getElementById('dataHoraEntrada').value" required="required">
               </div>
               <div class="mb-3">
-                <label for="funcionario_idFuncionario" class="col-form-label">Funcionario:</label>
-                <input name="funcionario_idFuncionario" type="text" class="form-control"  min="" max="" id="funcionario_idFuncionario"  required="required">
+                <label hidden for="funcionario_idFuncionario" class="col-form-label">Funcionario:</label>
+                <input hidden name="funcionario_idFuncionario" type="text" class="form-control"  min="" max="" id="funcionario_idFuncionario"  required="required">
               </div>            
               <button class="btn btn-primary" type="submit">Cadastrar</button>
             </form>
@@ -59,23 +59,23 @@
         <% lista.map(function(value, index) { %>
           <tr>
             <td>
-              <%= value.idregistroPonto %>
+             <%= value.idregistroPonto %>
+            </td>
+            <td id="tldataHoraEntrada<%= value.idregistroPonto %>">
+              <%= value.dataHoraEntrada.toLocaleString('pt-BR',{dateStyle:"short",timeStyle:"short"}); %>
+            </td>
+            <td id="tldataHoraSaida<%= value.idregistroPonto %>">
+              <%= value.dataHoraSaida.toLocaleString('pt-BR',{dateStyle:"short",timeStyle:"short"}); %>
             </td>
             <td>
-              <%= value.dataHoraEntrada %>
-            </td>
-            <td>
-              <%= value.dataHoraSaida %>
-            </td>
-            <td>
-              <%= value.funcionario_idFuncionario %>
+              <%= value.funcionarioNome %>
             </td>
             <td>
               <div>
                 <div class="d-flex">
                   <div class="me-1">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                      data-bs-target="#exampleAlterar<%= value.idregistroPonto %>" data-bs-whatever="@alterar">
+                      data-bs-target="#exampleAlterar<%= value.idregistroPonto %>"  data-bs-whatever="@alterar">
                       <i class="fas fa-pen"></i>
                     </button>
                     <div class="modal fade" id="exampleAlterar<%= value.idregistroPonto %>" tabindex="-1"
@@ -94,16 +94,16 @@
                                   value="<%= value.idregistroPonto %>">
                                 <label for="alterarnome" class="col-form-label">Hora Entrada:</label>
                                 <input id="dataHoraEntradaEditar" name="dataHoraEntrada" type="datetime-local" class="form-control"
-                                  value="<%= value.dataHoraEntrada %>" required="required">
+                                  value="document.getElementById(tldataHoraEntrada<%= value.idregistroPonto %>).value" required="required">
                               </div>
                               <div class="mb-3">
                                 <label for="alterarHoraEntrada" class="col-form-label">Hora Saída:</label>
                                 <input id="dataHoraSaidaEditar" name="dataHoraSaida" type="datetime-local" class="form-control"
-                                  value="<%= value.dataHoraSaida %>" onchange="document.getElementById('dataHoraSaidaEditar').min=document.getElementById('dataHoraEntradaEditar').value" required="required">
+                                  value="document.getElementById(tldataHoraSaida<%= value.idregistroPonto %>).value" onchange="document.getElementById('dataHoraSaidaEditar').min=document.getElementById('dataHoraEntradaEditar').value" required="required">
                               </div>
                               <div class="mb-3">
-                                <label for="alterarEntradaRepouso" class="col-form-label">Funcionario :</label>
-                                <input id="entradaRepousoEditar" name="funcionario_idFuncionario" type="text" class="form-control"
+                                <label hidden for="alterarEntradaRepouso" class="col-form-label">Funcionario :</label>
+                                <input hidden id="entradaRepousoEditar" name="funcionario_idFuncionario" type="text" class="form-control"
                                   value="<%= value.funcionario_idFuncionario %>">
                               </div>
                               <button class="btn btn-primary" type="submit">Alterar</button>

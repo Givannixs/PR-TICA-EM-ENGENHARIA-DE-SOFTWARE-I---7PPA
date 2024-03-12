@@ -7,6 +7,7 @@ class RegistapontoModel {
     #dataHoraEntrada;
     #dataHoraSaida;
     #funcionario_idFuncionario;
+    #funcionarioNome;
 
  
 
@@ -14,14 +15,16 @@ class RegistapontoModel {
     get dataHoraEntrada() { return this.#dataHoraEntrada; } set dataHoraEntrada(dataHoraEntrada) {this.#dataHoraEntrada = dataHoraEntrada;}
     get dataHoraSaida() { return this.#dataHoraSaida; } set dataHoraSaida(dataHoraSaida) {this.#dataHoraSaida = dataHoraSaida;}
     get funcionario_idFuncionario() { return this.#funcionario_idFuncionario; } set funcionario_idFuncionario(funcionario_idFuncionario) {this.#funcionario_idFuncionario = funcionario_idFuncionario;}
+    get funcionarioNome() { return this.#funcionarioNome; } set funcionarioNome(funcionarioNome) {this.#funcionarioNome = funcionarioNome;}
     
 
 
-    constructor(idregistroPonto, dataHoraEntrada, dataHoraSaida, funcionario_idFuncionario) {
+    constructor(idregistroPonto, dataHoraEntrada, dataHoraSaida, funcionario_idFuncionario, funcionarioNome) {
         this.#idregistroPonto = idregistroPonto
         this.#dataHoraEntrada = dataHoraEntrada
         this.#dataHoraSaida = dataHoraSaida
         this.#funcionario_idFuncionario = funcionario_idFuncionario
+        this.#funcionarioNome = funcionarioNome
        
 
    
@@ -30,15 +33,16 @@ class RegistapontoModel {
 
     async listarResgistroponto() {
       
-        let sql = 'SELECT * FROM `registroponto`';
+        let sql = 'SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario`';
         
         var rows = await conexao.ExecutaComando(sql);
+        console.log(rows);
         let listaRetorno = [];
 
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'],  row['dataHoraSaida'], row['funcionario_idFuncionario']));
+                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'],  row['dataHoraSaida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
             }
         }
         
@@ -76,7 +80,7 @@ class RegistapontoModel {
 
     async buscarResgistroponto() {
 
-        let sql = "SELECT * FROM `registroponto` WHERE `dataHoraEntrada` LIKE '%" + this.dataHoraEntrada + "%' ORDER BY `registroponto`.`dataHoraEntrada` ASC";
+        let sql = "SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` WHERE `dataHoraEntrada` LIKE '%" + this.dataHoraEntrada + "%' ORDER BY `registroponto`.`dataHoraEntrada` ASC";
 
         
         var rows = await conexao.ExecutaComando(sql);
@@ -86,7 +90,7 @@ class RegistapontoModel {
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'], row['dataHoraSaida'], row['funcionario_idFuncionario']));
+                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'], row['dataHoraSaida'], row['funcionarioNome']));
                 
                 
             }

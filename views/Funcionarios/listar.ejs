@@ -114,7 +114,7 @@
                         <td id="tlfuncionarioEscala<%= value.idFuncionario %>"><%= value.funcionarioEscala %></td>
                         <td id="tlfuncionarioDepartamento<%= value.idFuncionario %>"><%= value.funcionarioDepartamento %></td>
                         <td id="tlfuncionarioTelefone<%= value.idFuncionario %>"><%= value.funcionarioTelefone %></td>
-                        <td id="tldataAdmissao<%= value.idFuncionario %>"><%= value.dataAdmissao %></td>              
+                        <td id="tldataAdmissao<%= value.idFuncionario %>"><%= value.dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short",timeStyle:"short"}); %></td>              
                         <td id="tlfuncionarioEmail<%= value.idFuncionario %>"><%= value.funcionarioEmail %></td>
                         <td style="-webkit-text-security: disc;" id="tlfuncionarioSenha<%= value.idFuncionario %>"><%= value.funcionarioSenha %></td>    
                         <td id="tlfuncionarioAcesso<%= value.idFuncionario %>"><%= value.funcionarioAcesso %></td>                                   

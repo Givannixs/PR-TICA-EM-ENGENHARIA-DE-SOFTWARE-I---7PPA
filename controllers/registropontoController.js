@@ -5,7 +5,7 @@ class ResgistrapontoController {
     async listarView(req, res) {
         let registraponto = new ResgistrapontoModel();
         let lista = await registraponto.listarResgistroponto();
-        console.log('chegei aquii'+lista[0]);
+       
         res.render('registroponto/listar', {lista: lista});
     }
 
