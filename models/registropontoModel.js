@@ -33,7 +33,7 @@ class RegistapontoModel {
 
     async listarResgistroponto() {
       
-        let sql = 'SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario`';
+        let sql = 'SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` ORDER BY `registroponto`.`dataHoraEntrada` DESC';
         
         var rows = await conexao.ExecutaComando(sql);
         console.log(rows);
@@ -79,8 +79,8 @@ class RegistapontoModel {
     }
 
     async buscarResgistroponto() {
-
-        let sql = "SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` WHERE `dataHoraEntrada` LIKE '%" + this.dataHoraEntrada + "%' ORDER BY `registroponto`.`dataHoraEntrada` ASC";
+       
+        let sql = "SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` WHERE `funcionarioNome` LIKE '%" + this.funcionarioNome + "%' ORDER BY `registroponto`.`dataHoraEntrada` DESC";
 
         
         var rows = await conexao.ExecutaComando(sql);
@@ -90,7 +90,7 @@ class RegistapontoModel {
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'], row['dataHoraSaida'], row['funcionarioNome']));
+                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'],  row['dataHoraSaida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
                 
                 
             }

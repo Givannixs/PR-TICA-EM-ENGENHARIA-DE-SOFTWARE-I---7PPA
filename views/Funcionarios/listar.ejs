@@ -114,7 +114,7 @@
                         <td id="tlfuncionarioEscala<%= value.idFuncionario %>"><%= value.funcionarioEscala %></td>
                         <td id="tlfuncionarioDepartamento<%= value.idFuncionario %>"><%= value.funcionarioDepartamento %></td>
                         <td id="tlfuncionarioTelefone<%= value.idFuncionario %>"><%= value.funcionarioTelefone %></td>
-                        <td id="tldataAdmissao<%= value.idFuncionario %>"><%= value.dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short",timeStyle:"short"}); %></td>              
+                        <td id="tldataAdmissao<%= value.idFuncionario %>"><%= value.dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>              
                         <td id="tlfuncionarioEmail<%= value.idFuncionario %>"><%= value.funcionarioEmail %></td>
                         <td style="-webkit-text-security: disc;" id="tlfuncionarioSenha<%= value.idFuncionario %>"><%= value.funcionarioSenha %></td>    
                         <td id="tlfuncionarioAcesso<%= value.idFuncionario %>"><%= value.funcionarioAcesso %></td>                                   
@@ -173,7 +173,7 @@
                                           
                                              <div class="mb-3">
                                             <label for="cpf" class="col-form-label">Data Admissao:</label>
-                                            <input name="dataAdmissao" type="date" class="form-control" id="dataAdmissao" value="<%= value.dataAdmissao %>" required="required">
+                                            <input name="dataAdmissao" type="datetime-local" class="form-control" id="dataAdmissao"  value="<%= new Date(value.dataAdmissao.valueOf() -  value.dataAdmissao.getTimezoneOffset() * 60000).toISOString().replace(/\.\d{3}Z$/, ''); %>" required="required">
                                           </div> 
                                           
                                          

@@ -62,7 +62,7 @@ class ResgistrapontoController {
 
     async buscarResgistroponto(req, res) {
         let registraponto = new ResgistrapontoModel();
-        registraponto.idregistroPonto= req.body.busca;
+        registraponto.funcionarioNome= req.body.busca;
         let lista = await registraponto.buscarResgistroponto();
         res.render('registroponto/listar', {lista: lista});
     }
@@ -77,6 +77,7 @@ class ResgistrapontoController {
         registraponto.dataHoraEntrada= req.body.dataHoraEntrada;
         registraponto.dataHoraSaida= req.body.dataHoraSaida;
         registraponto.funcionario_idFuncionario= req.body.funcionario_idFuncionario;
+        
        
        
 

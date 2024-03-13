@@ -94,12 +94,12 @@
                                   value="<%= value.idregistroPonto %>">
                                 <label for="alterarnome" class="col-form-label">Hora Entrada:</label>
                                 <input id="dataHoraEntradaEditar" name="dataHoraEntrada" type="datetime-local" class="form-control"
-                                  value="document.getElementById(tldataHoraEntrada<%= value.idregistroPonto %>).value" required="required">
+                                  value="<%= new Date(value.dataHoraEntrada.valueOf() -  value.dataHoraEntrada.getTimezoneOffset() * 60000).toISOString().replace(/\.\d{3}Z$/, ''); %>" required="required">
                               </div>
                               <div class="mb-3">
                                 <label for="alterarHoraEntrada" class="col-form-label">Hora Saída:</label>
                                 <input id="dataHoraSaidaEditar" name="dataHoraSaida" type="datetime-local" class="form-control"
-                                  value="document.getElementById(tldataHoraSaida<%= value.idregistroPonto %>).value" onchange="document.getElementById('dataHoraSaidaEditar').min=document.getElementById('dataHoraEntradaEditar').value" required="required">
+                                  value="<%= new Date(value.dataHoraSaida.valueOf() -  value.dataHoraSaida.getTimezoneOffset() * 60000).toISOString().replace(/\.\d{3}Z$/, ''); %>" onchange="document.getElementById('dataHoraSaidaEditar').min=document.getElementById('dataHoraEntradaEditar').value" required="required">
                               </div>
                               <div class="mb-3">
                                 <label hidden for="alterarEntradaRepouso" class="col-form-label">Funcionario :</label>
