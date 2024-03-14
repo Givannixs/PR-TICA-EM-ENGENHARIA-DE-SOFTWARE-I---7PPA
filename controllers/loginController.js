@@ -21,7 +21,7 @@ class LoginController {
             var usuario = new funcionarioModel();
             var usuario = await usuario.autenticarFuncionario(req.body.inputEmail, req.body.inputPassword);
             if(usuario != null){
-                //console.log(usuario[0].idFuncionario);
+                console.log(usuario[0].idFuncionario);
                 res.cookie('usuarioLogado', usuario[0].idFuncionario);
                 res.redirect('/');
             }

@@ -47,12 +47,12 @@ class ResgistrapontoController {
         let registraponto = new ResgistrapontoModel();
 
         registraponto.idregistroPonto=req.body.idregistroPonto;
-        registraponto.dataHoraEntrada=req.body.dataHoraEntrada;
-        registraponto.dataHoraSaida=req.body.dataHoraSaida;
+        registraponto.entrada=req.body.entrada;
+        registraponto.entradaRepouso=req.body.entradaRepouso;
+        registraponto.saidaRepouso=req.body.saidaRepouso;
+        registraponto.saida=req.body.saida;
+        registraponto.data=req.body.data;
         registraponto.funcionario_idFuncionario=req.body.funcionario_idFuncionario;
-        
-
-       
 
         let retorno = await registraponto.cadastrarResgistroponto();
         let lista = await registraponto.listarResgistroponto();
@@ -73,13 +73,13 @@ class ResgistrapontoController {
         let registraponto = new ResgistrapontoModel();
 
        
-        registraponto.idregistroPonto= req.body.idregistroPonto;
-        registraponto.dataHoraEntrada= req.body.dataHoraEntrada;
-        registraponto.dataHoraSaida= req.body.dataHoraSaida;
-        registraponto.funcionario_idFuncionario= req.body.funcionario_idFuncionario;
-        
-       
-       
+        registraponto.idregistroPonto=req.body.idregistroPonto;
+        registraponto.entrada=req.body.entrada;
+        registraponto.entradaRepouso=req.body.entradaRepouso;
+        registraponto.saidaRepouso=req.body.saidaRepouso;
+        registraponto.saida=req.body.saida;
+        registraponto.data=req.body.data;
+        registraponto.funcionario_idFuncionario=req.body.funcionario_idFuncionario;
 
         let retorno = await registraponto.alterarResgistroponto();
         let lista = await registraponto.listarResgistroponto();

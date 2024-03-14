@@ -4,25 +4,34 @@ const conexao = new Database();
 class RegistapontoModel {
 
     #idregistroPonto;
-    #dataHoraEntrada;
-    #dataHoraSaida;
+    #data
+    #entrada;
+    #entradaRepouso;
+    #saidaRepouso;
+    #saida;
     #funcionario_idFuncionario;
     #funcionarioNome;
 
  
 
     get idregistroPonto() { return this.#idregistroPonto; } set idregistroPonto(idregistroPonto) {this.#idregistroPonto = idregistroPonto;}
-    get dataHoraEntrada() { return this.#dataHoraEntrada; } set dataHoraEntrada(dataHoraEntrada) {this.#dataHoraEntrada = dataHoraEntrada;}
-    get dataHoraSaida() { return this.#dataHoraSaida; } set dataHoraSaida(dataHoraSaida) {this.#dataHoraSaida = dataHoraSaida;}
+    get data() { return this.#data; } set data(data) {this.#data = data;}
+    get entrada() { return this.#entrada; } set entrada(entrada) {this.#entrada = entrada;}
+    get entradaRepouso() { return this.#entradaRepouso; } set entradaRepouso(entradaRepouso) {this.#entradaRepouso = entradaRepouso;}
+    get saidaRepouso() { return this.#saidaRepouso; } set saidaRepouso(saidaRepouso) {this.#saidaRepouso = saidaRepouso;}
+    get saida() { return this.#saida; } set saida(saida) {this.#saida = saida;}
     get funcionario_idFuncionario() { return this.#funcionario_idFuncionario; } set funcionario_idFuncionario(funcionario_idFuncionario) {this.#funcionario_idFuncionario = funcionario_idFuncionario;}
     get funcionarioNome() { return this.#funcionarioNome; } set funcionarioNome(funcionarioNome) {this.#funcionarioNome = funcionarioNome;}
     
 
 
-    constructor(idregistroPonto, dataHoraEntrada, dataHoraSaida, funcionario_idFuncionario, funcionarioNome) {
+    constructor(idregistroPonto, data, entrada, entradaRepouso, saidaRepouso, saida, funcionario_idFuncionario, funcionarioNome) {
         this.#idregistroPonto = idregistroPonto
-        this.#dataHoraEntrada = dataHoraEntrada
-        this.#dataHoraSaida = dataHoraSaida
+        this.#data = data
+        this.#entrada = entrada
+        this.#entradaRepouso = entradaRepouso
+        this.#saidaRepouso = saidaRepouso
+        this.#saida = saida
         this.#funcionario_idFuncionario = funcionario_idFuncionario
         this.#funcionarioNome = funcionarioNome
        
@@ -33,21 +42,24 @@ class RegistapontoModel {
 
     async listarResgistroponto() {
       
-        let sql = 'SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` ORDER BY `registroponto`.`dataHoraEntrada` DESC';
+        let sql = `SELECT data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
+        FROM funcionario_has_registroponto AS pontofuncionario
+        INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
+        INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto`;
         
-        var rows = await conexao.ExecutaComando(sql);
-        console.log(rows);
-        let listaRetorno = [];
+    var rows = await conexao.ExecutaComando(sql);
+    console.log(rows);
+    let listaRetorno = [];
 
-        if(rows.length > 0){
-            for(let i=0; i<rows.length; i++){
-                var row = rows[i];
-                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'],  row['dataHoraSaida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
-            }
+    if(rows.length > 0){
+        for(let i=0; i<rows.length; i++){
+            var row = rows[i];
+            listaRetorno.push(new RegistapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
         }
-        
-        return listaRetorno;
     }
+        
+    return listaRetorno;
+}
 
     async deletarResgistroponto(id) {
 
@@ -71,7 +83,7 @@ class RegistapontoModel {
 
     async cadastrarResgistroponto() {
 
-        let sql = "INSERT INTO `registroponto`(`dataHoraEntrada`, `dataHoraSaida`, `funcionario_idFuncionario`) VALUES ('"+this.#dataHoraEntrada+"','"+this.#dataHoraSaida+"', '"+this.#funcionario_idFuncionario+"')";
+        let sql = "INSERT INTO `registroponto`(`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`, `funcionario_idFuncionario`) VALUES ('"+this.#entrada+"','"+this.#entradaRepouso+"','"+this.#saidaRepouso+"','"+this.#saida+"', '"+this.#funcionario_idFuncionario+"')";
         
         var rows = await conexao.ExecutaComando(sql);
 
@@ -80,7 +92,7 @@ class RegistapontoModel {
 
     async buscarResgistroponto() {
        
-        let sql = "SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` WHERE `funcionarioNome` LIKE '%" + this.funcionarioNome + "%' ORDER BY `registroponto`.`dataHoraEntrada` DESC";
+        let sql = "SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` WHERE `funcionarioNome` LIKE '%" + this.funcionarioNome + "%' ORDER BY `registroponto`.`entrada` DESC";
 
         
         var rows = await conexao.ExecutaComando(sql);
@@ -90,7 +102,7 @@ class RegistapontoModel {
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['dataHoraEntrada'],  row['dataHoraSaida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
+                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'],  row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
                 
                 
             }
@@ -102,9 +114,9 @@ class RegistapontoModel {
 
 
     async alterarResgistroponto() {
-        let sql = "UPDATE `registroponto` SET `dataHoraEntrada` = ?, `dataHoraSaida` = ?, `funcionario_idFuncionario` = ?  WHERE `registroponto`.`idregistroPonto` = ?";
+        let sql = "UPDATE `registroponto` SET `entrada` = ?,`entradaRepouso` = ?,`saidaRepouso` = ?, `saida` = ?, `funcionario_idFuncionario` = ?  WHERE `registroponto`.`idregistroPonto` = ?";
       
-        var values = [this.dataHoraEntrada, this.dataHoraSaida, this.funcionario_idFuncionario, this.idregistroPonto];
+        var values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, this.funcionario_idFuncionario, this.idregistroPonto];
       
         var rows = await conexao.ExecutaComando(sql, values);
       
