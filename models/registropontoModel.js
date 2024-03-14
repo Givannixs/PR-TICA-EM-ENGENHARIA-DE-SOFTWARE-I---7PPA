@@ -45,7 +45,7 @@ class RegistrapontoModel {
         let sql = `SELECT data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
         FROM funcionario_has_registroponto AS pontofuncionario
         INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
-        INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto`;
+        INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionario_idFuncionario LIKE '%`+this.#funcionario_idFuncionario+`%' ORDER BY data DESC`;
         
     var rows = await conexao.ExecutaComando(sql);
     console.log(rows);
@@ -54,7 +54,7 @@ class RegistrapontoModel {
     if(rows.length > 0){
         for(let i=0; i<rows.length; i++){
             var row = rows[i];
-            listaRetorno.push(new RegistapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
+            listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
         }
     }
         
@@ -82,8 +82,8 @@ class RegistrapontoModel {
     }
 
     async cadastrarResgistroponto() {
-
-        let sql = "INSERT INTO `registroponto`(`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`, `funcionario_idFuncionario`) VALUES ('"+this.#entrada+"','"+this.#entradaRepouso+"','"+this.#saidaRepouso+"','"+this.#saida+"', '"+this.#funcionario_idFuncionario+"')";
+       
+       let sql = "INSERT INTO `registroponto`(`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`, `funcionario_idFuncionario`) VALUES ('"+this.#entrada+"','"+this.#entradaRepouso+"','"+this.#saidaRepouso+"','"+this.#saida+"', '"+this.#funcionario_idFuncionario+"')";
         
         var rows = await conexao.ExecutaComando(sql);
 
@@ -102,7 +102,7 @@ class RegistrapontoModel {
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new RegistapontoModel(row['idregistroPonto'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'],  row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
+                listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'],  row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
                 
                 
             }

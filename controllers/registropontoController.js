@@ -4,6 +4,7 @@ class ResgistrapontoController {
 
     async listarView(req, res) {
         let registraponto = new ResgistrapontoModel();
+        registraponto.funcionario_idFuncionario=req.headers.cookie.split('=')[1];
         let lista = await registraponto.listarResgistroponto();
        
         res.render('registroponto/listar', {lista: lista});
