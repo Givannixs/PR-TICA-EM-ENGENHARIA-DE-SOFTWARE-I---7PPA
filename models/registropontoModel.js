@@ -1,7 +1,7 @@
 const Database = require('../db/database');
 
 const conexao = new Database();
-class RegistapontoModel {
+class RegistrapontoModel {
 
     #idregistroPonto;
     #data
@@ -127,4 +127,4 @@ class RegistapontoModel {
 
 }
 
-module.exports = RegistapontoModel;
+module.exports = RegistrapontoModel;
