@@ -42,7 +42,7 @@ class RegistrapontoModel {
 
     async listarResgistroponto() {
       
-        let sql = `SELECT data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
+        let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
         FROM funcionario_has_registroponto AS pontofuncionario
         INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
         INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionario_idFuncionario LIKE '%`+this.#funcionario_idFuncionario+`%' ORDER BY data DESC`;
@@ -82,10 +82,14 @@ class RegistrapontoModel {
     }
 
     async cadastrarResgistroponto() {
-       
-       let sql = "INSERT INTO `registroponto`(`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`, `funcionario_idFuncionario`) VALUES ('"+this.#entrada+"','"+this.#entradaRepouso+"','"+this.#saidaRepouso+"','"+this.#saida+"', '"+this.#funcionario_idFuncionario+"')";
+        console.log(this.#data,this.#entrada);
+       let sql = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('"+this.#data+"','"+this.#entrada+"','"+this.#entradaRepouso+"','"+this.#saidaRepouso+"','"+this.#saida+"')";
         
         var rows = await conexao.ExecutaComando(sql);
+        console.log('id inserido' +rows.insertId);
+
+       let sql2 = "INSERT INTO `funcionario_has_registroponto` (`funcionario_idFuncionario`, `registroponto_idregistroPonto`) VALUES ('"+this.funcionario_idFuncionario+"', '"+rows.insertId+"')";
+        var rows = await conexao.ExecutaComando(sql2);
 
         return true;
     }
@@ -114,9 +118,9 @@ class RegistrapontoModel {
 
 
     async alterarResgistroponto() {
-        let sql = "UPDATE `registroponto` SET `entrada` = ?,`entradaRepouso` = ?,`saidaRepouso` = ?, `saida` = ?, `funcionario_idFuncionario` = ?  WHERE `registroponto`.`idregistroPonto` = ?";
+        let sql = "UPDATE `registroponto` SET `entradaRepouso` = ?,`saidaRepouso` = ?, `saida` = ? WHERE `registroponto`.`idregistroPonto` = ?";
       
-        var values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, this.funcionario_idFuncionario, this.idregistroPonto];
+        var values = [this.entradaRepouso,this.saidaRepouso, this.saida, this.idregistroPonto];
       
         var rows = await conexao.ExecutaComando(sql, values);
       

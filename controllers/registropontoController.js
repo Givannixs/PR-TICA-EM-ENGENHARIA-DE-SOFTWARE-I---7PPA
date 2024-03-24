@@ -44,10 +44,9 @@ class ResgistrapontoController {
     }
 
     async cadastrarResgistroponto(req, res) {
-        console.log(req.body);
+        
         let registraponto = new ResgistrapontoModel();
-
-        registraponto.idregistroPonto=req.body.idregistroPonto;
+        //registraponto.idregistroPonto=req.body.idregistroPonto;
         registraponto.entrada=req.body.entrada;
         registraponto.entradaRepouso=req.body.entradaRepouso;
         registraponto.saidaRepouso=req.body.saidaRepouso;
@@ -57,7 +56,9 @@ class ResgistrapontoController {
 
         let retorno = await registraponto.cadastrarResgistroponto();
         let lista = await registraponto.listarResgistroponto();
-        res.render('registroponto/listar', {lista: lista});
+       // res.render('registroponto/listar', {lista: lista});
+        return true;
+        
     }
 
 
@@ -70,21 +71,22 @@ class ResgistrapontoController {
 
     async alterarResgistroponto(req, res) {
         
-        console.log(req.body);
+        console.log(req.body.idregistroPonto);
         let registraponto = new ResgistrapontoModel();
 
        
         registraponto.idregistroPonto=req.body.idregistroPonto;
-        registraponto.entrada=req.body.entrada;
+        //registraponto.entrada=req.body.entrada;
         registraponto.entradaRepouso=req.body.entradaRepouso;
         registraponto.saidaRepouso=req.body.saidaRepouso;
         registraponto.saida=req.body.saida;
-        registraponto.data=req.body.data;
+        //registraponto.data=req.body.data;
         registraponto.funcionario_idFuncionario=req.body.funcionario_idFuncionario;
 
         let retorno = await registraponto.alterarResgistroponto();
-        let lista = await registraponto.listarResgistroponto();
-        res.render('registroponto/listar', {lista: lista});
+        //let lista = await registraponto.listarResgistroponto();
+        //res.render('registroponto/listar', {lista: lista});
+        return true;
     }
 
 }

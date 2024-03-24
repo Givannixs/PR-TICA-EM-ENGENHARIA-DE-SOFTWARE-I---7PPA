@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-  
+  <script src="/js/Registroponto/listar.js"></script>
 </head> 
 <body>
   <div>
@@ -16,10 +16,12 @@
         <% for(var i=0; i<1; i++) { %>
         <p><strong>Nome do Usuário:</strong> <%= lista[i].funcionarioNome %></p>
         <% } %>
-        <p><strong>Status do Ponto:</strong> <span id="statusIndicator">Não Batido</span></p>
-
+       <!--<p><strong>Status do Ponto:</strong> <span id="statusIndicator">Não Batido</span></p> --> 
+          
     </div>
-    <form >
+    <% for(var i=0; i<1; i++) { %>
+    <form onsubmit="event.preventDefault(), Baterponto(Date.now(),'<%=lista[i].data%>', '<%=lista[i].funcionario_idFuncionario%>', '<%=lista[i].entradaRepouso%>', '<%=lista[i].saidaRepouso%>', '<%=lista[i].saida%>','<%=lista[i].idregistroPonto%>')">
+      <% } %>
       <!-- Input hidden para o ID do funcionário -->
       <button type="submit" class="btn btn-success mb-4">Bater Ponto</button>
     </form>
