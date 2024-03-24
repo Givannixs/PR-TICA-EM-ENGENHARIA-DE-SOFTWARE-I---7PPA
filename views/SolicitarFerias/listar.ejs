@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+  <h2>Solicitação de Férias</h2>
+  <br>
+  <!-- Formulário de Solicitação de Férias -->
+  <form id="vacationForm">
+    <div class="form-group">
+      <label for="startDate">Data de Início:</label>
+      <input type="date" class="form-control" id="startDate" required>
+    </div>
+    <div class="form-group">
+      <label for="endDate">Data de Término:</label>
+      <input type="date" class="form-control" id="endDate" required>
+    </div>
+    <!-- Dias Disponíveis -->
+    <h3>Dias Disponíveis</h3>
+    <p id="availableDays"></p>
+    <div class="form-group">
+      <label for="reason">Motivo:</label>
+      <textarea class="form-control" id="reason" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+  </form>
+  
+  <hr>
+  
+  <!-- Histórico de Solicitações -->
+  <h3>Histórico de Solicitações</h3>
+  <ul id="vacationHistory" class="list-group">
+    <!-- As solicitações serão preenchidas dinamicamente aqui -->
+  </ul>
+  
+  <hr>
+  
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  // Exemplo de dados estáticos
+  let vacationData = [
+    { startDate: '2024-04-01', endDate: '2024-04-10', reason: 'Férias', status: 'Aprovada' },
+    { startDate: '2024-05-01', endDate: '2024-05-10', reason: 'Descanso', status: 'Aprovada' },
+    { startDate: '2024-06-01', endDate: '2024-06-10', reason: 'Viagem', status: 'Rejeitada' }
+  ];
+
+  // Função para exibir o histórico de solicitações
+  function displayVacationHistory() {
+    let historyList = $("#vacationHistory");
+    historyList.empty();
+    vacationData.forEach(function (item) {
+      historyList.append(`<li class="list-group-item">${item.startDate} - ${item.endDate}: ${item.reason} (${item.status})</li>`);
+    });
+  }
+
+  // Função para calcular e exibir os dias disponíveis
+  function displayAvailableDays() {
+    // Lógica para calcular os dias disponíveis aqui
+    let availableDays = 20; // Exemplo
+    $("#availableDays").text(`Você tem ${availableDays} dias de férias disponíveis.`);
+  }
+
+  // Função para lidar com o envio do formulário
+  $("#vacationForm").submit(function (event) {
+    event.preventDefault();
+    let startDate = $("#startDate").val();
+    let endDate = $("#endDate").val();
+    let reason = $("#reason").val();
+    // Aqui você pode enviar os dados para o servidor para processamento
+    // Por enquanto, apenas atualizamos a exibição dos dados
+    vacationData.push({ startDate: startDate, endDate: endDate, reason: reason, status: 'Pendente' });
+    displayVacationHistory();
+    displayAvailableDays();
+    // Limpar o formulário após o envio
+    $("#startDate").val("");
+    $("#endDate").val("");
+    $("#reason").val("");
+  });
+
+  // Inicialização da exibição dos dados
+  displayVacationHistory();
+  displayAvailableDays();
+</script>
+
+</body>
+</html>
