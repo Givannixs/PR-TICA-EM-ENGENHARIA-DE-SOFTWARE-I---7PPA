@@ -9,6 +9,7 @@ const EscalasRoute = require ('./routes/escalasRoute');
 const LoginRoute = require('./routes/loginRoute');
 const RegistropontoRoute = require('./routes/registropontoRoute');
 const SolicitarFeriasRoute = require('./routes/solicitarFeriasRoute');
+const AprovarFeriasRoute = require('./routes/aprovarFeriasRoute');
 
 const app = express();
 
@@ -27,6 +28,9 @@ app.set('layout', './layout');
 app.use(expressLayouts);
 
 //definindo as rotas que o nosso sistema vai reconhecer através da url do navegador
+let AprovarFeriasRota = new AprovarFeriasRoute();
+app.use('/aprovarferias', AprovarFeriasRota.router);
+
 let SolicitarFeriasRota = new SolicitarFeriasRoute();
 app.use('/solicitarferias', SolicitarFeriasRota.router);
 
