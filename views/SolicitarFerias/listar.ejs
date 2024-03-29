@@ -12,18 +12,18 @@
   <h2>Solicitação de Férias</h2>
   <br>
   <!-- Formulário de Solicitação de Férias -->
-  <form id="vacationForm">
+  <form id="vacationForm" method="post" action="/solicitarferias/cadastrarsolicitacaoferias">
     <div class="form-group">
       <label for="startDate">Data de Início:</label>
-      <input type="date" class="form-control" id="startDate" required>
+      <input type="date" class="form-control" id="datainicio" name="datainicio" onchange="document.querySelector('#endDate').min=this.value" required>
     </div>
     <div class="form-group">
       <label for="endDate">Data de Término:</label>
-      <input type="date" class="form-control" id="endDate" required>
+      <input type="date" class="form-control" id="datatermino" name="datatermino" required>
     </div>
-    <!-- Dias Disponíveis -->
+    <!-- Dias Disponíveis 
     <h3>Dias Disponíveis</h3>
-    <p id="availableDays"></p>
+    <p id="availableDays"></p>-->
     <div class="form-group">
       <label for="reason">Motivo:</label>
       <textarea class="form-control" id="reason" rows="3" required></textarea>
@@ -33,11 +33,41 @@
   
   <hr>
   
-  <!-- Histórico de Solicitações -->
+  <!-- Histórico de Solicitações
   <h3>Histórico de Solicitações</h3>
-  <ul id="vacationHistory" class="list-group">
-    <!-- As solicitações serão preenchidas dinamicamente aqui -->
-  </ul>
+  <ul id="vacationHistory" class="list-group"> -->
+
+    <!-- As solicitações serão preenchidas dinamicamente aqui 
+  </ul>-->
+
+  <div id="lastRecords" class="mt-4">
+    <h3>Histórico de Solicitações</h3>
+    <br>
+    <table class="table table-bordered table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>Data Inicio</th>
+          <th>Data Termino</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% lista.map(function(value, index) { %>
+          <tr>
+            <td>
+              <%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"});%>
+            </td>
+            <td>
+              <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"});%>
+            </td>
+            <td>
+              Pendente
+            </td>        
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
   
   <hr>
   
@@ -49,7 +79,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   // Exemplo de dados estáticos
-  let vacationData = [
+ /* let vacationData = [
     { startDate: '2024-04-01', endDate: '2024-04-10', reason: 'Férias', status: 'Aprovada' },
     { startDate: '2024-05-01', endDate: '2024-05-10', reason: 'Descanso', status: 'Aprovada' },
     { startDate: '2024-06-01', endDate: '2024-06-10', reason: 'Viagem', status: 'Rejeitada' }
@@ -90,7 +120,7 @@
 
   // Inicialização da exibição dos dados
   displayVacationHistory();
-  displayAvailableDays();
+  displayAvailableDays();*/
 </script>
 
 </body>
