@@ -18,6 +18,8 @@ class SolicitarFeriasController {
        
         solicitacaoferias.datainicio=req.body.datainicio;
         solicitacaoferias.datatermino=req.body.datatermino;
+        solicitacaoferias.status=req.body.status;
+        solicitacaoferias.motivo=req.body.motivo;
         solicitacaoferias.funcionario_idFuncionario=req.headers.cookie.split('=')[1];
     
         let retorno = await solicitacaoferias.cadastrarSolicitacaoFerias();

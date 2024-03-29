@@ -21,24 +21,46 @@
       <label for="endDate">Data de Término:</label>
       <input type="date" class="form-control" id="datatermino" name="datatermino" required>
     </div>
-    <!-- Dias Disponíveis 
-    <h3>Dias Disponíveis</h3>
-    <p id="availableDays"></p>-->
     <div class="form-group">
       <label for="reason">Motivo:</label>
-      <textarea class="form-control" id="reason" rows="3" required></textarea>
+      <textarea class="form-control" id="motivo" name="motivo" rows="4" required></textarea>
     </div>
+    <!-- Adicionando campo hidden para o status -->
+    <input type="hidden" name="status" id="status" value="Pendente">
     <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
   </form>
+  <br>
+  <% for(var i = 0; i < 1; i++) { %>
+    <p><strong>Data de Admissão:</strong> <%= lista[i].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %></p>
+    <% 
+      var dataAdmissao = new Date(lista[i].dataAdmissao);
+      var dataAtual = new Date();
+      var umAnoEmMilissegundos = 1000 * 60 * 60 * 24 * 365;
+      var diferencaEmMilissegundos = dataAtual - dataAdmissao;
+      var diferencaEmAnos = diferencaEmMilissegundos / umAnoEmMilissegundos;
+      var diasDisponiveis = 0;
+      
+      if (diferencaEmAnos >= 1) {
+        // O funcionário completou pelo menos um ano de trabalho
+        diasDisponiveis = Math.floor(diferencaEmAnos) * 30; // Considerando 30 dias de férias por ano
+      } else {
+        // O funcionário não completou um ano de trabalho ainda
+        diasDisponiveis = 0;
+        // Defina uma mensagem indicando que o funcionário ainda não tem direito a férias
+        var statusFerias = "Funcionário ainda não possui férias disponíveis";
+      }
+    %>
+    <p><strong>Dias Disponíveis:</strong> <%= diasDisponiveis %></p>
+    <% if (statusFerias) { %>
+      <p><strong>Status:</strong> <%= statusFerias %></p>
+    <% } %>
+  <% } %>
+  
+  
+  
+
   
   <hr>
-  
-  <!-- Histórico de Solicitações
-  <h3>Histórico de Solicitações</h3>
-  <ul id="vacationHistory" class="list-group"> -->
-
-    <!-- As solicitações serão preenchidas dinamicamente aqui 
-  </ul>-->
 
   <div id="lastRecords" class="mt-4">
     <h3>Histórico de Solicitações</h3>
@@ -48,6 +70,7 @@
         <tr>
           <th>Data Inicio</th>
           <th>Data Termino</th>
+          <th>Motivo</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -61,8 +84,11 @@
               <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"});%>
             </td>
             <td>
-              Pendente
-            </td>        
+              <%= value.motivo%>
+            </td>
+            <td>
+              <%= value.status%>
+            </td>
           </tr>
         <% }); %>
       </tbody>
@@ -73,54 +99,12 @@
   
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-  // Exemplo de dados estáticos
- /* let vacationData = [
-    { startDate: '2024-04-01', endDate: '2024-04-10', reason: 'Férias', status: 'Aprovada' },
-    { startDate: '2024-05-01', endDate: '2024-05-10', reason: 'Descanso', status: 'Aprovada' },
-    { startDate: '2024-06-01', endDate: '2024-06-10', reason: 'Viagem', status: 'Rejeitada' }
-  ];
-
-  // Função para exibir o histórico de solicitações
-  function displayVacationHistory() {
-    let historyList = $("#vacationHistory");
-    historyList.empty();
-    vacationData.forEach(function (item) {
-      historyList.append(`<li class="list-group-item">${item.startDate} - ${item.endDate}: ${item.reason} (${item.status})</li>`);
-    });
-  }
-
-  // Função para calcular e exibir os dias disponíveis
-  function displayAvailableDays() {
-    // Lógica para calcular os dias disponíveis aqui
-    let availableDays = 20; // Exemplo
-    $("#availableDays").text(`Você tem ${availableDays} dias de férias disponíveis.`);
-  }
-
-  // Função para lidar com o envio do formulário
-  $("#vacationForm").submit(function (event) {
-    event.preventDefault();
-    let startDate = $("#startDate").val();
-    let endDate = $("#endDate").val();
-    let reason = $("#reason").val();
-    // Aqui você pode enviar os dados para o servidor para processamento
-    // Por enquanto, apenas atualizamos a exibição dos dados
-    vacationData.push({ startDate: startDate, endDate: endDate, reason: reason, status: 'Pendente' });
-    displayVacationHistory();
-    displayAvailableDays();
-    // Limpar o formulário após o envio
-    $("#startDate").val("");
-    $("#endDate").val("");
-    $("#reason").val("");
+  // Evento para preencher o campo de status com "pendente" antes de enviar o formulário
+  document.getElementById('vacationForm').addEventListener('submit', function(event) {
+    // Preenche o campo de status com "pendente"
+    document.getElementById('status').value = 'Pendente';
   });
-
-  // Inicialização da exibição dos dados
-  displayVacationHistory();
-  displayAvailableDays();*/
 </script>
 
 </body>

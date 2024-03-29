@@ -1,7 +1,7 @@
 const Database = require('../db/database');
 
 const conexao = new Database();
-class SolicitarFeriasModel {
+class AprovarFeriasModel {
 
     #idsolicitacaoFerias;
     #datainicio;
@@ -40,7 +40,7 @@ class SolicitarFeriasModel {
     }
 
 
-    async listarSolicitacaoFerias() {
+    async obterListaDeSolicitacoesDeFerias() {
       
         let sql = `SELECT feriasfuncionario.idsolicitacaoFerias, 
         feriasfuncionario.funcionario_idFuncionario, 
@@ -62,7 +62,7 @@ class SolicitarFeriasModel {
     if(rows.length > 0){
         for(let i=0; i<rows.length; i++){
             var row = rows[i];
-            listaRetorno.push(new SolicitarFeriasModel(row['idsolicitacaoFerias'],row['datainicio'], row['datatermino'], row['status'], row['motivo'], row['funcionario_idFuncionario'], row['funcionarioNome'], row['dataAdmissao']  ));
+            listaRetorno.push(new AprovarFeriasModel(row['idsolicitacaoFerias'],row['datainicio'], row['datatermino'], row['status'], row['motivo'], row['funcionario_idFuncionario'], row['funcionarioNome'], row['dataAdmissao']  ));
         }
     }
         
@@ -70,34 +70,6 @@ class SolicitarFeriasModel {
 }
 
 
-async cadastrarSolicitacaoFerias() {
-    console.log(this.#datainicio, this.#datatermino);
-    let sql = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`) VALUES (?, ?, ?, ?, ?)";
-    var values = [this.#datainicio, this.#datatermino, this.#status, this.#motivo, this.#funcionario_idFuncionario];
-
-    try {
-        var result = await conexao.ExecutaComando(sql, values);
-        console.log('id inserido: ' + result.insertId);
-        return true;
-    } catch (error) {
-        console.error('Erro ao cadastrar solicitação de férias:', error);
-        return false;
-    }
 }
 
-
-    async alterarSolicitacaoFerias() {
-        let sql = "UPDATE `solicitacaoferias` SET `dataInicio` = ?,`datatermino` = ? WHERE `solicitacaoferias`.`idsolicitacaoFerias` = ?";
-      
-        var values = [this.datainicio,this.#datatermino, this.idsolicitacaoFerias];
-      
-        var rows = await conexao.ExecutaComando(sql, values);
-      
-        return true;
-    }
-    
-
-
-}
-
-module.exports = SolicitarFeriasModel;
+module.exports = AprovarFeriasModel;

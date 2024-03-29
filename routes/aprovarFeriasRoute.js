@@ -15,7 +15,7 @@ class AprovarFeriasRoute {
         this.#router = express.Router();
         let auth = new Autenticacao();
         let ctrl = new AprovarFeriasController();
-        this.#router.get('/',auth.usuarioEstaLogado, ctrl.aprovarFeriasView);
+        this.#router.get('/',auth.usuarioEstaLogado, ctrl.listarView);
         
     }
 }

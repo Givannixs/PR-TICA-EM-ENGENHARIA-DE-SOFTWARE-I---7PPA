@@ -3,79 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aprovação de Férias</title>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-  <h2>Aprovação de Férias</h2>
+  <h2>Solicitações de Férias - Gestor</h2>
   <br>
-  
-  <!-- Lista de solicitações pendentes -->
-  <h4>Solicitações Pendentes</h4>
-  <ul id="pendingVacations" class="list-group">
-    <!-- As solicitações pendentes serão preenchidas dinamicamente aqui -->
-  </ul>
-  
-  <hr>
-  
+
+  <!-- Tabela para exibir as solicitações de férias -->
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>Data Início</th>
+        <th>Data Término</th>
+        <th>Motivo</th>
+        <th>Status</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% lista.map(function(value, index) { %>
+        <tr>
+          <td><%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
+          <td><%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
+          <td><%= value.motivo %></td>
+          <td><%= value.status %></td>
+          <td>
+            <% if (value.status === 'Pendente') { %>
+              <!-- Botões de Aprovar e Rejeitar -->
+              <button class="btn btn-success btn-sm" onclick="aprovarSolicitacao('<%= value.id %>')">Aprovar</button>
+              <button class="btn btn-danger btn-sm" onclick="rejeitarSolicitacao('<%= value.id %>')">Rejeitar</button>
+            <% } else { %>
+              <!-- Se a solicitação já foi processada, exibe uma mensagem -->
+              <span class="badge badge-secondary">Já Processado</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-  // Exemplo de dados estáticos
-  let vacationData = [
-    { id: 1, startDate: '2024-04-01', endDate: '2024-04-10', reason: 'Férias', status: 'Pendente' },
-    { id: 2, startDate: '2024-05-01', endDate: '2024-05-10', reason: 'Descanso', status: 'Pendente' },
-    { id: 3, startDate: '2024-06-01', endDate: '2024-06-10', reason: 'Viagem', status: 'Pendente' }
-  ];
-
-  // Função para exibir as solicitações pendentes
-  function displayPendingVacations() {
-    let pendingList = $("#pendingVacations");
-    pendingList.empty();
-    vacationData.filter(item => item.status === 'Pendente').forEach(function (item) {
-      pendingList.append(`
-        <li class="list-group-item">
-          <div>
-            <strong>Data de Início:</strong> ${item.startDate} | 
-            <strong>Data de Término:</strong> ${item.endDate} | 
-            <strong>Motivo:</strong> ${item.reason}
-          </div>
-          <div>
-            <button type="button" class="btn btn-success" onclick="approveVacation(${item.id})">Aprovar</button>
-            <button type="button" class="btn btn-danger" onclick="rejectVacation(${item.id})">Rejeitar</button>
-          </div>
-        </li>
-      `);
-    });
-  }
-
   // Função para aprovar uma solicitação de férias
-  function approveVacation(id) {
-    let vacation = vacationData.find(item => item.id === id);
-    if (vacation) {
-      vacation.status = 'Aprovada';
-      displayPendingVacations();
-    }
+  function aprovarSolicitacao(id) {
+    // Aqui você pode enviar uma solicitação para o servidor para marcar a solicitação como aprovada
+    alert('Solicitação aprovada com sucesso! ID: ' + id);
+    // Atualizar a página ou fazer outras operações necessárias após a aprovação
   }
 
   // Função para rejeitar uma solicitação de férias
-  function rejectVacation(id) {
-    let vacation = vacationData.find(item => item.id === id);
-    if (vacation) {
-      vacation.status = 'Rejeitada';
-      displayPendingVacations();
-    }
+  function rejeitarSolicitacao(id) {
+    // Aqui você pode enviar uma solicitação para o servidor para marcar a solicitação como rejeitada
+    alert('Solicitação rejeitada! ID: ' + id);
+    // Atualizar a página ou fazer outras operações necessárias após a rejeição
   }
-
-  // Inicialização da exibição das solicitações pendentes
-  displayPendingVacations();
 </script>
 
 </body>
