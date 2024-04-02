@@ -1,9 +1,9 @@
 const express = require('express');
-const AprovarFeriasController= require('../controllers/aprovarFeriasController');
+const AprovarFeriasController = require('../controllers/aprovarFeriasController');
 const Autenticacao = require('../middleware/autenticacao');
-class AprovarFeriasRoute {
 
-    #router;
+class AprovarFeriasRoute {
+#router;
     get router() {
         return this.#router;
     }
@@ -16,6 +16,7 @@ class AprovarFeriasRoute {
         let auth = new Autenticacao();
         let ctrl = new AprovarFeriasController();
         this.#router.get('/',auth.usuarioEstaLogado, ctrl.listarView);
+        this.#router.post('/alterarsolicitacaoferias',auth.usuarioEstaLogado, ctrl.alterarSolicitacaoFerias);
         
     }
 }

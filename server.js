@@ -1,5 +1,6 @@
 //importando os packages instalados
 const express = require('express');
+const app = express();
 const expressLayouts = require('express-ejs-layouts');
 const HomeRoute = require('./routes/homeRoute');
 const FuncionariosRoute = require('./routes/funcionariosRoute');
@@ -11,7 +12,10 @@ const RegistropontoRoute = require('./routes/registropontoRoute');
 const SolicitarFeriasRoute = require('./routes/solicitarFeriasRoute');
 const AprovarFeriasRoute = require('./routes/aprovarFeriasRoute');
 
-const app = express();
+// Middleware para fazer o parsing do corpo da requisição
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 //configurando a nossa pasta public como o nosso repositorio de arquivos estáticos (css, js, imagens)
 app.use(express.static(__dirname + "/public"))

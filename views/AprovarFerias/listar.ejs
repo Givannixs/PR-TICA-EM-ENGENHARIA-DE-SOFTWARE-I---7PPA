@@ -1,66 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="container">
-  <h2>Solicitações de Férias - Gestor</h2>
-  <br>
+    <div class="container">
+        <h2>Solicitações de Férias - Gestor</h2>
+        <br>
 
-  <!-- Tabela para exibir as solicitações de férias -->
-  <table class="table table-bordered table-hover">
-    <thead class="thead-light">
-      <tr>
-        <th>Data Início</th>
-        <th>Data Término</th>
-        <th>Motivo</th>
-        <th>Status</th>
-        <th>Ação</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% lista.map(function(value, index) { %>
-        <tr>
-          <td><%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
-          <td><%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
-          <td><%= value.motivo %></td>
-          <td><%= value.status %></td>
-          <td>
-            <% if (value.status === 'Pendente') { %>
-              <!-- Botões de Aprovar e Rejeitar -->
-              <button class="btn btn-success btn-sm" onclick="aprovarSolicitacao('<%= value.id %>')">Aprovar</button>
-              <button class="btn btn-danger btn-sm" onclick="rejeitarSolicitacao('<%= value.id %>')">Rejeitar</button>
-            <% } else { %>
-              <!-- Se a solicitação já foi processada, exibe uma mensagem -->
-              <span class="badge badge-secondary">Já Processado</span>
-            <% } %>
-          </td>
-        </tr>
-      <% }); %>
-    </tbody>
-  </table>
-</div>
+        <!-- Tabela para exibir as solicitações de férias -->
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Data Início</th>
+                    <th>Data Término</th>
+                    <th>Nome</th>
+                    <th>Motivo</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% lista.map(function(value, index) { %>
+                    <tr>
+                        <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }); %></td>
+                        <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }); %></td>
+                        <td><%= value.funcionarioNome %></td>
+                        <td><%= value.motivo %></td>
+                        <td><%= value.status %></td>
+                        <td>
+                            <% if (value.status === 'Pendente') { %>
+                                <!-- Botões de Aprovar e Rejeitar -->
+                                <button class="btn btn-success btn-sm" onclick="aprovarSolicitacao('<%= value.idsolicitacaoFerias %>')">Aprovar</button>
+                                <button class="btn btn-danger btn-sm" onclick="rejeitarSolicitacao('<%= value.idsolicitacaoFerias %>')">Rejeitar</button>
+                            <% } else { %>
+                                <!-- Se a solicitação já foi processada, exibe uma mensagem -->
+                                <span class="badge badge-secondary">Já Processado</span>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
 
 <script>
-  // Função para aprovar uma solicitação de férias
-  function aprovarSolicitacao(id) {
-    // Aqui você pode enviar uma solicitação para o servidor para marcar a solicitação como aprovada
-    alert('Solicitação aprovada com sucesso! ID: ' + id);
-    // Atualizar a página ou fazer outras operações necessárias após a aprovação
+  function aprovarSolicitacao(idsolicitacaoFerias) {
+      console.log("Solicitação de férias aprovada:", idsolicitacaoFerias);
+      enviarAprovacaoRejeicao(idsolicitacaoFerias, 'aprovada');
   }
 
-  // Função para rejeitar uma solicitação de férias
-  function rejeitarSolicitacao(id) {
-    // Aqui você pode enviar uma solicitação para o servidor para marcar a solicitação como rejeitada
-    alert('Solicitação rejeitada! ID: ' + id);
-    // Atualizar a página ou fazer outras operações necessárias após a rejeição
+  function rejeitarSolicitacao(idsolicitacaoFerias) {
+      console.log("Solicitação de férias rejeitada:", idsolicitacaoFerias);
+      enviarAprovacaoRejeicao(idsolicitacaoFerias, 'rejeitada');
+  }
+
+  function enviarAprovacaoRejeicao(idsolicitacaoFerias, status) {
+      fetch('aprovarferias/alterarsolicitacaoferias', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              idsolicitacaoFerias: idsolicitacaoFerias,
+              status: status
+          })
+      })
+      .then(response => {
+          console.log('Resposta recebida do backend:', response);
+      })
+      .catch(error => {
+          console.error('Erro ao enviar solicitação para o backend:', error);
+      });
   }
 </script>
 
-</body>
+
 </html>
