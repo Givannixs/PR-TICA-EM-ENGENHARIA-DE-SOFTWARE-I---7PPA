@@ -131,6 +131,21 @@ class FuncionariosModel {
         ];
         
         var rows = await conexao.ExecutaComando(sql, values);
+
+
+       
+        let sql2 = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('','','','','')";
+         
+         var rows2 = await conexao.ExecutaComando(sql2);
+         console.log('id inserido' +rows2.insertId);
+ 
+        let sql3 = "INSERT INTO `funcionario_has_registroponto` (`funcionario_idFuncionario`, `registroponto_idregistroPonto`) VALUES ('"+rows.insertId+"', '"+rows2.insertId+"')";
+         var rows3 = await conexao.ExecutaComando(sql3);
+
+
+         let sql4 = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`) VALUES ('', '','', '', '"+rows.insertId+"')";
+        var result = await conexao.ExecutaComando(sql4, values);
+       
     
         return true;
     }
