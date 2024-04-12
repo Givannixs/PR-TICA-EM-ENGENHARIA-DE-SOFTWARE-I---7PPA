@@ -1,9 +1,11 @@
 
 function Baterponto(dataAtual,primeiroponto, funcionarioid, entradarepouso,saidarepouso, saida,idregistroponto)
 { //alert('ola mundo '+ new Date(dataAtual).toLocaleString('pt-BR',{dateStyle:'short'}) +' '+ new Date(dataAtual).toLocaleTimeString() + ' '+ new Date(primeiroponto).toLocaleString('pt-BR',{dateStyle:'short'}) + ' '+ funcionarioid + 'entrada rep'+ entradarepouso + 'saida rep' + saidarepouso + 'saida '+ saida+ 'id registro ' + idregistroponto  );
+var aux= new Date(dataAtual).getFullYear()+'-'+(new Date(dataAtual).getMonth()+parseInt(1))+'-'+new Date(dataAtual).getDate();
 
+//alert( aux);
 if(new Date(dataAtual).toLocaleString('pt-BR',{dateStyle:'short'})==new Date(primeiroponto).toLocaleString('pt-BR',{dateStyle:'short'}))
-{
+{  
    console.log(true);
 
    if(entradarepouso=='00:00:00')
@@ -100,7 +102,8 @@ else
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-        body: JSON.stringify({ data: new Date(dataAtual), entrada: new Date(dataAtual).toLocaleTimeString() ,funcionario_idFuncionario: funcionarioid ,entradaRepouso: '',saidaRepouso: '',saida: ''})
+           
+        body: JSON.stringify({ data: aux, entrada: new Date(dataAtual).toLocaleTimeString() ,funcionario_idFuncionario: funcionarioid ,entradaRepouso: '',saidaRepouso: '',saida: ''})
         
         }).then(function(response) {
         response.text().then(function(data) {
