@@ -61,27 +61,7 @@ class RegistrapontoModel {
     return listaRetorno;
 }
 
-    async deletarResgistroponto(id) {
-
-
-        try {
-
-            let sql = "DELETE FROM `registroponto` WHERE `registroponto`.`idregistroPonto` = '"+id+"'";
-        
-        var rows = await conexao.ExecutaComando(sql);
-
-        return true;
-            
-        } catch (error) {
-
-            return false;
-            
-        }
-
-        
-    }
-
-    async cadastrarResgistroponto() {
+async cadastrarResgistroponto() {
         console.log(this.#data,this.#entrada);
        let sql = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('"+this.#data+"','"+this.#entrada+"','"+this.#entradaRepouso+"','"+this.#saidaRepouso+"','"+this.#saida+"')";
         
@@ -126,6 +106,88 @@ class RegistrapontoModel {
       
         return true;
     }
+
+
+
+
+    // model registro ponto admin
+
+    async listarResgistropontoadmin() {
+      
+        let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
+        FROM funcionario_has_registroponto AS pontofuncionario
+        INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
+        INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto ORDER BY data DESC`;
+        
+    var rows = await conexao.ExecutaComando(sql);
+    console.log(rows);
+    let listaRetorno = [];
+
+    if(rows.length > 0){
+        for(let i=0; i<rows.length; i++){
+            var row = rows[i];
+            listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
+        }
+    }
+        
+    return listaRetorno;
+}
+
+async deletarResgistropontoadmin(id) {
+
+
+    try {
+
+        let sql = "DELETE FROM `funcionario_has_registroponto` WHERE `registroponto_idregistroPonto` = '"+id+"'";
+    
+        var rows = await conexao.ExecutaComando(sql);
+
+         sql = "DELETE FROM `registroponto` WHERE `registroponto`.`idregistroPonto` = '"+id+"'";
+    
+        rows = await conexao.ExecutaComando(sql);
+
+    return true;
+        
+    } catch (error) {
+
+        return false;
+        
+    }
+
+    
+}
+
+async buscarResgistropontoadmin() {
+    let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida FROM funcionario_has_registroponto AS pontofuncionario INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioNome LIKE '%`+this.#funcionarioNome+`%' ORDER BY data DESC`;   
+    
+
+    
+    var rows = await conexao.ExecutaComando(sql);
+
+    let listaRetorno = [];
+
+    if(rows.length > 0){
+        for(let i=0; i<rows.length; i++){
+            var row = rows[i];
+            listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
+            
+            
+        }
+    }
+
+    return listaRetorno;
+}
+
+
+async alterarResgistropontoadmin() {
+    let sql = "UPDATE `registroponto` SET `entrada` = ?, `entradaRepouso` = ?,`saidaRepouso` = ?, `saida` = ? WHERE `registroponto`.`idregistroPonto` = ?";
+  
+    var values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, this.idregistroPonto];
+  
+    var rows = await conexao.ExecutaComando(sql, values);
+  
+    return true;
+}
     
 
 

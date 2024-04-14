@@ -52,6 +52,7 @@ app.use('/escalas', escalasRota.router);
 
 let registropontoRota = new RegistropontoRoute();
 app.use('/registroponto', registropontoRota.router);
+app.use('/registropontoadmin', registropontoRota.router);
 
 let homeRota = new HomeRoute();
 app.use('/', homeRota.router)
