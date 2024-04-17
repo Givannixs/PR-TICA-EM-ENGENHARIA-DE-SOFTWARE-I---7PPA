@@ -84,12 +84,19 @@ class FuncionariosModel {
 
 
     async deletarFuncionarios(id) {
-
-        let sql = "DELETE FROM `funcionario` WHERE `funcionario`.`idFuncionario` = '"+id+"'";
+        try
+        {
+            let sql = "DELETE FROM `funcionario` WHERE `funcionario`.`idFuncionario` = '"+id+"'";
         
-        var rows = await conexao.ExecutaComando(sql);
+            var rows = await conexao.ExecutaComando(sql);
+    
+            return true;
 
-        return true;
+        } catch(error)
+        {
+            return false;
+        }
+       
     }
 
 

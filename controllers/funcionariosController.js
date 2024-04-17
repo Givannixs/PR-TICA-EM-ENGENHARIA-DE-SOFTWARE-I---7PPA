@@ -27,8 +27,18 @@ class FuncionariosController {
         //req.params.cpf
         let funcionario = new FuncionariosModel();
         let retorno = await funcionario.deletarFuncionarios(req.params.id);
-        let lista = await funcionario.listarFuncionarios();
-        res.render('funcionarios/listar', {lista: lista});
+
+        if(retorno==true)
+        {
+            let lista = await funcionario.listarFuncionarios();
+            res.render('funcionarios/listar', {lista: lista});
+        }
+
+        else
+        {
+            res.send('<script>alert("Não foi possível excluir o registro pois existem um ou mais registros vinculados a ele."); window.location.href = "/funcionarios"; </script>');
+        }
+       
         
     }
 
