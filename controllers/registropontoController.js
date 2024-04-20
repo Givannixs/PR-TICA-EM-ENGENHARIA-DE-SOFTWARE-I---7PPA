@@ -157,6 +157,9 @@ class ResgistrapontoController {
     async buscarResgistropontoadmin(req, res) {
         let registraponto = new ResgistrapontoModel();
         registraponto.funcionarioNome= req.body.busca;
+        registraponto.entrada =req.body.dataInicio;
+        registraponto.saida = req.body.dataFinal;
+        
         let lista = await registraponto.buscarResgistropontoadmin();
         res.render('registropontoadmin/listar', {lista: lista});
     }

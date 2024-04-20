@@ -158,7 +158,7 @@ async deletarResgistropontoadmin(id) {
 }
 
 async buscarResgistropontoadmin() {
-    let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida FROM funcionario_has_registroponto AS pontofuncionario INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioNome LIKE '%`+this.#funcionarioNome+`%' ORDER BY data DESC`;   
+    let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida FROM funcionario_has_registroponto AS pontofuncionario INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioNome LIKE '%`+this.#funcionarioNome+`%' AND data BETWEEN '`+this.#entrada+`' AND '`+this.#saida+`' ORDER BY data DESC`;   
     
 
     
