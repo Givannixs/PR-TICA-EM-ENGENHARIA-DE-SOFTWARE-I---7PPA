@@ -1,8 +1,28 @@
 <!--Para fazer com fetch
 <script src="/js/Escala/listar.js"></script>-->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
+<script>
+//gera csv para download
+function csv()
+{    var csvContent = "";
+     var list=[];
+     `<% lista.map(function(value, index) { %>`
+       var item= '<%= value.entrada %>;<%= value.entradaRepouso %>;<%= value.saidaRepouso %>;<%= value.saida %>;<%= value.data.toLocaleString("pt-BR",{dateStyle:"short"}) %>;<%= value.funcionarioNome %>'
+       csvContent += item + "\r\n";
+        
+          `<% }) %>`     
+     
 
+var cabecario = "data:text/csv;charset=utf-8,entrada;entradarepouso;saidarepouso;saida;data;funcionario\r\n";
+csvContent = cabecario+csvContent;
+
+var encodedUri = encodeURI(csvContent);
+window.open(encodedUri);
+
+}
+</script>
+<script type="text/javascript">
+//gera grafico de aderencia
 
         google.charts.load("current", {packages:["calendar"]});
         google.charts.setOnLoadCallback(drawChart);
@@ -53,7 +73,10 @@
             <input class="form-control me-2" type="date" id="dataFinal" name="dataFinal" alt="dataFinal" required>
             <button class="btn btn-outline-success" type="submit">Buscar</button>
           </form>
-          
+
+          <button type="button" onclick="csv()" class="btn btn-success">Baixar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
+            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z"></path>
+          </svg></button>
          <!--
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
             data-bs-whatever="@mdo" onclick="document.getElementById('funcionario_idFuncionario').value=document.cookie.split('=')[1]"><i class="fas fa-plus"></i> Cadastrar</button>
@@ -112,7 +135,7 @@
                <%= value.idregistroPonto %>
               </td>
               <td class="tldate">
-                <%= value.data.toLocaleString('pt-BR',{dateStyle:"short",timeStyle:"short"}); %>
+                <%= value.data.toLocaleString('pt-BR',{dateStyle:"short"}); %>
                </td>
               <td id="tldataHoraEntrada<%= value.idregistroPonto %>">
                 <%= value.entrada.toLocaleString('pt-BR',{dateStyle:"short",timeStyle:"short"}); %>
