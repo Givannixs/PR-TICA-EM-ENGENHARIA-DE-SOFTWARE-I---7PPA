@@ -32,34 +32,8 @@
   <br>
   <% for(var i = 0; i < 1; i++) { %>
     <p><strong>Data de Admissão:</strong> <%= lista[i].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %></p>
-    <% 
-      var dataAdmissao = new Date(lista[i].dataAdmissao);
-      var dataAtual = new Date();
-      var umAnoEmMilissegundos = 1000 * 60 * 60 * 24 * 365;
-      var diferencaEmMilissegundos = dataAtual - dataAdmissao;
-      var diferencaEmAnos = diferencaEmMilissegundos / umAnoEmMilissegundos;
-      var diasDisponiveis = 0;
-      
-      if (diferencaEmAnos >= 1) {
-        // O funcionário completou pelo menos um ano de trabalho
-        diasDisponiveis = Math.floor(diferencaEmAnos) * 30; // Considerando 30 dias de férias por ano
-      } else {
-        // O funcionário não completou um ano de trabalho ainda
-        diasDisponiveis = 0;
-        // Defina uma mensagem indicando que o funcionário ainda não tem direito a férias
-        var statusFerias = "Funcionário ainda não possui férias disponíveis";
-      }
-    %>
-    <p><strong>Dias Disponíveis:</strong> <%= diasDisponiveis %></p>
-    <% if (statusFerias) { %>
-      <p><strong>Status:</strong> <%= statusFerias %></p>
-    <% } %>
+    <p><strong>Dias Disponiveis:</strong> <%= lista[i].diasFeriasDisponiveis%></p>
   <% } %>
-  
-  
-  
-
-  
   <hr>
 
   <div id="lastRecords" class="mt-4">
@@ -70,6 +44,7 @@
         <tr>
           <th>Data Inicio</th>
           <th>Data Termino</th>
+          <th>Ano Referencia</th>
           <th>Motivo</th>
           <th>Status</th>
         </tr>
@@ -82,6 +57,9 @@
             </td>
             <td>
               <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"});%>
+            </td>
+            <td>
+              <%= value.anoReferencia%>
             </td>
             <td>
               <%= value.motivo%>
@@ -104,8 +82,47 @@
   document.getElementById('vacationForm').addEventListener('submit', function(event) {
     // Preenche o campo de status com "pendente"
     document.getElementById('status').value = 'Pendente';
+    
+    // Verifica a data atual
+    var dataAtual = new Date();
+    
+    // Verifica se a data de início das férias está no passado
+    var dataInicio = new Date(document.getElementById('datainicio').value);
+    if (dataInicio < dataAtual) {
+      alert("Você não pode solicitar férias com datas anteriores ou igual à data atual.");
+      event.preventDefault(); // Impede o envio do formulário
+    } else {
+      // Verifica a data de admissão e calcula o período de aquisição de férias
+      var dataAdmissao = new Date('<%= lista[0].dataAdmissao %>');
+      var dataAquisicaoFerias = new Date(dataAdmissao);
+      dataAquisicaoFerias.setMonth(dataAquisicaoFerias.getMonth() + 12);
+      
+      // Verifica se a data de início das férias está dentro do período permitido
+      if (dataInicio < dataAquisicaoFerias) {
+        var dataAquisicaoFormatada = dataAquisicaoFerias.toLocaleDateString('pt-BR', {day: '2-digit', month: 'long', year: 'numeric'});
+        alert("Você só pode solicitar férias após o período de aquisição, a partir de " + dataAquisicaoFormatada + ".");
+        event.preventDefault(); // Impede o envio do formulário
+      } else {
+        // Calcula a data limite para tirar as férias
+        var dataLimite = new Date(dataAquisicaoFerias);
+        dataLimite.setMonth(dataLimite.getMonth() + 11); // Adiciona 11 meses para obter o prazo máximo
+        
+        if (dataInicio > dataLimite) {
+          var dataLimiteFormatada = dataLimite.toLocaleDateString('pt-BR', {day: '2-digit', month: 'long', year: 'numeric'});
+          alert("Você deve tirar as férias até um mês antes do vencimento do segundo período aquisitivo, ou seja, até " + dataLimiteFormatada + ".");
+          event.preventDefault(); // Impede o envio do formulário
+        }
+      }
+    }
   });
 </script>
+
+
+
+
+
+
+
 
 </body>
 </html>
