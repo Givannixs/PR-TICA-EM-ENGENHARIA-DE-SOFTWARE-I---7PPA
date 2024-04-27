@@ -41,7 +41,7 @@ class RegistrapontoModel {
 
 
     async listarResgistroponto() {
-      
+      try{
         let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
         FROM funcionario_has_registroponto AS pontofuncionario
         INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
@@ -59,6 +59,12 @@ class RegistrapontoModel {
     }
         
     return listaRetorno;
+      }catch(error)
+      {   let listaRetorno = [];
+          listaRetorno.push('','','','','','','','');
+          return listaRetorno;
+      }
+       
 }
 
 async cadastrarResgistroponto() {
@@ -114,10 +120,10 @@ async cadastrarResgistroponto() {
 
     async listarResgistropontoadmin() {
       
-        let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
+        let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida, funcionarioStatus
         FROM funcionario_has_registroponto AS pontofuncionario
         INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
-        INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto ORDER BY data DESC`;
+        INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioStatus = 1 ORDER BY data DESC`;
         
     var rows = await conexao.ExecutaComando(sql);
     console.log(rows);
@@ -158,7 +164,7 @@ async deletarResgistropontoadmin(id) {
 }
 
 async buscarResgistropontoadmin() {
-    let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida FROM funcionario_has_registroponto AS pontofuncionario INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioNome LIKE '%`+this.#funcionarioNome+`%' AND data BETWEEN '`+this.#entrada+`' AND '`+this.#saida+`' ORDER BY data DESC`;   
+    let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida, funcionarioStatus FROM funcionario_has_registroponto AS pontofuncionario INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioNome LIKE '%`+this.#funcionarioNome+`%' AND data BETWEEN '`+this.#entrada+`' AND '`+this.#saida+`' AND funcionarioStatus = 1 ORDER BY data DESC`;   
     
 
     
