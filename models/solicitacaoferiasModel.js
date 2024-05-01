@@ -4,6 +4,7 @@ const conexao = new Database();
 class SolicitarFeriasModel {
 
     #idsolicitacaoFerias;
+    #datasolicitacao;
     #datainicio;
     #datatermino;
     #anoReferencia;
@@ -18,6 +19,7 @@ class SolicitarFeriasModel {
  
 
     get idsolicitacaoFerias() { return this.#idsolicitacaoFerias; } set idsolicitacaoFerias(idsolicitacaoFerias) {this.#idsolicitacaoFerias = idsolicitacaoFerias;}
+    get datasolicitacao() { return this.#datasolicitacao; } set datasolicitacao(datasolicitacao) {this.#datasolicitacao = datasolicitacao;}
     get datainicio() { return this.#datainicio; } set datainicio(datainicio) {this.#datainicio = datainicio;}
     get datatermino() { return this.#datatermino; } set datatermino(datatermino) {this.#datatermino = datatermino;}
     get anoReferencia() { return this.#anoReferencia; } set anoReferencia(anoReferencia) {this.#anoReferencia = anoReferencia;}
@@ -31,8 +33,9 @@ class SolicitarFeriasModel {
     
 
 
-    constructor(idsolicitacaoFerias, datainicio, datatermino, anoReferencia, status, motivo, respostaGestor, funcionario_idFuncionario, diasFeriasDisponiveis, funcionarioNome, dataAdmissao) {
+    constructor(idsolicitacaoFerias, datasolicitacao, datainicio, datatermino, anoReferencia, status, motivo, respostaGestor, funcionario_idFuncionario, diasFeriasDisponiveis, funcionarioNome, dataAdmissao) {
         this.#idsolicitacaoFerias = idsolicitacaoFerias
+        this.#datasolicitacao = datasolicitacao
         this.#datainicio = datainicio
         this.#datatermino = datatermino
         this.#anoReferencia = anoReferencia
@@ -49,7 +52,8 @@ class SolicitarFeriasModel {
     async listarSolicitacaoFerias() {
       
         let sql = `SELECT feriasfuncionario.idsolicitacaoFerias, 
-        feriasfuncionario.funcionario_idFuncionario, 
+        feriasfuncionario.funcionario_idFuncionario,
+        feriasfuncionario.datasolicitacao,
         feriasfuncionario.datainicio, 
         feriasfuncionario.datatermino,
         feriasfuncionario.anoReferencia, 
@@ -72,7 +76,7 @@ class SolicitarFeriasModel {
     if(rows.length > 0){
         for(let i=0; i<rows.length; i++){
             var row = rows[i];
-            listaRetorno.push(new SolicitarFeriasModel(row['idsolicitacaoFerias'],row['datainicio'], row['datatermino'], row['anoReferencia'], row['status'], row['motivo'], row['respostaGestor'], row['funcionario_idFuncionario'], row['diasFeriasDisponiveis'], row['funcionarioNome'], row['dataAdmissao']  ));
+            listaRetorno.push(new SolicitarFeriasModel(row['idsolicitacaoFerias'],row['datasolicitacao'],row['datainicio'], row['datatermino'], row['anoReferencia'], row['status'], row['motivo'], row['respostaGestor'], row['funcionario_idFuncionario'], row['diasFeriasDisponiveis'], row['funcionarioNome'], row['dataAdmissao']  ));
         }
     }
         
@@ -81,9 +85,9 @@ class SolicitarFeriasModel {
 
 
 async cadastrarSolicitacaoFerias() {
-    console.log(this.#datainicio, this.#datatermino);
-    let sql = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`) VALUES (?, ?, ?, ?, ?)";
-    var values = [this.#datainicio, this.#datatermino, this.#status, this.#motivo, this.#funcionario_idFuncionario];
+    console.log(this.#datasolicitacao, this.#datainicio, this.#datatermino);
+    let sql = "INSERT INTO `solicitacaoferias`(`datasolicitacao`, `datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`) VALUES (?, ?, ?, ?, ?, ?)";
+    var values = [this.#datasolicitacao, this.#datainicio, this.#datatermino, this.#status, this.#motivo, this.#funcionario_idFuncionario];
 
     try {
         var result = await conexao.ExecutaComando(sql, values);
@@ -97,9 +101,9 @@ async cadastrarSolicitacaoFerias() {
 
 
     async alterarSolicitacaoFerias() {
-        let sql = "UPDATE `solicitacaoferias` SET `dataInicio` = ?,`datatermino` = ? WHERE `solicitacaoferias`.`idsolicitacaoFerias` = ?";
+        let sql = "UPDATE `solicitacaoferias` SET `datasolicitacao` = ?, `dataInicio` = ?,`datatermino` = ? WHERE `solicitacaoferias`.`idsolicitacaoFerias` = ?";
       
-        var values = [this.datainicio,this.#datatermino, this.idsolicitacaoFerias];
+        var values = [this.#datasolicitacao, this.datainicio,this.#datatermino, this.idsolicitacaoFerias];
       
         var rows = await conexao.ExecutaComando(sql, values);
       

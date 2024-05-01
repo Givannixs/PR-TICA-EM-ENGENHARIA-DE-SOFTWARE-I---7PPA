@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <title>Solicitação de Férias</title>
 </head>
 <body>
 
@@ -15,7 +16,7 @@
   <form id="vacationForm" method="post" action="/solicitarferias/cadastrarsolicitacaoferias">
     <div class="form-group">
       <label for="startDate">Data de Início:</label>
-      <input type="date" class="form-control" id="datainicio" name="datainicio" onchange="document.querySelector('#endDate').min=this.value" required>
+      <input type="date" class="form-control" id="datainicio" name="datainicio" onchange="document.querySelector('#datatermino').min=this.value" required>
     </div>
     <div class="form-group">
       <label for="endDate">Data de Término:</label>
@@ -27,12 +28,14 @@
     </div>
     <!-- Adicionando campo hidden para o status -->
     <input type="hidden" name="status" id="status" value="Pendente">
+    <!-- Adicionando campo hidden para a data de solicitação -->
+    <input type="hidden" name="datasolicitacao" id="dataSolicitacao">
     <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
   </form>
   <br>
   <% for(var i = 0; i < 1; i++) { %>
     <p><strong>Data de Admissão:</strong> <%= lista[i].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %></p>
-    <p><strong>Dias Disponiveis:</strong> <%= lista[i].diasFeriasDisponiveis%></p>
+    <p><strong>Dias Disponíveis:</strong> <%= lista[i].diasFeriasDisponiveis %></p>
   <% } %>
   <hr>
 
@@ -42,9 +45,10 @@
     <table class="table table-bordered table-hover">
       <thead class="thead-light">
         <tr>
-          <th>Data Inicio</th>
-          <th>Data Termino</th>
-          <th>Ano Referencia</th>
+          <th>Data Solicitação</th>
+          <th>Data Início</th>
+          <th>Data Término</th>
+          <th>Ano Referência</th>
           <th>Motivo</th>
           <th>Status</th>
           <th>Resposta do Gestor</th>
@@ -54,22 +58,25 @@
         <% lista.map(function(value, index) { %>
           <tr>
             <td>
-              <%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"});%>
+              <%= value.datasolicitacao.toLocaleString('pt-BR',{dateStyle:"short"}) %>
             </td>
             <td>
-              <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"});%>
+              <%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}) %>
             </td>
             <td>
-              <%= value.anoReferencia%>
+              <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}) %>
             </td>
             <td>
-              <%= value.motivo%>
+              <%= value.anoReferencia %>
             </td>
             <td>
-              <%= value.status%>
+              <%= value.motivo %>
             </td>
             <td>
-              <%= value.respostaGestor%>
+              <%= value.status %>
+            </td>
+            <td>
+              <%= value.respostaGestor %>
             </td>
           </tr>
         <% }); %>
@@ -87,8 +94,19 @@
     // Preenche o campo de status com "pendente"
     document.getElementById('status').value = 'Pendente';
     
-    // Verifica a data atual
+    // Obtém a data atual
     var dataAtual = new Date();
+    
+    // Define o valor do campo de data de solicitação como a data atual
+    document.getElementById('dataSolicitacao').value = dataAtual.toISOString().split('T')[0];
+    
+    // Exibe os dados que serão enviados para o backend
+    var formData = new FormData(document.getElementById('vacationForm'));
+    var jsonData = {};
+    formData.forEach(function(value, key){
+      jsonData[key] = value;
+    });
+    console.log(jsonData);
     
     // Verifica se a data de início das férias está no passado
     var dataInicio = new Date(document.getElementById('datainicio').value);
@@ -120,11 +138,6 @@
     }
   });
 </script>
-
-
-
-
-
 
 
 

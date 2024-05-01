@@ -3,9 +3,10 @@ const Database = require('../db/database');
 const conexao = new Database();
 
 class AprovarFeriasModel {
-    constructor(idsolicitacaoFerias, funcionario_idFuncionario, datainicio, datatermino, status, motivo, respostaGestor, funcionarioNome, dataAdmissao) {
+    constructor(idsolicitacaoFerias, funcionario_idFuncionario, datasolicitacao, datainicio, datatermino, status, motivo, respostaGestor, funcionarioNome, dataAdmissao) {
         this.idsolicitacaoFerias = idsolicitacaoFerias;
         this.funcionario_idFuncionario = funcionario_idFuncionario;
+        this.datasolicitacao = datasolicitacao;
         this.datainicio = datainicio;
         this.datatermino = datatermino;
         this.status = status;
@@ -19,6 +20,7 @@ class AprovarFeriasModel {
         try {
             let sql = `SELECT feriasfuncionario.idsolicitacaoFerias, 
                         feriasfuncionario.funcionario_idFuncionario, 
+                        feriasfuncionario.dataSolicitacao,
                         feriasfuncionario.datainicio, 
                         feriasfuncionario.datatermino, 
                         feriasfuncionario.status, 
@@ -37,7 +39,7 @@ class AprovarFeriasModel {
             if (rows.length > 0) {
                 for (let i = 0; i < rows.length; i++) {
                     var row = rows[i];
-                    listaRetorno.push(new AprovarFeriasModel(row.idsolicitacaoFerias, row.funcionario_idFuncionario, row.datainicio, row.datatermino, row.status, row.motivo, row.respostaGestor, row.funcionarioNome, row.dataAdmissao, row.funcionarioStatus));
+                    listaRetorno.push(new AprovarFeriasModel(row.idsolicitacaoFerias, row.funcionario_idFuncionario, row.dataSolicitacao, row.datainicio, row.datatermino, row.status, row.motivo, row.respostaGestor, row.funcionarioNome, row.dataAdmissao, row.funcionarioStatus));
                 }
             }
             return listaRetorno;

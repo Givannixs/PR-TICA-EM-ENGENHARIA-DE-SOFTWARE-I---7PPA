@@ -15,7 +15,8 @@ class SolicitarFeriasController {
     async cadastrarSolicitarFerias(req, res) {
         
         let solicitacaoferias = new SolicitarFeriasModel();
-       
+
+        solicitacaoferias.datasolicitacao=req.body.datasolicitacao;
         solicitacaoferias.datainicio=req.body.datainicio;
         solicitacaoferias.datatermino=req.body.datatermino;
         solicitacaoferias.status=req.body.status;

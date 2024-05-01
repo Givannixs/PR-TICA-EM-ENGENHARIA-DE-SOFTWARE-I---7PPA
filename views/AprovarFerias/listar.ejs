@@ -11,13 +11,14 @@
 <body>
 
     <div class="container">
-        <h2>Solicitações de Férias - Gestor</h2>
+        <h2>Férias Gestor</h2>
         <br>
 
         <!-- Tabela para exibir as solicitações de férias -->
         <table class="table table-bordered table-hover">
             <thead class="thead-light">
                 <tr>
+                    <th>Data Solicitação</th>
                     <th>Data Início</th>
                     <th>Data Término</th>
                     <th>Nome</th>
@@ -30,6 +31,7 @@
             <tbody>
                 <% lista.map(function(value, index) { %>
                     <tr>
+                        <td><%= value.datasolicitacao.toLocaleString('pt-BR',{dateStyle:"short"});%></td>
                         <td><%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
                         <td><%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
                         <td><%= value.funcionarioNome %></td>
@@ -39,8 +41,10 @@
                         <td>
                             <% if (value.status === 'Pendente') { %>
                                 <!-- Botões de Aprovar e Rejeitar -->
-                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalRespostaAprovada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Aprovar</button>
-                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalRespostaRejeitada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Rejeitar</button>
+                                <div class="btn-group">
+                                    <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalRespostaAprovada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Aprovar</button>
+                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalRespostaRejeitada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Rejeitar</button>
+                                </div>
                             <% } else { %>
                                 <!-- Se a solicitação já foi processada, exibe uma mensagem -->
                                 <span class="badge badge-secondary">Já Processado</span>
