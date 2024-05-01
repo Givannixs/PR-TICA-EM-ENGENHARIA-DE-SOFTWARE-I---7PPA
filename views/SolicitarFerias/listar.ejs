@@ -107,38 +107,8 @@
       jsonData[key] = value;
     });
     console.log(jsonData);
-    
-    // Verifica se a data de início das férias está no passado
-    var dataInicio = new Date(document.getElementById('datainicio').value);
-    if (dataInicio < dataAtual) {
-      alert("Você não pode solicitar férias com datas anteriores ou igual à data atual.");
-      event.preventDefault(); // Impede o envio do formulário
-    } else {
-      // Verifica a data de admissão e calcula o período de aquisição de férias
-      var dataAdmissao = new Date('<%= lista[0].dataAdmissao %>');
-      var dataAquisicaoFerias = new Date(dataAdmissao);
-      dataAquisicaoFerias.setMonth(dataAquisicaoFerias.getMonth() + 12);
-      
-      // Verifica se a data de início das férias está dentro do período permitido
-      if (dataInicio < dataAquisicaoFerias) {
-        var dataAquisicaoFormatada = dataAquisicaoFerias.toLocaleDateString('pt-BR', {day: '2-digit', month: 'long', year: 'numeric'});
-        alert("Você só pode solicitar férias após o período de aquisição, a partir de " + dataAquisicaoFormatada + ".");
-        event.preventDefault(); // Impede o envio do formulário
-      } else {
-        // Calcula a data limite para tirar as férias
-        var dataLimite = new Date(dataAquisicaoFerias);
-        dataLimite.setMonth(dataLimite.getMonth() + 11); // Adiciona 11 meses para obter o prazo máximo
-        
-        if (dataInicio > dataLimite) {
-          var dataLimiteFormatada = dataLimite.toLocaleDateString('pt-BR', {day: '2-digit', month: 'long', year: 'numeric'});
-          alert("Você deve tirar as férias até um mês antes do vencimento do segundo período aquisitivo, ou seja, até " + dataLimiteFormatada + ".");
-          event.preventDefault(); // Impede o envio do formulário
-        }
-      }
-    }
   });
 </script>
-
 
 
 </body>
