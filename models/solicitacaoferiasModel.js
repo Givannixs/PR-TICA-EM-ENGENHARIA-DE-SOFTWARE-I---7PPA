@@ -54,10 +54,11 @@ class SolicitarFeriasModel {
         feriasfuncionario.motivo, 
         fun.funcionarioNome,
         fun.diasFeriasDisponiveis,
-        fun.dataAdmissao
+        fun.dataAdmissao,
+        fun.funcionarioStatus
         FROM solicitacaoferias AS feriasfuncionario
         INNER JOIN funcionario AS fun ON fun.idFuncionario = feriasfuncionario.funcionario_idFuncionario
-        WHERE feriasfuncionario.funcionario_idFuncionario LIKE '%`+this.#funcionario_idFuncionario+`%'
+        WHERE feriasfuncionario.funcionario_idFuncionario LIKE '%`+this.#funcionario_idFuncionario+`%' AND fun.funcionarioStatus = 1
         ORDER BY feriasfuncionario.datainicio DESC;`;
         
     var rows = await conexao.ExecutaComando(sql);

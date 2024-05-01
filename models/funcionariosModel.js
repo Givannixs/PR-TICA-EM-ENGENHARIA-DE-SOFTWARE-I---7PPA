@@ -15,6 +15,7 @@ class FuncionariosModel {
     #funcionarioEmail;
     #funcionarioSenha;
     #funcionarioAcesso;
+    #funcionarioStatus;
 
     get idFuncionario() { return this.#idFuncionario; } set idFuncionario(idFuncionario) {this.#idFuncionario = idFuncionario;}
     get funcionarioCPF() { return this.#funcionarioCPF; } set funcionarioCPF(funcionarioCPF) {this.#funcionarioCPF = funcionarioCPF;}
@@ -28,8 +29,9 @@ class FuncionariosModel {
     get funcionarioEmail() { return this.#funcionarioEmail; } set funcionarioEmail(funcionarioEmail) {this.#funcionarioEmail = funcionarioEmail;}
     get funcionarioSenha() { return this.#funcionarioSenha; } set funcionarioSenha(funcionarioSenha) {this.#funcionarioSenha = funcionarioSenha;}
     get funcionarioAcesso() { return this.#funcionarioAcesso; } set funcionarioAcesso(funcionarioAcesso) {this.#funcionarioAcesso = funcionarioAcesso;}
+    get funcionarioStatus() { return this.#funcionarioStatus; } set funcionarioStatus(funcionarioStatus) {this.#funcionarioStatus = funcionarioStatus;}
 
-    constructor(idFuncionario, funcionarioCPF, funcionarioNome, funcionarioCargo,funcionarioEscala, funcionarioDepartamento, funcionarioTelefone, dataAdmissao, funcionarioEmail, funcionarioSenha, idCargo,funcionarioAcesso) {
+    constructor(idFuncionario, funcionarioCPF, funcionarioNome, funcionarioCargo,funcionarioEscala, funcionarioDepartamento, funcionarioTelefone, dataAdmissao, funcionarioEmail, funcionarioSenha, idCargo,funcionarioAcesso,funcionarioStatus) {
         this.#idFuncionario = idFuncionario;
         this.#funcionarioCPF = funcionarioCPF;
         this.#funcionarioNome = funcionarioNome;
@@ -42,12 +44,13 @@ class FuncionariosModel {
         this.#funcionarioEmail = funcionarioEmail;
         this.#funcionarioSenha = funcionarioSenha;
         this.#funcionarioAcesso = funcionarioAcesso;
+        this.#funcionarioStatus = funcionarioStatus;
     }
 
 
     async listarFuncionarios() {
 
-        let sql = 'SELECT * FROM `funcionario` INNER JOIN `cargo` ON `funcionario`.`idCargo` = `cargo`.`idCargo` INNER JOIN `departamento` ON `funcionario`.`idDepartamento` = `departamento`.`idDepartamento` INNER JOIN `escaladetrabalho` ON `funcionario`.`idEscala` = `escaladetrabalho`.`idEscala`'
+        let sql = 'SELECT * FROM `funcionario` INNER JOIN `cargo` ON `funcionario`.`idCargo` = `cargo`.`idCargo` INNER JOIN `departamento` ON `funcionario`.`idDepartamento` = `departamento`.`idDepartamento` INNER JOIN `escaladetrabalho` ON `funcionario`.`idEscala` = `escaladetrabalho`.`idEscala`  WHERE `funcionarioStatus` = 1'
 
         var rows = await conexao.ExecutaComando(sql);
 
@@ -66,7 +69,7 @@ class FuncionariosModel {
 
 
     async buscarFuncionarios() {
-        let sql = "SELECT * FROM `funcionario` INNER JOIN departamento ON funcionario.idDepartamento = departamento.idDepartamento INNER JOIN escaladetrabalho ON funcionario.idEscala = escaladetrabalho.idEscala WHERE `funcionarioNome` LIKE '%"+this.funcionarioNome+"%' ORDER BY `funcionario`.`funcionarioNome` ASC";
+        let sql = "SELECT * FROM `funcionario` INNER JOIN departamento ON funcionario.idDepartamento = departamento.idDepartamento INNER JOIN escaladetrabalho ON funcionario.idEscala = escaladetrabalho.idEscala WHERE `funcionarioNome` LIKE '%"+this.funcionarioNome+"%' AND  `funcionarioStatus` = 1 ORDER BY `funcionario`.`funcionarioNome` ASC";
         
         var rows = await conexao.ExecutaComando(sql);
     
@@ -86,14 +89,14 @@ class FuncionariosModel {
     async deletarFuncionarios(id) {
         try
         {
-            let sql = "DELETE FROM `funcionario` WHERE `funcionario`.`idFuncionario` = '"+id+"'";
-        
+            //let sql = "DELETE FROM `funcionario` WHERE `funcionario`.`idFuncionario` = '"+id+"'";
+            let sql = "UPDATE  `funcionario` SET `funcionarioStatus` = 0  WHERE `funcionario`.`idFuncionario` = '"+id+"'";
             var rows = await conexao.ExecutaComando(sql);
     
             return true;
 
         } catch(error)
-        {
+        {   
             return false;
         }
        
@@ -101,7 +104,7 @@ class FuncionariosModel {
 
 
     async autenticarFuncionario (usuario, senha) {
-        const sql = "SELECT * FROM `funcionario` WHERE `funcionarioEmail` LIKE '"+usuario+"' AND `funcionarioSenha` LIKE '"+senha+"'";
+        const sql = "SELECT * FROM `funcionario` WHERE `funcionarioEmail` LIKE '"+usuario+"' AND `funcionarioSenha` LIKE '"+senha+"' AND `funcionarioStatus` = 1";
        
         var row = await conexao.ExecutaComando(sql);
         
@@ -139,9 +142,11 @@ class FuncionariosModel {
         
         var rows = await conexao.ExecutaComando(sql, values);
 
-
+        var datetime = new Date();
+        datetime= datetime.toISOString().slice(0,10);
+        console.log(datetime);
        
-        let sql2 = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('','','','','')";
+        let sql2 = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('"+datetime+"','','','','')";
          
          var rows2 = await conexao.ExecutaComando(sql2);
          console.log('id inserido' +rows2.insertId);
@@ -150,7 +155,7 @@ class FuncionariosModel {
          var rows3 = await conexao.ExecutaComando(sql3);
 
 
-         let sql4 = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`) VALUES ('', '','', '', '"+rows.insertId+"')";
+         let sql4 = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`) VALUES ('"+datetime+"', '"+datetime+"','', '', '"+rows.insertId+"')";
         var result = await conexao.ExecutaComando(sql4, values);
        
     
