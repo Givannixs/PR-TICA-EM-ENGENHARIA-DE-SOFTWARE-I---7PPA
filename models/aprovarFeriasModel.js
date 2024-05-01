@@ -3,12 +3,13 @@ const Database = require('../db/database');
 const conexao = new Database();
 
 class AprovarFeriasModel {
-    constructor(idsolicitacaoFerias, datainicio, datatermino, status, motivo, funcionario_idFuncionario, funcionarioNome, dataAdmissao) {
+    constructor(idsolicitacaoFerias, datainicio, datatermino, status, motivo, respostaGestor, funcionario_idFuncionario, funcionarioNome, dataAdmissao) {
         this.idsolicitacaoFerias = idsolicitacaoFerias;
         this.datainicio = datainicio;
         this.datatermino = datatermino;
         this.status = status;
         this.motivo = motivo;
+        this.respostaGestor = respostaGestor;
         this.funcionario_idFuncionario = funcionario_idFuncionario;
         this.funcionarioNome = funcionarioNome;
         this.dataAdmissao = dataAdmissao;
@@ -22,6 +23,7 @@ class AprovarFeriasModel {
                         feriasfuncionario.datatermino, 
                         feriasfuncionario.status, 
                         feriasfuncionario.motivo, 
+                        feriasfuncionario.respostaGestor,
                         fun.funcionarioNome,
                         fun.dataAdmissao,
                         fun.funcionarioStatus
@@ -35,7 +37,7 @@ class AprovarFeriasModel {
             if (rows.length > 0) {
                 for (let i = 0; i < rows.length; i++) {
                     var row = rows[i];
-                    listaRetorno.push(new AprovarFeriasModel(row.idsolicitacaoFerias, row.datainicio, row.datatermino, row.status, row.motivo, row.funcionario_idFuncionario, row.funcionarioNome, row.dataAdmissao));
+                    listaRetorno.push(new AprovarFeriasModel(row.idsolicitacaoFerias, row.datainicio, row.datatermino, row.status, row.motivo, row.respostaGestor, row.funcionarioNome, row.dataAdmissao, row.funcionario_idFuncionario));
                 }
             }
             return listaRetorno;
@@ -46,8 +48,8 @@ class AprovarFeriasModel {
 
     async alterarSolicitacaoFerias() {
      
-            let sql = "UPDATE `solicitacaoferias` SET `status` = ? WHERE `idsolicitacaoFerias` = ? ";
-            var values = [this.status, this.idsolicitacaoFerias];
+            let sql = "UPDATE `solicitacaoferias` SET `status` = ?, `respostaGestor` = ? WHERE `idsolicitacaoFerias` = ?";
+            var values = [this.status, this.respostaGestor, this.idsolicitacaoFerias];
 
             var rows = await conexao.ExecutaComando(sql, values);
       

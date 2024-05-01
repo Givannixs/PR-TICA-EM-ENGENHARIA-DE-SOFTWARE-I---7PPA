@@ -18,6 +18,7 @@ class AprovarFeriasController {
             let aprovarferias = new AprovarFeriasModel();
 
             aprovarferias.idsolicitacaoFerias = req.body.idsolicitacaoFerias;
+            aprovarferias.respostaGestor = req.body.respostaGestor;
             aprovarferias.status = req.body.status;
 
             let retorno = await aprovarferias.alterarSolicitacaoFerias();

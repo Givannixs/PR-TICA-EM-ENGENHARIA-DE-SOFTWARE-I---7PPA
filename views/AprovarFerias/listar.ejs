@@ -23,6 +23,7 @@
                     <th>Nome</th>
                     <th>Motivo</th>
                     <th>Status</th>
+                    <th>Resposta</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -34,11 +35,12 @@
                         <td><%= value.funcionarioNome %></td>
                         <td><%= value.motivo %></td>
                         <td><%= value.status %></td>
+                        <td><%= value.respostaGestor %></td>
                         <td>
                             <% if (value.status === 'Pendente') { %>
                                 <!-- Botões de Aprovar e Rejeitar -->
-                                <button class="btn btn-success btn-sm" onclick="aprovarSolicitacao('<%= value.idsolicitacaoFerias %>')">Aprovar</button>
-                                <button class="btn btn-danger btn-sm" onclick="rejeitarSolicitacao('<%= value.idsolicitacaoFerias %>')">Rejeitar</button>
+                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalRespostaAprovada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Aprovar</button>
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalRespostaRejeitada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Rejeitar</button>
                             <% } else { %>
                                 <!-- Se a solicitação já foi processada, exibe uma mensagem -->
                                 <span class="badge badge-secondary">Já Processado</span>
@@ -49,38 +51,101 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Modal de Resposta para Aprovação -->
+    <div class="modal fade" id="modalRespostaAprovada" tabindex="-1" role="dialog" aria-labelledby="modalRespostaAprovadaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalRespostaAprovadaLabel">Resposta da Aprovação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="respostaAprovada" placeholder="Digite sua resposta...">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="aprovarSolicitacaoComResposta()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Resposta para Rejeição -->
+    <div class="modal fade" id="modalRespostaRejeitada" tabindex="-1" role="dialog" aria-labelledby="modalRespostaRejeitadaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalRespostaRejeitadaLabel">Resposta da Rejeição</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="respostaRejeitada" placeholder="Digite sua resposta...">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="rejeitarSolicitacaoComResposta()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        var idSolicitacaoAtual;
+
+        $('#modalRespostaAprovada').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            idSolicitacaoAtual = button.data('solicitacao-id');
+        });
+
+        $('#modalRespostaRejeitada').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            idSolicitacaoAtual = button.data('solicitacao-id');
+        });
+
+        function aprovarSolicitacaoComResposta() {
+            var resposta = $('#respostaAprovada').val();
+            enviarAprovacaoRejeicao(idSolicitacaoAtual, 'Aprovado', resposta);
+        }
+
+        function rejeitarSolicitacaoComResposta() {
+            var resposta = $('#respostaRejeitada').val();
+            enviarAprovacaoRejeicao(idSolicitacaoAtual, 'Rejeitado', resposta);
+        }
+
+
+        function enviarAprovacaoRejeicao(idsolicitacaoFerias, status, resposta) {
+            fetch('aprovarferias/alterarsolicitacaoferias', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        idsolicitacaoFerias: idsolicitacaoFerias,
+                        status: status,
+                        respostaGestor: resposta
+                    })
+                })
+                .then(response => {
+                    console.log('Resposta recebida do backend:', response);
+                    // Atualizar a página após o envio bem-sucedido, se necessário
+                    // window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar solicitação para o backend:', error);
+                });
+        }
+    </script>
+
 </body>
-
-<script>
-  function aprovarSolicitacao(idsolicitacaoFerias) {
-      console.log("Solicitação de férias aprovada:", idsolicitacaoFerias);
-      enviarAprovacaoRejeicao(idsolicitacaoFerias, 'aprovada');
-  }
-
-  function rejeitarSolicitacao(idsolicitacaoFerias) {
-      console.log("Solicitação de férias rejeitada:", idsolicitacaoFerias);
-      enviarAprovacaoRejeicao(idsolicitacaoFerias, 'rejeitada');
-  }
-
-  function enviarAprovacaoRejeicao(idsolicitacaoFerias, status) {
-      fetch('aprovarferias/alterarsolicitacaoferias', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              idsolicitacaoFerias: idsolicitacaoFerias,
-              status: status
-          })
-      })
-      .then(response => {
-          console.log('Resposta recebida do backend:', response);
-      })
-      .catch(error => {
-          console.error('Erro ao enviar solicitação para o backend:', error);
-      });
-  }
-</script>
-
 
 </html>

@@ -9,6 +9,7 @@ class SolicitarFeriasModel {
     #anoReferencia;
     #status;
     #motivo;
+    #respostaGestor;
     #funcionario_idFuncionario;
     #diasFeriasDisponiveis;
     #funcionarioNome;
@@ -22,6 +23,7 @@ class SolicitarFeriasModel {
     get anoReferencia() { return this.#anoReferencia; } set anoReferencia(anoReferencia) {this.#anoReferencia = anoReferencia;}
     get status() { return this.#status; } set status(status) {this.#status = status;}
     get motivo() { return this.#motivo; } set motivo(motivo) {this.#motivo = motivo;}
+    get respostaGestor() { return this.#respostaGestor; } set respostaGestor(respostaGestor) {this.#respostaGestor = respostaGestor;}
     get funcionario_idFuncionario() { return this.#funcionario_idFuncionario; } set funcionario_idFuncionario(funcionario_idFuncionario) {this.#funcionario_idFuncionario = funcionario_idFuncionario;}
     get diasFeriasDisponiveis() { return this.#diasFeriasDisponiveis; } set diasFeriasDisponiveis(diasFeriasDisponiveis) {this.#diasFeriasDisponiveis = diasFeriasDisponiveis;}
     get funcionarioNome() { return this.#funcionarioNome; } set funcionarioNome(funcionarioNome) {this.#funcionarioNome = funcionarioNome;}
@@ -29,13 +31,14 @@ class SolicitarFeriasModel {
     
 
 
-    constructor(idsolicitacaoFerias, datainicio, datatermino, anoReferencia, status, motivo, funcionario_idFuncionario, diasFeriasDisponiveis, funcionarioNome, dataAdmissao) {
+    constructor(idsolicitacaoFerias, datainicio, datatermino, anoReferencia, status, motivo, respostaGestor, funcionario_idFuncionario, diasFeriasDisponiveis, funcionarioNome, dataAdmissao) {
         this.#idsolicitacaoFerias = idsolicitacaoFerias
         this.#datainicio = datainicio
         this.#datatermino = datatermino
         this.#anoReferencia = anoReferencia
         this.#status = status
         this.#motivo = motivo
+        this.#respostaGestor = respostaGestor
         this.#funcionario_idFuncionario = funcionario_idFuncionario
         this.#diasFeriasDisponiveis = diasFeriasDisponiveis
         this.#funcionarioNome = funcionarioNome
@@ -51,7 +54,8 @@ class SolicitarFeriasModel {
         feriasfuncionario.datatermino,
         feriasfuncionario.anoReferencia, 
         feriasfuncionario.status, 
-        feriasfuncionario.motivo, 
+        feriasfuncionario.motivo,
+        feriasfuncionario.respostaGestor,
         fun.funcionarioNome,
         fun.diasFeriasDisponiveis,
         fun.dataAdmissao,
@@ -68,7 +72,7 @@ class SolicitarFeriasModel {
     if(rows.length > 0){
         for(let i=0; i<rows.length; i++){
             var row = rows[i];
-            listaRetorno.push(new SolicitarFeriasModel(row['idsolicitacaoFerias'],row['datainicio'], row['datatermino'], row['anoReferencia'], row['status'], row['motivo'], row['funcionario_idFuncionario'], row['diasFeriasDisponiveis'], row['funcionarioNome'], row['dataAdmissao']  ));
+            listaRetorno.push(new SolicitarFeriasModel(row['idsolicitacaoFerias'],row['datainicio'], row['datatermino'], row['anoReferencia'], row['status'], row['motivo'], row['respostaGestor'], row['funcionario_idFuncionario'], row['diasFeriasDisponiveis'], row['funcionarioNome'], row['dataAdmissao']  ));
         }
     }
         
