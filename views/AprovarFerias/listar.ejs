@@ -23,15 +23,15 @@
                     <th>Nome</th>
                     <th>Motivo</th>
                     <th>Status</th>
-                    <th>Resposta</th>
+                    <th>Resposta do Gestor</th>
                     <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
                 <% lista.map(function(value, index) { %>
                     <tr>
-                        <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }); %></td>
-                        <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }); %></td>
+                        <td><%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
+                        <td><%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
                         <td><%= value.funcionarioNome %></td>
                         <td><%= value.motivo %></td>
                         <td><%= value.status %></td>
