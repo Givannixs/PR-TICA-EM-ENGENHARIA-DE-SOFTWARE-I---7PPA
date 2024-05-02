@@ -12,6 +12,8 @@ class AprovarFeriasController {
         }
     }
 
+
+
     async alterarSolicitacaoFerias(req, res) {
         try {
             console.log(req.body);

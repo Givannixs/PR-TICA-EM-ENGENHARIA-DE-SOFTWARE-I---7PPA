@@ -21,6 +21,7 @@
                     <th>Data Solicitação</th>
                     <th>Data Início</th>
                     <th>Data Término</th>
+                    <th>Ano Referência</th>
                     <th>Nome</th>
                     <th>Motivo</th>
                     <th>Status</th>
@@ -34,6 +35,7 @@
                         <td><%= value.datasolicitacao.toLocaleString('pt-BR',{dateStyle:"short"});%></td>
                         <td><%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
                         <td><%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
+                        <td><%= value.anoReferencia %></td>
                         <td><%= value.funcionarioNome %></td>
                         <td><%= value.motivo %></td>
                         <td><%= value.status %></td>

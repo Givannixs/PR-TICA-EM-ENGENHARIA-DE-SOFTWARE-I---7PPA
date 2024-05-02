@@ -3,7 +3,7 @@ const Database = require('../db/database');
 const conexao = new Database();
 
 class AprovarFeriasModel {
-    constructor(idsolicitacaoFerias, funcionario_idFuncionario, datasolicitacao, datainicio, datatermino, status, motivo, respostaGestor, funcionarioNome, dataAdmissao) {
+    constructor(idsolicitacaoFerias, funcionario_idFuncionario, datasolicitacao, datainicio, datatermino, status, motivo, respostaGestor, anoReferencia, funcionarioNome, dataAdmissao) {
         this.idsolicitacaoFerias = idsolicitacaoFerias;
         this.funcionario_idFuncionario = funcionario_idFuncionario;
         this.datasolicitacao = datasolicitacao;
@@ -12,6 +12,7 @@ class AprovarFeriasModel {
         this.status = status;
         this.motivo = motivo;
         this.respostaGestor = respostaGestor;
+        this.anoReferencia = anoReferencia;
         this.funcionarioNome = funcionarioNome;
         this.dataAdmissao = dataAdmissao;
     }
@@ -26,6 +27,7 @@ class AprovarFeriasModel {
                         feriasfuncionario.status, 
                         feriasfuncionario.motivo, 
                         feriasfuncionario.respostaGestor,
+                        feriasfuncionario.anoReferencia,
                         fun.funcionarioNome,
                         fun.dataAdmissao,
                         fun.funcionarioStatus
@@ -39,7 +41,7 @@ class AprovarFeriasModel {
             if (rows.length > 0) {
                 for (let i = 0; i < rows.length; i++) {
                     var row = rows[i];
-                    listaRetorno.push(new AprovarFeriasModel(row.idsolicitacaoFerias, row.funcionario_idFuncionario, row.dataSolicitacao, row.datainicio, row.datatermino, row.status, row.motivo, row.respostaGestor, row.funcionarioNome, row.dataAdmissao, row.funcionarioStatus));
+                    listaRetorno.push(new AprovarFeriasModel(row.idsolicitacaoFerias, row.funcionario_idFuncionario, row.dataSolicitacao, row.datainicio, row.datatermino, row.status, row.motivo, row.respostaGestor, row.anoReferencia, row.funcionarioNome, row.dataAdmissao, row.funcionarioStatus));
                 }
             }
             return listaRetorno;
@@ -57,6 +59,8 @@ class AprovarFeriasModel {
       
             return true;      
     }
+
+
 }
 
 module.exports = AprovarFeriasModel;
