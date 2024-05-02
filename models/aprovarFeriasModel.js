@@ -59,6 +59,8 @@ class AprovarFeriasModel {
       
             return true;      
     }
+
+
 }
 
 module.exports = AprovarFeriasModel;
