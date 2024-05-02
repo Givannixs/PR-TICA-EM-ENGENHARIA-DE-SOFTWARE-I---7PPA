@@ -11,6 +11,7 @@ class RegistrapontoModel {
     #saida;
     #funcionario_idFuncionario;
     #funcionarioNome;
+    #observacao
 
  
 
@@ -22,10 +23,11 @@ class RegistrapontoModel {
     get saida() { return this.#saida; } set saida(saida) {this.#saida = saida;}
     get funcionario_idFuncionario() { return this.#funcionario_idFuncionario; } set funcionario_idFuncionario(funcionario_idFuncionario) {this.#funcionario_idFuncionario = funcionario_idFuncionario;}
     get funcionarioNome() { return this.#funcionarioNome; } set funcionarioNome(funcionarioNome) {this.#funcionarioNome = funcionarioNome;}
+    get observacao() { return this.#observacao; } set observacao(observacao) {this.#observacao = observacao;}
     
 
 
-    constructor(idregistroPonto, data, entrada, entradaRepouso, saidaRepouso, saida, funcionario_idFuncionario, funcionarioNome) {
+    constructor(idregistroPonto, data, entrada, entradaRepouso, saidaRepouso, saida, funcionario_idFuncionario, funcionarioNome, observacao) {
         this.#idregistroPonto = idregistroPonto
         this.#data = data
         this.#entrada = entrada
@@ -34,6 +36,7 @@ class RegistrapontoModel {
         this.#saida = saida
         this.#funcionario_idFuncionario = funcionario_idFuncionario
         this.#funcionarioNome = funcionarioNome
+        this.#observacao = observacao
        
 
    
@@ -120,7 +123,7 @@ async cadastrarResgistroponto() {
 
     async listarResgistropontoadmin() {
       
-        let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida, funcionarioStatus
+        let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida, funcionarioStatus, observacao
         FROM funcionario_has_registroponto AS pontofuncionario
         INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
         INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioStatus = 1 ORDER BY data DESC`;
@@ -132,7 +135,7 @@ async cadastrarResgistroponto() {
     if(rows.length > 0){
         for(let i=0; i<rows.length; i++){
             var row = rows[i];
-            listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
+            listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'], row['observacao'] ));
         }
     }
         
@@ -164,7 +167,7 @@ async deletarResgistropontoadmin(id) {
 }
 
 async buscarResgistropontoadmin() {
-    let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida, funcionarioStatus FROM funcionario_has_registroponto AS pontofuncionario INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioNome LIKE '%`+this.#funcionarioNome+`%' AND data BETWEEN '`+this.#entrada+`' AND '`+this.#saida+`' AND funcionarioStatus = 1 ORDER BY data DESC`;   
+    let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida, funcionarioStatus, observacao FROM funcionario_has_registroponto AS pontofuncionario INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionarioNome LIKE '%`+this.#funcionarioNome+`%' AND data BETWEEN '`+this.#entrada+`' AND '`+this.#saida+`' AND funcionarioStatus = 1 ORDER BY data DESC`;   
     
 
     
@@ -175,7 +178,7 @@ async buscarResgistropontoadmin() {
     if(rows.length > 0){
         for(let i=0; i<rows.length; i++){
             var row = rows[i];
-            listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
+            listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'], row['observacao'] ));
             
             
         }
@@ -186,9 +189,9 @@ async buscarResgistropontoadmin() {
 
 
 async alterarResgistropontoadmin() {
-    let sql = "UPDATE `registroponto` SET `entrada` = ?, `entradaRepouso` = ?,`saidaRepouso` = ?, `saida` = ? WHERE `registroponto`.`idregistroPonto` = ?";
+    let sql = "UPDATE `registroponto` SET `entrada` = ?, `entradaRepouso` = ?,`saidaRepouso` = ?, `saida` = ?, `observacao` = ? WHERE `registroponto`.`idregistroPonto` = ?";
   
-    var values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, this.idregistroPonto];
+    var values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, this.observacao, this.idregistroPonto];
   
     var rows = await conexao.ExecutaComando(sql, values);
   

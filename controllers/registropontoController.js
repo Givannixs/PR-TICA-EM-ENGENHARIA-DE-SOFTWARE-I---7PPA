@@ -176,7 +176,7 @@ class ResgistrapontoController {
         registraponto.saidaRepouso= req.body.saidaRepouso;
         registraponto.saida= req.body.saida;
         registraponto.funcionario_idFuncionario= req.body.funcionario_idFuncionario;
-        
+        registraponto.observacao= req.body.observacao;
        
        
 

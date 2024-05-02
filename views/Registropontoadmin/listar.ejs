@@ -7,13 +7,13 @@ function csv()
 {    var csvContent = "";
      var list=[];
      `<% lista.map(function(value, index) { %>`
-       var item= '<%= value.entrada %>;<%= value.entradaRepouso %>;<%= value.saidaRepouso %>;<%= value.saida %>;<%= value.data.toLocaleString("pt-BR",{dateStyle:"short"}) %>;<%= value.funcionarioNome %>'
+       var item= '<%= value.entrada %>;<%= value.entradaRepouso %>;<%= value.saidaRepouso %>;<%= value.saida %>;<%= value.data.toLocaleString("pt-BR",{dateStyle:"short"}) %>;<%= value.funcionarioNome %>;<%= value.observacao %>'
        csvContent += item + "\r\n";
         
           `<% }) %>`     
      
 
-var cabecario = "data:text/csv;charset=utf-8,entrada;entradarepouso;saidarepouso;saida;data;funcionario\r\n";
+var cabecario = "data:text/csv;charset=utf-8,entrada;entradarepouso;saidarepouso;saida;data;funcionario;observacao\r\n";
 csvContent = cabecario+csvContent;
 
 var encodedUri = encodeURI(csvContent);
@@ -155,6 +155,9 @@ window.open(encodedUri);
               <td>
                 <div>
                   <div class="d-flex">
+                    <% if( value.observacao != null) { %>
+                    <i class="bi bi-exclamation-circle" style="color: orange;"></i>&nbsp;
+                    <% } %>
                     <div class="me-1">
                       <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#exampleAlterar<%= value.idregistroPonto %>"  data-bs-whatever="@alterar">
@@ -194,6 +197,10 @@ window.open(encodedUri);
                                     value="<%= value.saida %>" onchange="document.getElementById('saidaEditar<%= value.idregistroPonto %>').min=document.getElementById('saidaRepousoEditar<%= value.idregistroPonto %>').value" required="required">
                                 </div>
                                 <div class="mb-3">
+                                  <label for="observacao" class="col-form-label">Observacao:</label>
+                                  <textarea id="observacaoEditar<%= value.idregistroPonto %>" name="observacao" type="text"  class="form-control"   ><%= value.observacao %></textarea>
+                                </div>
+                                <div class="mb-3">
                                   <label hidden for="alterarEntradaRepouso" class="col-form-label">Funcionario :</label>
                                   <input hidden id="funcionario_idFuncionarioEditar" name="funcionario_idFuncionario" type="text" class="form-control"
                                     value="<%= value.funcionario_idFuncionario %>">
@@ -214,7 +221,7 @@ window.open(encodedUri);
                       data-bs-target="#ModalExclusao<%= value.idregistroPonto %>">
                       <i class="fas fa-trash"></i>
                     </button>
-  
+                    
                     <!-- Modal -->
                     <div class="modal fade" id="ModalExclusao<%= value.idregistroPonto %>" tabindex="-1"
                       aria-labelledby="ModalExclusaoLabel<%= value.idregistroPonto %>" aria-hidden="true">
