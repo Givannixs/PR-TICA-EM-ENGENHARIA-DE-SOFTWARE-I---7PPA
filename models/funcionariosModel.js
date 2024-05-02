@@ -85,6 +85,8 @@ class FuncionariosModel {
         return listaRetorno;
     }
 
+    
+
 
     async deletarFuncionarios(id) {
         try
@@ -125,7 +127,7 @@ class FuncionariosModel {
         }
     
         // Agora, podemos realizar a inserção
-        let sql = "INSERT INTO `funcionario`(`funcionarioCPF`, `funcionarioNome`, `funcionarioTelefone`, `dataAdmissao`, `funcionarioEmail`, `funcionarioSenha`, `idDepartamento`, `idCargo`, `idEscala`,`funcionarioAcesso`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        let sql = "INSERT INTO `funcionario`(`funcionarioCPF`, `funcionarioNome`, `funcionarioTelefone`, `dataAdmissao`, `funcionarioEmail`, `funcionarioSenha`, `idDepartamento`, `idCargo`, `idEscala`,`funcionarioAcesso`, `funcionarioStatus`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         var values = [
             this.funcionarioCPF,
@@ -137,7 +139,8 @@ class FuncionariosModel {
             this.funcionarioDepartamento,
             this.funcionarioCargo,
             this.funcionarioEscala,
-            this.funcionarioAcesso
+            this.funcionarioAcesso,
+            1
         ];
         
         var rows = await conexao.ExecutaComando(sql, values);
@@ -155,7 +158,7 @@ class FuncionariosModel {
          var rows3 = await conexao.ExecutaComando(sql3);
 
 
-         let sql4 = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`) VALUES ('"+datetime+"', '"+datetime+"','', '', '"+rows.insertId+"')";
+         let sql4 = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`, `respostaGestor`, `anoReferencia`, `dataSolicitacao` ) VALUES ('"+datetime+"', '"+datetime+"','', '', '"+rows.insertId+"', '', '', '"+datetime+"')";
         var result = await conexao.ExecutaComando(sql4, values);
        
     

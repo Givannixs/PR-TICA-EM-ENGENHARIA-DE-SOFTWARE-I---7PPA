@@ -65,7 +65,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open" id="pnfuncionarios">
             <a href="/funcionarios" class="nav-link">
               <i class="nav-icon fas fa-users"></i> <!-- Alterado para o ícone de usuários -->
               <p>
@@ -73,7 +73,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open" id="pncargos">
             <a href="/cargos" class="nav-link">
               <i class="nav-icon fas fa-list"></i>
               <p>
@@ -81,7 +81,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open" id="pndepartamentos">
             <a href="/departamentos" class="nav-link">
               <i class="nav-icon fas fa-building"></i>
               <p>
@@ -89,7 +89,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open" id="pnescalas">
             <a href="/escalas" class="nav-link">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
@@ -97,7 +97,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open" id="pnregistropontoadmin">
             <a href="/registropontoadmin/listar" class="nav-link">
               <i class="nav-icon fas fa-clock"></i>
               <p>
@@ -121,7 +121,7 @@
               </p>
             </a>
           </li>  
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open" id="pnaprovarferias">
             <a href="/aprovarferias" class="nav-link">
               <i class="nav-icon fas fa-check"></i>
               <p>
@@ -184,5 +184,16 @@
 <!-- AdminLTE App -->
 <script src="/js/adminlte.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script>
+  if(document.cookie.includes('operador'))
+  {
+    document.querySelector('#pnfuncionarios').style.display = "none";
+    document.querySelector('#pncargos').style.display = "none";
+    document.querySelector('#pndepartamentos').style.display = "none";
+    document.querySelector('#pnescalas').style.display = "none";
+    document.querySelector('#pnregistropontoadmin').style.display = "none";
+    document.querySelector('#pnaprovarferias').style.display = "none";
+  }
+</script>
 </body>
 </html>

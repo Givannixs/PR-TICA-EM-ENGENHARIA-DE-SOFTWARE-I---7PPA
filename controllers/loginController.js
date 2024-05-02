@@ -12,6 +12,9 @@ class LoginController {
 
     logoutUsuario(req, res) {
         res.clearCookie('usuarioLogado');
+        res.clearCookie('undefinedusuarioLogado');
+        res.clearCookie('operadorusuarioLogado');
+        res.clearCookie('administradorusuarioLogado');
         res.redirect('/login');
         res.end();
     }
@@ -21,8 +24,8 @@ class LoginController {
             var usuario = new funcionarioModel();
             var usuario = await usuario.autenticarFuncionario(req.body.inputEmail, req.body.inputPassword);
             if(usuario != null){
-                console.log(usuario[0].idFuncionario);
-                res.cookie('usuarioLogado', usuario[0].idFuncionario);
+                console.log(usuario[0]);
+                res.cookie(usuario[0].funcionarioAcesso+'usuarioLogado', usuario[0].idFuncionario);
                 res.redirect('/');
             }
             else{
