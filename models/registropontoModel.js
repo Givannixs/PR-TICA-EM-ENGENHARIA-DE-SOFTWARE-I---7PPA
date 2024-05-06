@@ -190,8 +190,12 @@ async buscarResgistropontoadmin() {
 
 async alterarResgistropontoadmin() {
     let sql = "UPDATE `registroponto` SET `entrada` = ?, `entradaRepouso` = ?,`saidaRepouso` = ?, `saida` = ?, `observacao` = ? WHERE `registroponto`.`idregistroPonto` = ?";
-  
-    var values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, this.observacao, this.idregistroPonto];
+    var values;
+    if(this.observacao!='')
+    values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, this.observacao, this.idregistroPonto];
+
+    else
+    values = [this.entrada,this.entradaRepouso,this.saidaRepouso, this.saida, null, this.idregistroPonto];
   
     var rows = await conexao.ExecutaComando(sql, values);
   
