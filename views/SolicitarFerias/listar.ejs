@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,139 +8,114 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <title>Solicitação de Férias</title>
 </head>
+
 <body>
 
-<div class="container">
-  <h2>Solicitação de Férias</h2>
-  <br>
-  <!-- Formulário de Solicitação de Férias -->
-  <form id="vacationForm" method="post" action="/solicitarferias/cadastrarsolicitacaoferias">
-    <div class="form-group">
-      <label for="startDate">Data de Início:</label>
-      <input type="date" class="form-control" id="datainicio" name="datainicio" onchange="document.querySelector('#datatermino').min=this.value" required>
-    </div>
-    <div class="form-group">
-      <label for="endDate">Data de Término:</label>
-      <input type="date" class="form-control" id="datatermino" name="datatermino" required>
-    </div>
-    <div class="form-group">
-      <label for="reason">Motivo:</label>
-      <textarea class="form-control" id="motivo" name="motivo" rows="4" required></textarea>
-    </div>
-    <!-- Adicionando campo hidden para o status -->
-    <input type="hidden" name="status" id="status" value="Pendente">
-    <!-- Adicionando campo hidden para a data de solicitação -->
-    <input type="hidden" name="datasolicitacao" id="dataSolicitacao">
-    <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
-  </form>
-  <br>
-  <% for(var i = 0; i < 1; i++) { %>
-    <p><strong>Data de Admissão:</strong> <%= lista[i].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %></p>
-    <p><strong>Dias Disponíveis:</strong> <%= lista[i].diasFeriasDisponiveis %></p>
-  <% } %>
-  <hr>
-
-  <div id="lastRecords" class="mt-4">
-    <h3>Histórico de Solicitações</h3>
+  <div class="container">
+    <h2>Solicitação de Férias</h2>
     <br>
-    <table class="table table-bordered table-hover">
-      <thead class="thead-light">
-        <tr>
-          <th>Data Solicitação</th>
-          <th>Data Início</th>
-          <th>Data Término</th>
-          <th>Ano Referência</th>
-          <th>Motivo</th>
-          <th>Status</th>
-          <th>Resposta do Gestor</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% lista.map(function(value, index) { %>
-          <tr>
-            <td>
-              <%= value.datasolicitacao.toLocaleString('pt-BR',{dateStyle:"short"}) %>
-            </td>
-            <td>
-              <%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}) %>
-            </td>
-            <td>
-              <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}) %>
-            </td>
-            <td>
-              <%= value.anoReferencia %>
-            </td>
-            <td>
-              <%= value.motivo %>
-            </td>
-            <td>
-              <%= value.status %>
-            </td>
-            <td>
-              <%= value.respostaGestor %>
-            </td>
-          </tr>
-        <% }); %>
-      </tbody>
-    </table>
+    <!-- Formulário de Solicitação de Férias -->
+    <form id="vacationForm" method="post" action="/solicitarferias/cadastrarsolicitacaoferias">
+      <div class="form-group">
+        <label for="startDate">Data de Início:</label>
+        <input type="date" class="form-control" id="datainicio" name="datainicio"
+          onchange="document.querySelector('#datatermino').min=this.value" required>
+      </div>
+      <div class="form-group">
+        <label for="endDate">Data de Término:</label>
+        <input type="date" class="form-control" id="datatermino" name="datatermino" required>
+      </div>
+      <div class="form-group">
+        <label for="reason">Motivo:</label>
+        <textarea class="form-control" id="motivo" name="motivo" rows="4" required></textarea>
+      </div>
+      <!-- Adicionando campo hidden para o status -->
+      <input type="hidden" name="status" id="status" value="Pendente">
+      <!-- Adicionando campo hidden para a data de solicitação -->
+      <input type="hidden" name="datasolicitacao" id="dataSolicitacao">
+      <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+    </form>
+    <br>
+    <% for(var i=0; i < 1; i++) { %>
+      <p><strong>Data de Admissão:</strong>
+        <%= lista[i].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %>
+      </p>
+      <p><strong>Dias Disponíveis:</strong>
+        <%= lista[i].diasFeriasDisponiveis %>
+      </p>
+      <% } %>
+        <hr>
+
+        <div id="lastRecords" class="mt-4">
+          <h3>Histórico de Solicitações</h3>
+          <br>
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th>Data Solicitação</th>
+                <th>Data Início</th>
+                <th>Data Término</th>
+                <th>Ano Referência</th>
+                <th>Motivo</th>
+                <th>Status</th>
+                <th>Resposta do Gestor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% lista.map(function(value, index) { %>
+                <tr>
+                  <td>
+                    <%= value.datasolicitacao.toLocaleString('pt-BR',{dateStyle:"short"}) %>
+                  </td>
+                  <td>
+                    <%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}) %>
+                  </td>
+                  <td>
+                    <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}) %>
+                  </td>
+                  <td>
+                    <%= value.anoReferencia %>
+                  </td>
+                  <td>
+                    <%= value.motivo %>
+                  </td>
+                  <td>
+                    <%= value.status %>
+                  </td>
+                  <td>
+                    <%= value.respostaGestor %>
+                  </td>
+                </tr>
+                <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <hr>
+
   </div>
-  
-  <hr>
-  
-</div>
 
-<script>
-  // Evento para preencher o campo de status com "pendente" antes de enviar o formulário
-  document.getElementById('vacationForm').addEventListener('submit', function(event) {
-    // Preenche o campo de status com "pendente"
-    document.getElementById('status').value = 'Pendente';
-    
-    // Obtém a data atual
-    var dataAtual = new Date();
-    
-    // Define o valor do campo de data de solicitação como a data atual
-    document.getElementById('dataSolicitacao').value = dataAtual.toISOString().split('T')[0];
-    
-    // Exibe os dados que serão enviados para o backend
-    var formData = new FormData(document.getElementById('vacationForm'));
-    var jsonData = {};
-    formData.forEach(function(value, key){
-      jsonData[key] = value;
-    });
-    console.log(jsonData);
-    
-    // Verifica se a data de início das férias está no passado
-    var dataInicio = new Date(document.getElementById('datainicio').value);
-    if (dataInicio < dataAtual) {
-      alert("Você não pode solicitar férias com datas anteriores ou igual à data atual.");
-      event.preventDefault(); // Impede o envio do formulário
-    } else {
-      // Verifica a data de admissão e calcula o período de aquisição de férias
-      var dataAdmissao = new Date('<%= lista[0].dataAdmissao %>');
-      var dataAquisicaoFerias = new Date(dataAdmissao);
-      dataAquisicaoFerias.setMonth(dataAquisicaoFerias.getMonth() + 12);
+  <script>
+    // Evento para preencher o campo de status com "pendente" antes de enviar o formulário
+    document.getElementById('vacationForm').addEventListener('submit', function(event) {
+      // Preenche o campo de status com "pendente"
+      document.getElementById('status').value = 'Pendente';
       
-      // Verifica se a data de início das férias está dentro do período permitido
-      if (dataInicio < dataAquisicaoFerias) {
-        var dataAquisicaoFormatada = dataAquisicaoFerias.toLocaleDateString('pt-BR', {day: '2-digit', month: 'long', year: 'numeric'});
-        alert("Você só pode solicitar férias após o período de aquisição, a partir de " + dataAquisicaoFormatada + ".");
-        event.preventDefault(); // Impede o envio do formulário
-      } else {
-        // Calcula a data limite para tirar as férias
-        var dataLimite = new Date(dataAquisicaoFerias);
-        dataLimite.setMonth(dataLimite.getMonth() + 11); // Adiciona 11 meses para obter o prazo máximo
-        
-        if (dataInicio > dataLimite) {
-          var dataLimiteFormatada = dataLimite.toLocaleDateString('pt-BR', {day: '2-digit', month: 'long', year: 'numeric'});
-          alert("Você deve tirar as férias até um mês antes do vencimento do segundo período aquisitivo, ou seja, até " + dataLimiteFormatada + ".");
-          event.preventDefault(); // Impede o envio do formulário
-        }
-      }
-    }
-  });
-</script>
-
-
-
+      // Obtém a data atual
+      var dataAtual = new Date();
+      
+      // Define o valor do campo de data de solicitação como a data atual
+      document.getElementById('dataSolicitacao').value = dataAtual.toISOString().split('T')[0];
+      
+      // Exibe os dados que serão enviados para o backend
+      var formData = new FormData(document.getElementById('vacationForm'));
+      var jsonData = {};
+      formData.forEach(function(value, key){
+        jsonData[key] = value;
+      });
+      console.log(jsonData);
+      
+    });
+  </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 const Database = require('../db/database');
 
 const conexao = new Database();
+
 class SolicitarFeriasModel {
 
     #idsolicitacaoFerias;
@@ -45,18 +46,27 @@ class SolicitarFeriasModel {
     }
 
     async calcularDiasFeriasDisponiveis() {
-        // Cálculo dos dias de férias disponíveis...
+        // Calcular o ano de referência com base na data de admissão
+        let anoReferencia = new Date(this.#dataAdmissao).getFullYear();
+        let hoje = new Date();
+
+        // Verificar se o período concessivo do ano anterior se encerrou
+        let ultimoDiaConcessivoAnoAnterior = new Date(anoReferencia, new Date(this.#dataAdmissao).getMonth(), new Date(this.#dataAdmissao).getDate() - 1);
+        if (hoje > ultimoDiaConcessivoAnoAnterior) {
+            // Se o período concessivo do ano anterior já passou, avançamos para o próximo ano de referência
+            anoReferencia++;
+        }
+
+        // Cálculo dos dias de férias disponíveis apenas para o ano de referência atual...
         let sql = `SELECT SUM(DATEDIFF(datatermino, datainicio) + 1) AS dias_solicitados
                    FROM solicitacaoferias
-                   WHERE funcionario_idFuncionario = ? AND status = 'Aprovado';`;
-        let values = [this.#funcionario_idFuncionario];
+                   WHERE funcionario_idFuncionario = ? AND status = 'Aprovado' AND anoReferencia = ?;`;
+        let values = [this.#funcionario_idFuncionario, anoReferencia];
         let result = await conexao.ExecutaComando(sql, values);
         let diasSolicitados = result[0].dias_solicitados || 0;
 
-        const dataAdmissaoTimestamp = new Date(this.#dataAdmissao).getTime();
-        const hoje = new Date();
         const umAnoEmMilissegundos = 365 * 24 * 60 * 60 * 1000;
-        const anosDeServico = Math.floor((hoje - dataAdmissaoTimestamp) / umAnoEmMilissegundos);
+        const anosDeServico = Math.floor((hoje - new Date(this.#dataAdmissao)) / umAnoEmMilissegundos);
 
         if (anosDeServico >= 1) {
             this.#diasFeriasDisponiveis = 30 - diasSolicitados; // 30 dias de férias após um ano de serviço
@@ -68,6 +78,8 @@ class SolicitarFeriasModel {
 
         // Atualização no banco de dados
         await this.atualizarDiasFeriasDisponiveisNoBancoDeDados();
+        
+        return anoReferencia;
     }
 
     async atualizarDiasFeriasDisponiveisNoBancoDeDados() {
@@ -120,22 +132,9 @@ class SolicitarFeriasModel {
         return listaRetorno;
     }
 
-
     async cadastrarSolicitacaoFerias() {
-        // Obter a data de admissão do funcionário do banco de dados
-        let sqlDataAdmissao = "SELECT dataAdmissao FROM funcionario WHERE idFuncionario = ?";
-        let resultDataAdmissao = await conexao.ExecutaComando(sqlDataAdmissao, [this.#funcionario_idFuncionario]);
-        let dataAdmissao = new Date(resultDataAdmissao[0].dataAdmissao);
-        
-        // Calcular o ano de referência com base na data de admissão
-        let anoReferencia = dataAdmissao.getFullYear();
-        let hoje = new Date();
-        let mesesDesdeAdmissao = (hoje.getFullYear() - dataAdmissao.getFullYear()) * 12 + hoje.getMonth() - dataAdmissao.getMonth();
-        
-        // Verificar se o período aquisitivo termina no próximo ano
-        if (hoje.getMonth() < dataAdmissao.getMonth() || (hoje.getMonth() === dataAdmissao.getMonth() && hoje.getDate() < dataAdmissao.getDate())) {
-            anoReferencia--; // Se ainda não atingiu o mês de admissão no ano seguinte, subtrai 1 do ano de início do período aquisitivo
-        }
+        // Calcular o ano de referência
+        let anoReferencia = await this.calcularDiasFeriasDisponiveis();
 
         // Insira o ano de referência junto com os outros dados da solicitação de férias
         let sql = "INSERT INTO `solicitacaoferias`(`datasolicitacao`, `datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`, `anoReferencia`) VALUES (?, ?, ?, ?, ?, ?, ?)";
