@@ -30,29 +30,31 @@
                 </tr>
             </thead>
             <tbody>
-                <% lista.map(function(value, index) { %>
-                    <tr>
-                        <td><%= value.datasolicitacao.toLocaleString('pt-BR',{dateStyle:"short"});%></td>
-                        <td><%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
-                        <td><%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}); %></td>
-                        <td><%= value.anoReferencia %></td>
-                        <td><%= value.funcionarioNome %></td>
-                        <td><%= value.motivo %></td>
-                        <td><%= value.status %></td>
-                        <td><%= value.respostaGestor %></td>
-                        <td>
-                            <% if (value.status === 'Pendente') { %>
-                                <!-- Botões de Aprovar e Rejeitar -->
-                                <div class="btn-group">
-                                    <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalRespostaAprovada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Aprovar</button>
-                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalRespostaRejeitada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Rejeitar</button>
-                                </div>
-                            <% } else { %>
-                                <!-- Se a solicitação já foi processada, exibe uma mensagem -->
-                                <span class="badge badge-secondary">Já Processado</span>
-                            <% } %>
-                        </td>
-                    </tr>
+                <% lista.forEach(function(value) { %>
+                    <% if (value.motivo && value.status) { %>
+                        <tr>
+                            <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                            <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                            <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                            <td><%= value.anoReferencia %></td>
+                            <td><%= value.funcionarioNome %></td>
+                            <td><%= value.motivo %></td>
+                            <td><%= value.status %></td>
+                            <td><%= value.respostaGestor %></td>
+                            <td>
+                                <% if (value.status === 'Pendente') { %>
+                                    <!-- Botões de Aprovar e Rejeitar -->
+                                    <div class="btn-group">
+                                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalRespostaAprovada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Aprovar</button>
+                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalRespostaRejeitada" data-solicitacao-id="<%= value.idsolicitacaoFerias %>">Rejeitar</button>
+                                    </div>
+                                <% } else { %>
+                                    <!-- Se a solicitação já foi processada, exibe uma mensagem -->
+                                    <span class="badge badge-secondary">Já Processado</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% } %>
                 <% }); %>
             </tbody>
         </table>

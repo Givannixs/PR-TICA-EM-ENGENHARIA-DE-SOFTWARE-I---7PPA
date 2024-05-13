@@ -148,8 +148,9 @@ class FuncionariosModel {
         var datetime = new Date();
         datetime= datetime.toISOString().slice(0,10);
         console.log(datetime);
+        
        
-        let sql2 = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('"+datetime+"','','','','')";
+        let sql2 = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('"+datetime+"','"+new Date().toLocaleTimeString()+"','','','')";
          
          var rows2 = await conexao.ExecutaComando(sql2);
          console.log('id inserido' +rows2.insertId);

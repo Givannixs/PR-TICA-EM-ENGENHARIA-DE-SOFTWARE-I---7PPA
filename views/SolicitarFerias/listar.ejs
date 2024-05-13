@@ -62,31 +62,29 @@
               </tr>
             </thead>
             <tbody>
-              <% lista.map(function(value, index) { %>
-                <tr>
-                  <td>
-                    <%= value.datasolicitacao.toLocaleString('pt-BR',{dateStyle:"short"}) %>
-                  </td>
-                  <td>
-                    <%= value.datainicio.toLocaleString('pt-BR',{dateStyle:"short"}) %>
-                  </td>
-                  <td>
-                    <%= value.datatermino.toLocaleString('pt-BR',{dateStyle:"short"}) %>
-                  </td>
-                  <td>
-                    <%= value.anoReferencia %>
-                  </td>
-                  <td>
-                    <%= value.motivo %>
-                  </td>
-                  <td>
-                    <%= value.status %>
-                  </td>
-                  <td>
-                    <%= value.respostaGestor %>
-                  </td>
-                </tr>
-                <% }); %>
+              <% 
+    // Verifica se a lista está definida e possui mais de um registro
+    if (lista && lista.length > 1) {
+        // Remove o primeiro elemento da lista
+        var listaSemPrimeiro = lista.slice(1);
+        
+        // Renderiza os registros restantes na tabela
+        listaSemPrimeiro.map(function(value, index) { %>
+            <tr>
+                <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                <td><%= value.anoReferencia %></td>
+                <td><%= value.motivo %></td>
+                <td><%= value.status %></td>
+                <td><%= value.respostaGestor %></td>
+            </tr>
+        <% });
+    } else {
+        // Caso a lista esteja vazia ou tenha apenas um registro, exibe uma mensagem de aviso
+        %>
+        <p>Nenhum registro de férias disponível</p>
+    <% } %>
             </tbody>
           </table>
         </div>
