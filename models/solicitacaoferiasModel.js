@@ -15,7 +15,7 @@ class SolicitarFeriasModel {
     #funcionario_idFuncionario;
     #diasFeriasDisponiveis;
     #funcionarioNome;
-    #dataAdmissao
+    #dataAdmissao;
 
     get idsolicitacaoFerias() { return this.#idsolicitacaoFerias; } set idsolicitacaoFerias(idsolicitacaoFerias) { this.#idsolicitacaoFerias = idsolicitacaoFerias; }
     get datasolicitacao() { return this.#datasolicitacao; } set datasolicitacao(datasolicitacao) { this.#datasolicitacao = datasolicitacao; }
@@ -47,21 +47,25 @@ class SolicitarFeriasModel {
 
     async calcularDiasFeriasDisponiveis() {
         // Calcular o ano de referência com base na data de admissão
-        let anoReferencia = new Date(this.#dataAdmissao).getFullYear();
+        console.log('Data de admissão:', this.#dataAdmissao);
+        this.#anoReferencia = new Date(this.#dataAdmissao).getFullYear();
+        console.log('Ano de referência inicial:', this.#anoReferencia);
+
         let hoje = new Date();
 
         // Verificar se o período concessivo do ano anterior se encerrou
-        let ultimoDiaConcessivoAnoAnterior = new Date(anoReferencia, new Date(this.#dataAdmissao).getMonth(), new Date(this.#dataAdmissao).getDate() - 1);
+        let ultimoDiaConcessivoAnoAnterior = new Date(this.#anoReferencia, new Date(this.#dataAdmissao).getMonth(), new Date(this.#dataAdmissao).getDate() - 1);
         if (hoje > ultimoDiaConcessivoAnoAnterior) {
             // Se o período concessivo do ano anterior já passou, avançamos para o próximo ano de referência
-            anoReferencia++;
+            this.#anoReferencia++;
         }
+        console.log('Ano de referência após ajuste:', this.#anoReferencia);
 
         // Cálculo dos dias de férias disponíveis apenas para o ano de referência atual...
         let sql = `SELECT SUM(DATEDIFF(datatermino, datainicio) + 1) AS dias_solicitados
                    FROM solicitacaoferias
                    WHERE funcionario_idFuncionario = ? AND status = 'Aprovado' AND anoReferencia = ?;`;
-        let values = [this.#funcionario_idFuncionario, anoReferencia];
+        let values = [this.#funcionario_idFuncionario, this.#anoReferencia];
         let result = await conexao.ExecutaComando(sql, values);
         let diasSolicitados = result[0].dias_solicitados || 0;
 
@@ -78,8 +82,8 @@ class SolicitarFeriasModel {
 
         // Atualização no banco de dados
         await this.atualizarDiasFeriasDisponiveisNoBancoDeDados();
-        
-        return anoReferencia;
+
+        return this.#anoReferencia;
     }
 
     async atualizarDiasFeriasDisponiveisNoBancoDeDados() {
@@ -120,10 +124,10 @@ class SolicitarFeriasModel {
         console.log(rows);
         let listaRetorno = [];
 
-        if(rows.length > 0){
-            for(let i=0; i<rows.length; i++){
+        if (rows.length > 0) {
+            for (let i = 0; i < rows.length; i++) {
                 var row = rows[i];
-                var solicitarFerias = new SolicitarFeriasModel(row['idsolicitacaoFerias'],row['datasolicitacao'],row['datainicio'], row['datatermino'], row['status'], row['motivo'], row['respostaGestor'], row['anoReferencia'], row['funcionario_idFuncionario'], row['diasFeriasDisponiveis'], row['funcionarioNome'], row['dataAdmissao']  );
+                var solicitarFerias = new SolicitarFeriasModel(row['idsolicitacaoFerias'], row['datasolicitacao'], row['datainicio'], row['datatermino'], row['status'], row['motivo'], row['respostaGestor'], row['anoReferencia'], row['funcionario_idFuncionario'], row['diasFeriasDisponiveis'], row['funcionarioNome'], row['dataAdmissao']);
                 await solicitarFerias.calcularDiasFeriasDisponiveis();
                 listaRetorno.push(solicitarFerias);
             }
@@ -133,13 +137,24 @@ class SolicitarFeriasModel {
     }
 
     async cadastrarSolicitacaoFerias() {
+        // Buscar a data de admissão do funcionário no banco de dados
+        let sqlDataAdmissao = "SELECT dataAdmissao FROM funcionario WHERE idFuncionario = ?";
+        let valuesDataAdmissao = [this.#funcionario_idFuncionario];
+        let resultDataAdmissao = await conexao.ExecutaComando(sqlDataAdmissao, valuesDataAdmissao);
+        if (resultDataAdmissao.length > 0) {
+            this.#dataAdmissao = resultDataAdmissao[0].dataAdmissao;
+        } else {
+            console.error('Data de admissão do funcionário não encontrada.');
+            return false;
+        }
+    
         // Calcular o ano de referência
         let anoReferencia = await this.calcularDiasFeriasDisponiveis();
-
+    
         // Insira o ano de referência junto com os outros dados da solicitação de férias
         let sql = "INSERT INTO `solicitacaoferias`(`datasolicitacao`, `datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`, `anoReferencia`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         let values = [this.#datasolicitacao, this.#datainicio, this.#datatermino, this.#status, this.#motivo, this.#funcionario_idFuncionario, anoReferencia];
-
+    
         try {
             let result = await conexao.ExecutaComando(sql, values);
             console.log('id inserido: ' + result.insertId);
@@ -149,6 +164,7 @@ class SolicitarFeriasModel {
             return false;
         }
     }
+    
 
     async alterarSolicitacaoFerias() {
         let sql = "UPDATE `solicitacaoferias` SET `datasolicitacao` = ?, `datainicio` = ?,`datatermino` = ? WHERE `solicitacaoferias`.`idsolicitacaoFerias` = ?";

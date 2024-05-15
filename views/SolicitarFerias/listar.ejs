@@ -36,60 +36,55 @@
       <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
     </form>
     <br>
-    <% for(var i=0; i < 1; i++) { %>
-      <p><strong>Data de Admissão:</strong>
-        <%= lista[i].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %>
-      </p>
-      <p><strong>Dias Disponíveis:</strong>
-        <%= lista[i].diasFeriasDisponiveis %>
-      </p>
-      <% } %>
-        <hr>
-
-        <div id="lastRecords" class="mt-4">
-          <h3>Histórico de Solicitações</h3>
-          <br>
-          <table class="table table-bordered table-hover">
-            <thead class="thead-light">
-              <tr>
-                <th>Data Solicitação</th>
-                <th>Data Início</th>
-                <th>Data Término</th>
-                <th>Ano Referência</th>
-                <th>Motivo</th>
-                <th>Status</th>
-                <th>Resposta do Gestor</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% 
-    // Verifica se a lista está definida e possui mais de um registro
-    if (lista && lista.length > 1) {
-        // Remove o primeiro elemento da lista
-        var listaSemPrimeiro = lista.slice(1);
-        
-        // Renderiza os registros restantes na tabela
-        listaSemPrimeiro.map(function(value, index) { %>
-            <tr>
-                <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                <td><%= value.anoReferencia %></td>
-                <td><%= value.motivo %></td>
-                <td><%= value.status %></td>
-                <td><%= value.respostaGestor %></td>
-            </tr>
-        <% });
-    } else {
-        // Caso a lista esteja vazia ou tenha apenas um registro, exibe uma mensagem de aviso
-        %>
+    <% if (lista && lista.length > 0) { %>
+        <p><strong>Data de Admissão:</strong> <%= lista[0].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %></p>
+        <p><strong>Dias Disponíveis:</strong> <%= lista[0].diasFeriasDisponiveis %></p>
+    <% } else { %>
         <p>Nenhum registro de férias disponível</p>
     <% } %>
-            </tbody>
-          </table>
-        </div>
 
-        <hr>
+    <hr>
+
+    <div id="lastRecords" class="mt-4">
+      <h3>Histórico de Solicitações</h3>
+      <br>
+      <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>Data Solicitação</th>
+            <th>Data Início</th>
+            <th>Data Término</th>
+            <th>Motivo</th>
+            <th>Status</th>
+            <th>Resposta do Gestor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (lista && lista.length > 1) {
+            lista.slice(1).map(function(value, index) { %>
+                <tr>
+                    <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                    <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                    <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                    <td><%= value.motivo %></td>
+                    <td><%= value.status %></td>
+                    <td><%= value.respostaGestor %></td>
+                </tr>
+            <% });
+          } else if (lista && lista.length === 1) { %>
+              <tr>
+                  <td colspan="7">Nenhum outro registro de férias disponível</td>
+              </tr>
+          <% } else { %>
+              <tr>
+                  <td colspan="7">Nenhum registro de férias disponível</td>
+              </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
 
   </div>
 
@@ -116,4 +111,5 @@
     });
   </script>
 </body>
+
 </html>
