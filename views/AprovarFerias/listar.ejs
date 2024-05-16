@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function csv()
+{    var csvContent = "";
+     var list=[];
+     `<% lista.map(function(value, index) { %>`
+       var item= '<%= value.datasolicitacao.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datainicio.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datatermino.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.anoReferencia %>;<%= value.funcionarioNome %>;<%= value.motivo %>;<%= value.status %>;<%= value.respostaGestor %>'
+       csvContent += item + "\r\n";
+        
+          `<% }) %>`     
+     
+
+          var cabecario = "data:text/csv;charset=utf-8,Data Solicitação;Data Inicio;Data Término;Periodo Aquisitivo;Nome;Motivo;Status;Resposta do Gestor\r\n";
+
+
+csvContent = cabecario+csvContent;
+
+var encodedUri = encodeURI(csvContent);
+window.open(encodedUri);
+
+}
+    </script>
 </head>
 
 <body>
@@ -13,7 +34,24 @@
     <div class="container">
         <h2>Férias Gestor</h2>
         <br>
-
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+              <form class="d-flex" role="search" method="post" action="/aprovarferias/buscarferias"> 
+                <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca" id="busca">
+                <input class="form-control me-2" type="date" id="dataInicio" name="dataInicio" alt="dataInicio" required="">
+                <input class="form-control me-2" type="date" id="dataFinal" name="dataFinal" alt="dataFinal" required="">
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
+              </form>
+    
+              <button type="button" onclick="csv()" class="btn btn-success">Baixar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z"></path>
+              </svg></button>
+             <!--
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                data-bs-whatever="@mdo" onclick="document.getElementById('funcionario_idFuncionario').value=document.cookie.split('=')[1]"><i class="fas fa-plus"></i> Cadastrar</button>
+             --> 
+            </div>
+          </nav>
         <!-- Tabela para exibir as solicitações de férias -->
         <table class="table table-bordered table-hover">
             <thead class="thead-light">

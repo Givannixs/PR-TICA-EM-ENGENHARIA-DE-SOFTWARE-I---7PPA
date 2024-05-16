@@ -31,6 +31,19 @@ class AprovarFeriasController {
             res.status(500).send("Erro ao alterar solicitação de férias");
         }
     }
+
+    async buscarFerias(req, res) {
+        let aprovarferias = new AprovarFeriasModel();
+        aprovarferias.funcionarioNome= req.body.busca;
+        aprovarferias.datainicio =req.body.dataInicio;
+        aprovarferias.datatermino = req.body.dataFinal;
+        
+        let lista = await aprovarferias.buscarResgistroFerias();
+        res.render('aprovarferias/listar', {lista: lista});
+    }
+    
 }
+
+
 
 module.exports = AprovarFeriasController;

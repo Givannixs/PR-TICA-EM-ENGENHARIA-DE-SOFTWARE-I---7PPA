@@ -17,7 +17,7 @@ class AprovarFeriasRoute {
         let ctrl = new AprovarFeriasController();
         this.#router.get('/',auth.usuarioEstaLogado, ctrl.listarView);
         this.#router.post('/alterarsolicitacaoferias',auth.usuarioEstaLogado, ctrl.alterarSolicitacaoFerias);
-        
+        this.#router.post('/buscarferias',auth.usuarioEstaLogado, ctrl.buscarFerias);
     }
 }
 
