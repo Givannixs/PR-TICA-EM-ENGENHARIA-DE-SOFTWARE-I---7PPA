@@ -60,8 +60,8 @@
           </tr>
         </thead>
         <tbody>
-          <% if (lista && lista.length > 1) {
-            lista.slice(1).map(function(value, index) { %>
+          <% if (lista && lista.length > 0) {
+            lista.forEach(function(value, index) { %>
                 <tr>
                     <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
                     <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
@@ -71,11 +71,7 @@
                     <td><%= value.respostaGestor %></td>
                 </tr>
             <% });
-          } else if (lista && lista.length === 1) { %>
-              <tr>
-                  <td colspan="7">Nenhum outro registro de férias disponível</td>
-              </tr>
-          <% } else { %>
+          } else { %>
               <tr>
                   <td colspan="7">Nenhum registro de férias disponível</td>
               </tr>
@@ -83,10 +79,6 @@
         </tbody>
       </table>
     </div>
-
-    <hr>
-
-  </div>
 
   <script>
     // Evento para preencher o campo de status com "pendente" antes de enviar o formulário

@@ -48,43 +48,56 @@ class SolicitarFeriasModel {
     async calcularDiasFeriasDisponiveis() {
         // Calcular o ano de referência com base na data de admissão
         console.log('Data de admissão:', this.#dataAdmissao);
-        this.#anoReferencia = new Date(this.#dataAdmissao).getFullYear();
-        console.log('Ano de referência inicial:', this.#anoReferencia);
-
+        let anoAdmissao = new Date(this.#dataAdmissao).getFullYear();
         let hoje = new Date();
-
-        // Verificar se o período concessivo do ano anterior se encerrou
-        let ultimoDiaConcessivoAnoAnterior = new Date(this.#anoReferencia, new Date(this.#dataAdmissao).getMonth(), new Date(this.#dataAdmissao).getDate() - 1);
-        if (hoje > ultimoDiaConcessivoAnoAnterior) {
-            // Se o período concessivo do ano anterior já passou, avançamos para o próximo ano de referência
-            this.#anoReferencia++;
+        let anoInicioReferencia = anoAdmissao;
+        let anoFimReferencia = anoAdmissao + 1;
+    
+        // Verificar se o período aquisitivo foi totalmente completado no ano corrente
+        while (hoje >= new Date(anoFimReferencia, new Date(this.#dataAdmissao).getMonth(), new Date(this.#dataAdmissao).getDate())) {
+            let totalDiasFeriasUtilizados = await this.calcularTotalDiasFeriasUtilizados(anoInicioReferencia, anoFimReferencia);
+    
+            // Se o funcionário já utilizou 30 dias de férias, avançamos para o próximo período de referência
+            if (totalDiasFeriasUtilizados >= 30) {
+                anoInicioReferencia++;
+                anoFimReferencia++;
+            } else {
+                // Caso contrário, o período aquisitivo atual ainda não foi totalmente completado
+                break;
+            }
         }
-        console.log('Ano de referência após ajuste:', this.#anoReferencia);
-
+    
         // Cálculo dos dias de férias disponíveis apenas para o ano de referência atual...
-        let sql = `SELECT SUM(DATEDIFF(datatermino, datainicio) + 1) AS dias_solicitados
-                   FROM solicitacaoferias
-                   WHERE funcionario_idFuncionario = ? AND status = 'Aprovado' AND anoReferencia = ?;`;
-        let values = [this.#funcionario_idFuncionario, this.#anoReferencia];
-        let result = await conexao.ExecutaComando(sql, values);
-        let diasSolicitados = result[0].dias_solicitados || 0;
-
-        const umAnoEmMilissegundos = 365 * 24 * 60 * 60 * 1000;
-        const anosDeServico = Math.floor((hoje - new Date(this.#dataAdmissao)) / umAnoEmMilissegundos);
-
+        let umAnoEmMilissegundos = 365 * 24 * 60 * 60 * 1000;
+        let anosDeServico = Math.floor((hoje - new Date(this.#dataAdmissao)) / umAnoEmMilissegundos);
+    
         if (anosDeServico >= 1) {
-            this.#diasFeriasDisponiveis = 30 - diasSolicitados; // 30 dias de férias após um ano de serviço
+            let totalDiasFeriasUtilizados = await this.calcularTotalDiasFeriasUtilizados(anoInicioReferencia, anoFimReferencia);
+    
+            this.#diasFeriasDisponiveis = 30 - totalDiasFeriasUtilizados; // 30 dias de férias após um ano de serviço
         } else {
             this.#diasFeriasDisponiveis = 0; // Sem direito a férias ainda
         }
-
+    
         console.log('Dias de férias disponíveis:', this.#diasFeriasDisponiveis);
-
+    
         // Atualização no banco de dados
         await this.atualizarDiasFeriasDisponiveisNoBancoDeDados();
-
+    
+        this.#anoReferencia = `${anoInicioReferencia}/${anoFimReferencia}`;
+        console.log('Período de referência:', this.#anoReferencia);
         return this.#anoReferencia;
     }
+    
+    async calcularTotalDiasFeriasUtilizados(anoInicio, anoFim) {
+        let sql = `SELECT SUM(DATEDIFF(datatermino, datainicio) + 1) AS dias_solicitados
+                   FROM solicitacaoferias
+                   WHERE funcionario_idFuncionario = ? AND status = 'Aprovado' AND anoReferencia >= ? AND anoReferencia <= ?;`;
+        let values = [this.#funcionario_idFuncionario, anoInicio, anoFim];
+        let result = await conexao.ExecutaComando(sql, values);
+        return result[0].dias_solicitados || 0;
+    }
+    
 
     async atualizarDiasFeriasDisponiveisNoBancoDeDados() {
         let sql = "UPDATE funcionario SET diasFeriasDisponiveis = ? WHERE idFuncionario = ?";
@@ -147,14 +160,14 @@ class SolicitarFeriasModel {
             console.error('Data de admissão do funcionário não encontrada.');
             return false;
         }
-    
+
         // Calcular o ano de referência
         let anoReferencia = await this.calcularDiasFeriasDisponiveis();
-    
+
         // Insira o ano de referência junto com os outros dados da solicitação de férias
         let sql = "INSERT INTO `solicitacaoferias`(`datasolicitacao`, `datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`, `anoReferencia`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         let values = [this.#datasolicitacao, this.#datainicio, this.#datatermino, this.#status, this.#motivo, this.#funcionario_idFuncionario, anoReferencia];
-    
+
         try {
             let result = await conexao.ExecutaComando(sql, values);
             console.log('id inserido: ' + result.insertId);
@@ -164,7 +177,7 @@ class SolicitarFeriasModel {
             return false;
         }
     }
-    
+
 
     async alterarSolicitacaoFerias() {
         let sql = "UPDATE `solicitacaoferias` SET `datasolicitacao` = ?, `datainicio` = ?,`datatermino` = ? WHERE `solicitacaoferias`.`idsolicitacaoFerias` = ?";
