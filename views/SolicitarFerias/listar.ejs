@@ -18,8 +18,7 @@
     <form id="vacationForm" method="post" action="/solicitarferias/cadastrarsolicitacaoferias">
       <div class="form-group">
         <label for="startDate">Data de Início:</label>
-        <input type="date" class="form-control" id="datainicio" name="datainicio"
-          onchange="document.querySelector('#datatermino').min=this.value" required>
+        <input type="date" class="form-control" id="datainicio" name="datainicio" onchange="validateStartDate()" required>
       </div>
       <div class="form-group">
         <label for="endDate">Data de Término:</label>
@@ -38,7 +37,7 @@
     <br>
     <% if (lista && lista.length > 0) { %>
         <p><strong>Data de Admissão:</strong> <%= lista[0].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %></p>
-        <p><strong>Dias Disponíveis:</strong> <%= lista[0].diasFeriasDisponiveis %></p>
+        <p><strong>Dias Disponíveis:</strong> <span id="diasFeriasDisponiveis"><%= lista[0].diasFeriasDisponiveis %></span></p>
     <% } else { %>
         <p>Nenhum registro de férias disponível</p>
     <% } %>
@@ -81,25 +80,42 @@
     </div>
 
   <script>
-    // Evento para preencher o campo de status com "pendente" antes de enviar o formulário
+    function validateStartDate() {
+      var startDateInput = document.getElementById('datainicio');
+      var startDate = new Date(startDateInput.value);
+      var today = new Date();
+      var minDate = new Date(today);
+      minDate.setDate(minDate.getDate() + 7); // Define a data mínima como uma semana após a data atual
+      
+      if (startDate < minDate) {
+        alert("Por favor, escolha uma data de início com pelo menos uma semana de antecedência.");
+        startDateInput.value = ''; // Limpa o campo de data de início
+      }
+    }
+
     document.getElementById('vacationForm').addEventListener('submit', function(event) {
-      // Preenche o campo de status com "pendente"
+      var diasFeriasDisponiveis = parseInt(document.getElementById('diasFeriasDisponiveis').textContent);
+      var dataInicio = new Date(document.getElementById('datainicio').value);
+      var dataTermino = new Date(document.getElementById('datatermino').value);
+      
+      if (!dataInicio || !dataTermino) {
+        alert("Por favor, preencha as datas de início e término.");
+        event.preventDefault();
+        return;
+      }
+      
+      var diffTime = Math.abs(dataTermino - dataInicio);
+      var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Inclui o dia de início nas férias
+
+      if (diffDays > diasFeriasDisponiveis) {
+        alert("Você não pode solicitar mais dias do que o disponível. Dias solicitados: " + diffDays + ", Dias disponíveis: " + diasFeriasDisponiveis);
+        event.preventDefault();
+        return;
+      }
+      
       document.getElementById('status').value = 'Pendente';
-      
-      // Obtém a data atual
       var dataAtual = new Date();
-      
-      // Define o valor do campo de data de solicitação como a data atual
       document.getElementById('dataSolicitacao').value = dataAtual.toISOString().split('T')[0];
-      
-      // Exibe os dados que serão enviados para o backend
-      var formData = new FormData(document.getElementById('vacationForm'));
-      var jsonData = {};
-      formData.forEach(function(value, key){
-        jsonData[key] = value;
-      });
-      console.log(jsonData);
-      
     });
   </script>
 </body>
