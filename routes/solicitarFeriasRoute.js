@@ -17,6 +17,7 @@ class SolicitarFeriasRoute {
         let ctrl = new SolicitarFeriasController();
         this.#router.get('/',auth.usuarioEstaLogado, ctrl.listarView);
         this.#router.post('/cadastrarsolicitacaoferias',auth.usuarioEstaLogado, ctrl.cadastrarSolicitarFerias);
+        this.#router.post('/buscarferias',auth.usuarioEstaLogado, ctrl.buscarFerias);
         
     }
 }

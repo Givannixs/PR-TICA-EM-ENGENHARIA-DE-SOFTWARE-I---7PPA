@@ -34,6 +34,16 @@ class SolicitarFeriasController {
             res.status(500).send('Erro ao cadastrar solicitação de férias');
         }
     }
+
+    async buscarFerias(req, res) {
+        let solicitacaoferias = new SolicitarFeriasModel();
+        solicitacaoferias.status= req.body.busca;
+        solicitacaoferias.datainicio =req.body.dataInicio;
+        solicitacaoferias.datatermino = req.body.dataFinal;
+        
+        let lista = await solicitacaoferias.buscarResgistroFerias();
+        res.render('solicitarferias/listar', {lista: lista});
+    }
 }
 
 module.exports = SolicitarFeriasController;
