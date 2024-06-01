@@ -47,7 +47,6 @@ class SolicitarFeriasModel {
 
     async calcularDiasFeriasDisponiveis() {
         // Calcular o ano de referência com base na data de admissão
-        console.log('Data de admissão:', this.#dataAdmissao);
         let anoAdmissao = new Date(this.#dataAdmissao).getFullYear();
         let hoje = new Date();
         let anoInicioReferencia = anoAdmissao;
@@ -79,13 +78,11 @@ class SolicitarFeriasModel {
             this.#diasFeriasDisponiveis = 0; // Sem direito a férias ainda
         }
     
-        console.log('Dias de férias disponíveis:', this.#diasFeriasDisponiveis);
     
         // Atualização no banco de dados
         await this.atualizarDiasFeriasDisponiveisNoBancoDeDados();
     
         this.#anoReferencia = `${anoInicioReferencia}/${anoFimReferencia}`;
-        console.log('Período de referência:', this.#anoReferencia);
         return this.#anoReferencia;
     }
     
@@ -105,7 +102,6 @@ class SolicitarFeriasModel {
 
         try {
             await conexao.ExecutaComando(sql, values);
-            console.log('Dias de férias disponíveis atualizados no banco de dados.');
             return true;
         } catch (error) {
             console.error('Erro ao atualizar os dias de férias disponíveis no banco de dados:', error);
@@ -114,40 +110,62 @@ class SolicitarFeriasModel {
     }
 
     async listarSolicitacaoFerias() {
-        let sql = `SELECT feriasfuncionario.idsolicitacaoFerias, 
-        feriasfuncionario.funcionario_idFuncionario,
-        feriasfuncionario.datasolicitacao,
-        feriasfuncionario.datainicio, 
-        feriasfuncionario.datatermino,
-        feriasfuncionario.status, 
-        feriasfuncionario.motivo,
-        feriasfuncionario.respostaGestor,
-        feriasfuncionario.anoReferencia,
-        fun.funcionarioNome,
-        fun.diasFeriasDisponiveis,
-        fun.dataAdmissao,
-        fun.funcionarioStatus
-        FROM solicitacaoferias AS feriasfuncionario
-        INNER JOIN funcionario AS fun ON fun.idFuncionario = feriasfuncionario.funcionario_idFuncionario
-        WHERE feriasfuncionario.funcionario_idFuncionario = ? AND fun.funcionarioStatus = 1
-        ORDER BY feriasfuncionario.datainicio DESC;`;
 
+        let sql = `SELECT 
+                    feriasfuncionario.idsolicitacaoFerias, 
+                    feriasfuncionario.funcionario_idFuncionario,
+                    feriasfuncionario.datasolicitacao,
+                    feriasfuncionario.datainicio, 
+                    feriasfuncionario.datatermino,
+                    feriasfuncionario.status, 
+                    feriasfuncionario.motivo,
+                    feriasfuncionario.respostaGestor,
+                    feriasfuncionario.anoReferencia,
+                    fun.funcionarioNome,
+                    fun.diasFeriasDisponiveis,
+                    fun.dataAdmissao,
+                    fun.funcionarioStatus
+                   FROM 
+                    solicitacaoferias AS feriasfuncionario
+                   INNER JOIN 
+                    funcionario AS fun ON fun.idFuncionario = feriasfuncionario.funcionario_idFuncionario
+                   WHERE 
+                    feriasfuncionario.funcionario_idFuncionario = ? 
+                    AND fun.funcionarioStatus = 1
+                   ORDER BY 
+                    feriasfuncionario.datainicio DESC;`;
+    
         let values = [this.#funcionario_idFuncionario];
         var rows = await conexao.ExecutaComando(sql, values);
-        console.log(rows);
+    
+    
         let listaRetorno = [];
-
+    
         if (rows.length > 0) {
             for (let i = 0; i < rows.length; i++) {
                 var row = rows[i];
-                var solicitarFerias = new SolicitarFeriasModel(row['idsolicitacaoFerias'], row['datasolicitacao'], row['datainicio'], row['datatermino'], row['status'], row['motivo'], row['respostaGestor'], row['anoReferencia'], row['funcionario_idFuncionario'], row['diasFeriasDisponiveis'], row['funcionarioNome'], row['dataAdmissao']);
+                var solicitarFerias = new SolicitarFeriasModel(
+                    row['idsolicitacaoFerias'], 
+                    row['datasolicitacao'], 
+                    row['datainicio'], 
+                    row['datatermino'], 
+                    row['status'], 
+                    row['motivo'], 
+                    row['respostaGestor'], 
+                    row['anoReferencia'], 
+                    row['funcionario_idFuncionario'], 
+                    row['diasFeriasDisponiveis'], 
+                    row['funcionarioNome'], 
+                    row['dataAdmissao']
+                );
                 await solicitarFerias.calcularDiasFeriasDisponiveis();
                 listaRetorno.push(solicitarFerias);
             }
         }
-
+    
         return listaRetorno;
     }
+    
 
     async cadastrarSolicitacaoFerias() {
         // Buscar a data de admissão do funcionário no banco de dados
@@ -170,7 +188,6 @@ class SolicitarFeriasModel {
 
         try {
             let result = await conexao.ExecutaComando(sql, values);
-            console.log('id inserido: ' + result.insertId);
             return true;
         } catch (error) {
             console.error('Erro ao cadastrar solicitação de férias:', error);
@@ -180,12 +197,15 @@ class SolicitarFeriasModel {
 
 
     async alterarSolicitacaoFerias() {
-        let sql = "UPDATE `solicitacaoferias` SET `datasolicitacao` = ?, `datainicio` = ?,`datatermino` = ? WHERE `solicitacaoferias`.`idsolicitacaoFerias` = ?";
-
-        let values = [this.#datasolicitacao, this.#datainicio, this.#datatermino, this.idsolicitacaoFerias];
-
+        let sql = `UPDATE solicitacaoferias 
+                   SET datasolicitacao = ?, datainicio = ?, datatermino = ? 
+                   WHERE idsolicitacaoFerias = ? 
+                   AND funcionario_idFuncionario = ?`;
+    
+        let values = [this.#datasolicitacao, this.#datainicio, this.#datatermino, this.#idsolicitacaoFerias, this.#funcionario_idFuncionario];
+        
         let rows = await conexao.ExecutaComando(sql, values);
-
+        
         return true;
     }
 
@@ -200,21 +220,25 @@ class SolicitarFeriasModel {
                 feriasfuncionario.motivo, 
                 feriasfuncionario.respostaGestor,
                 feriasfuncionario.anoReferencia,
+                fun.diasFeriasDisponiveis,
                 fun.funcionarioNome,
                 fun.dataAdmissao,
                 fun.funcionarioStatus 
             FROM 
                 solicitacaoferias AS feriasfuncionario
-                INNER JOIN funcionario AS fun ON fun.idFuncionario = feriasfuncionario.funcionario_idFuncionario  
+            INNER JOIN 
+                funcionario AS fun ON fun.idFuncionario = feriasfuncionario.funcionario_idFuncionario
             WHERE 
                 feriasfuncionario.status LIKE ? 
-                AND dataSolicitacao BETWEEN ? AND ? 
-                AND funcionarioStatus = 1 
+                AND feriasfuncionario.dataSolicitacao BETWEEN ? AND ? 
+                AND fun.funcionarioStatus = 1 
+                AND feriasfuncionario.funcionario_idFuncionario = ?
             ORDER BY 
-                dataSolicitacao DESC
+                feriasfuncionario.dataSolicitacao DESC
         `;
     
-        let values = [`%${this.status}%`, this.datainicio, this.datatermino];
+        let values = [`%${this.#status}%`, this.#datainicio, this.#datatermino, this.#funcionario_idFuncionario];
+    
         var rows = await conexao.ExecutaComando(sql, values);
     
         let listaRetorno = [];
@@ -232,7 +256,7 @@ class SolicitarFeriasModel {
                     row.respostaGestor,
                     row.anoReferencia,
                     row.funcionario_idFuncionario,
-                    row.diasFeriasDisponiveis,
+                    row.diasFeriasDisponiveis, 
                     row.funcionarioNome,
                     row.dataAdmissao,
                     row.funcionarioStatus,
@@ -242,6 +266,7 @@ class SolicitarFeriasModel {
     
         return listaRetorno;
     }
+    
 }
 
 module.exports = SolicitarFeriasModel;

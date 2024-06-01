@@ -24,7 +24,6 @@ class SolicitarFeriasController {
             solicitacaoferias.motivo = req.body.motivo;
             solicitacaoferias.funcionario_idFuncionario = req.headers.cookie.split('=')[1];
             
-            // Passar o ano de referência calculado para cadastrarSolicitacaoFerias
             let retorno = await solicitacaoferias.cadastrarSolicitacaoFerias();
             let lista = await solicitacaoferias.listarSolicitacaoFerias();
             
@@ -40,6 +39,7 @@ class SolicitarFeriasController {
         solicitacaoferias.status= req.body.busca;
         solicitacaoferias.datainicio =req.body.dataInicio;
         solicitacaoferias.datatermino = req.body.dataFinal;
+        solicitacaoferias.funcionario_idFuncionario = req.headers.cookie.split('=')[1];
         
         let lista = await solicitacaoferias.buscarRegistroFerias();
         res.render('solicitarferias/listar', {lista: lista});
