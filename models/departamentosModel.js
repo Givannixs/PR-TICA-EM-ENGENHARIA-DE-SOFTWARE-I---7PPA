@@ -20,7 +20,7 @@ class DepartamentosModel {
 
     async listarDepartamentos() {
 
-        let sql = 'SELECT * FROM `departamento`';
+        let sql = 'SELECT * FROM `departamento` ORDER BY `departamento`.`nomeDepartamento` ASC';
         
         var rows = await conexao.ExecutaComando(sql);
 

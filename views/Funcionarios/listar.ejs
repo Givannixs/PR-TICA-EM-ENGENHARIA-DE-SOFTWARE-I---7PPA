@@ -3,9 +3,112 @@
 <script src="/js/Escalas/listar.js"></script>
 <script src="/js/Departamento/listar.js"></script>
 
+<script>
+  //mascara no cpf
+
+function formataCPF(cpf) {
+  var elementoAlvo = cpf;
+  var cpfAtual = cpf.value;
+  cpfAtual=cpfAtual.replace(/\D/g,""); 
+  let cpfAtualizado;
+  cpfAtualizado = cpfAtual.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, 
+  function( regex, argumento1, argumento2, argumento3, argumento4 ) {
+      return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
+    })  
+  elementoAlvo.value = cpfAtualizado; 
+  }
+
+  //mascara no Celular
+
+function mtel(celular){
+  var elementoAlvo=celular;
+  var celular = celular.value
+  var id= elementoAlvo.id
+ 
+  celular =celular.replace(/\D/g,""); //Remove tudo o que não é dígito
+  celular = celular.replace(/^(\d{2})(\d)/g,"($1) $2"); //Coloca parênteses em volta dos dois primeiros dígitos
+  celular = celular.replace(/(\d)(\d{4})$/,"$1-$2"); //Coloca hífen entre o quarto e o quinto dígitos
+  celular=celular.replace(" ","");
+  console.log(celular);
+  //console.log(v);
+  document.getElementById(id).value=celular;
+
+}
+
+// dowload csv
+  function csv()
+  {    var csvContent = "";
+       var list=[];
+       `<% lista.map(function(value, index) { %>`
+         var item= '<%= value.idFuncionario %>;<%= value.funcionarioCPF %>;<%= value.funcionarioNome %>;<%= value.funcionarioCargo %>;<%= value.funcionarioEscala %>;<%= value.funcionarioDepartamento %>;<%= value.funcionarioTelefone %>;<%= value.dataAdmissao.toLocaleString("pt-BR",{dateStyle:"short"}) %>;<%= value.funcionarioEmail %>;<%= value.funcionarioAcesso %>'
+         csvContent += item + "\r\n";
+          
+            `<% }) %>`     
+       
+  
+  var cabecario = "data:text/csv;charset=utf-8,Id Funcionario;CPF;Nome;Cargo;Departamento;Escala;Telefone;Data Adimissao;Email;Acesso\r\n";
+  csvContent = cabecario+csvContent;
+  
+  var encodedUri = encodeURI(csvContent);
+  window.open(encodedUri);
+  
+  }
+  </script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['bar']});
+  google.charts.setOnLoadCallback(drawStuff);
+
+  function drawStuff() {
+    var departamentoCount = {};
+
+    `<% lista.forEach(function(funcionario) { %>`
+      if (departamentoCount['<%= funcionario.funcionarioEscala %>']) {
+        departamentoCount['<%= funcionario.funcionarioEscala %>']++;
+      } else {
+        departamentoCount['<%= funcionario.funcionarioEscala %>'] = 1;
+      }
+      `<% }); %>`
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Departamento');
+    data.addColumn('number', 'Quantidade');
+
+    Object.keys(departamentoCount).forEach(function(departamento) {
+      data.addRow([departamento, departamentoCount[departamento]]);
+    });
+
+    var options = {
+      width: 800,
+      legend: { position: 'none' },
+      chart: {
+        title: 'Quantidade de Funcionários',
+        subtitle: 'Quantidade por departamento'
+      },
+      axes: {
+        x: {
+          0: { side: 'top', label: 'Departamento' } // Eixo x superior
+        }
+      },
+      bar: { groupWidth: "20%" }
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+  }
+</script>
+
+
+
+
+
+
+
 <body onload="listarcargo(),listarescalas(),listardepartamento()">
   <div>
     <h1>Funcionários</h1>
+    <div id="top_x_div" style="width: 300px; height: 200px;"></div>
     <div>
       <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
@@ -13,8 +116,13 @@
             <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca">
             <button class="btn btn-outline-success" type="submit">Buscar</button>
           </form>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          <div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
             data-bs-whatever="@mdo"><i class="fas fa-plus"></i> Cadastrar</button>
+            <button type="button" onclick="csv()" class="btn btn-success">Baixar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
+              <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z"></path>
+            </svg></button>
+          </div>
         </div>
       </nav>
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -28,7 +136,7 @@
               <form method="post" action="/funcionarios/cadastrarfuncionarios">
                 <div class="mb-3">
                   <label for="cpf" class="col-form-label">CPF:</label>
-                  <input name="funcionarioCPF" type="text" class="form-control" id="funcionarioCPF" required="required">
+                  <input name="funcionarioCPF" type="text" class="form-control" maxlength="14" id="funcionarioCPF" required="required" onkeyup="formataCPF(this)">
                 </div>
                 <div class="mb-3">
                   <label for="cpf" class="col-form-label">Nome:</label>
@@ -58,8 +166,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="cpf" class="col-form-label">Telefone:</label>
-                  <input name="funcionarioTelefone" type="text" class="form-control" id="funcionarioTelefone"
-                    required="required">
+                  <input name="funcionarioTelefone" id="funcionarioTelefone" maxlength="14" type="text" class="form-control" required="required" onkeyup="mtel(this)">
                 </div>
                 <div class="mb-3">
                   <label for="cpf" class="col-form-label">Data Admissao:</label>
@@ -167,8 +274,8 @@
                                 <input type="text" hidden="true" id="idFuncionario" name="idFuncionario"
                                   value="<%= value.idFuncionario %>">
                                 <label for="cpf" class="col-form-label">CPF:</label>
-                                <input name="funcionarioCPF" type="text" class="form-control" id="funcionarioCPF"
-                                  value="<%= value.funcionarioCPF %>" required="required">
+                                <input name="funcionarioCPF" type="text" maxlength="14" class="form-control" id="funcionarioCPF"
+                                  value="<%= value.funcionarioCPF %>" required="required" onkeyup="formataCPF(this)">
                               </div>
                               <div class="mb-3">
                                 <label for="cpf" class="col-form-label">Nome:</label>
@@ -203,7 +310,7 @@
                               <div class="mb-3">
                                 <label for="cpf" class="col-form-label">Telefone:</label>
                                 <input name="funcionarioTelefone" type="text" class="form-control"
-                                  id="funcionarioTelefone" value="<%= value.funcionarioTelefone %>" required="required">
+                                  id="telalt<%= value.idFuncionario %>" value="<%= value.funcionarioTelefone %>" maxlength="14" required="required" onkeyup="mtel(this)">
                               </div>
 
                               <div class="mb-3">

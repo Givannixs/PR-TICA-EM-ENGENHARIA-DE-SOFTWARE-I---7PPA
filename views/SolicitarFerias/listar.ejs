@@ -72,7 +72,7 @@ window.open(encodedUri);
       <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
           <form class="d-flex" role="search" method="post" action="/solicitarferias/buscarferias"> 
-            <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca" id="busca">
+            <input hidden class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca" id="busca">
             <input class="form-control me-2" type="date" id="dataInicio" name="dataInicio" alt="dataInicio" required="">
             <input class="form-control me-2" type="date" id="dataFinal" name="dataFinal" alt="dataFinal" required="">
             <button class="btn btn-outline-success" type="submit">Buscar</button>
@@ -100,22 +100,30 @@ window.open(encodedUri);
           </tr>
         </thead>
         <tbody>
-          <% if (lista && lista.length > 0) {
-            lista.forEach(function(value, index) { %>
-                <tr>
-                    <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                    <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                    <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                    <td><%= value.motivo %></td>
-                    <td><%= value.status %></td>
-                    <td><%= value.respostaGestor %></td>
-                </tr>
-            <% });
-          } else { %>
-              <tr>
-                  <td colspan="7">Nenhum registro de férias disponível</td>
-              </tr>
-          <% } %>
+          <% if (lista && lista.length > 0) { %>
+            <% lista.forEach(function(value, index) { %>
+                <% if (value.motivo && value.status) { %>
+                    <tr>
+                        <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                        <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                        <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
+                        <td><%= value.motivo %></td>
+                        <td><%= value.status %></td>
+                        <td><%= value.respostaGestor %></td>
+                    </tr>
+                <% } else { %>
+                    <tr>
+                        <td colspan="7">Nenhum registro de férias disponível</td>
+                    </tr>
+                <% } %>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="7">Nenhum registro de férias disponível</td>
+            </tr>
+        <% } %>
+        
+          
         </tbody>
       </table>
     </div>

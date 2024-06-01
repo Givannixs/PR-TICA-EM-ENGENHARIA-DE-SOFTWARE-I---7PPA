@@ -83,7 +83,24 @@ window.open(encodedUri);
          --> 
         </div>
       </nav>
-      <div  id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+      <% 
+      let allNamesAreEqual = true;
+      if (lista.length > 0) {
+        const firstName = lista[0].funcionarioNome;
+        for (let i = 1; i < lista.length; i++) {
+          if (lista[i].funcionarioNome !== firstName) {
+            allNamesAreEqual = false;
+            break;
+          }
+        }
+      } else {
+        allNamesAreEqual = false;
+      }
+    %>
+    
+    <% if (allNamesAreEqual) { %>
+      <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+    <% } %>
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">

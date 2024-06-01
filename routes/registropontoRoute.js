@@ -18,7 +18,7 @@ class RegistrapontoRoute {
         this.#router.get('/',auth.usuarioEstaLogado, ctrl.listarView);
         //this.#router.get('/deletarregistroponto/:id',auth.usuarioEstaLogado, ctrl.deletarResgistroponto);
         this.#router.post('/cadastrarresgistroponto',auth.usuarioEstaLogado, ctrl.cadastrarResgistroponto);
-        //this.#router.post('/buscarregistroponto',auth.usuarioEstaLogado, ctrl.buscarResgistroponto);
+        this.#router.post('/buscarregistroponto',auth.usuarioEstaLogado, ctrl.buscarResgistroponto);
         this.#router.post('/alterarregistroponto',auth.usuarioEstaLogado, ctrl.alterarResgistroponto);
         this.#router.get('/listarfetch',auth.usuarioEstaLogado, ctrl.listarJson);
 

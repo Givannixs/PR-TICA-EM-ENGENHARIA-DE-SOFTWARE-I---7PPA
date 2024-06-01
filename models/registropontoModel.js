@@ -85,23 +85,29 @@ async cadastrarResgistroponto() {
 
     async buscarResgistroponto() {
        
-        let sql = "SELECT * FROM `registroponto` INNER JOIN `funcionario` ON `registroponto`.`funcionario_idFuncionario` = `funcionario`.`idFuncionario` WHERE `funcionarioNome` LIKE '%" + this.funcionarioNome + "%' ORDER BY `registroponto`.`entrada` DESC";
-
-        
+        try{
+            let sql = `SELECT idregistroPonto, funcionario_idFuncionario, data, funcionarioNome, entrada,entradaRepouso, saidaRepouso, saida
+            FROM funcionario_has_registroponto AS pontofuncionario
+            INNER JOIN funcionario AS fun ON fun.idFuncionario = pontofuncionario.funcionario_idFuncionario
+            INNER JOIN registroponto AS ponto ON ponto.idregistroPonto = pontofuncionario.registroponto_idregistroPonto WHERE funcionario_idFuncionario LIKE '%`+this.#funcionario_idFuncionario+`%' AND data BETWEEN '`+this.#entrada+`' AND '`+this.#saida+`' AND funcionarioStatus = 1 ORDER BY data DESC`;
+            
         var rows = await conexao.ExecutaComando(sql);
-
+        console.log(rows);
         let listaRetorno = [];
-
+    
         if(rows.length > 0){
             for(let i=0; i<rows.length; i++){
                 var row = rows[i];
-                listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'],  row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
-                
-                
+                listaRetorno.push(new RegistrapontoModel(row['idregistroPonto'],row['data'], row['entrada'],row['entradaRepouso'],row['saidaRepouso'], row['saida'], row['funcionario_idFuncionario'], row['funcionarioNome'] ));
             }
         }
-
+            
         return listaRetorno;
+          }catch(error)
+          {   let listaRetorno = [];
+              listaRetorno.push('','','','','','','','');
+              return listaRetorno;
+          }
     }
 
 
