@@ -24,7 +24,7 @@ class CargosModel {
 
     async listarCargos() {
 
-        let sql = 'SELECT * FROM `cargo`';
+        let sql = 'SELECT * FROM `cargo` ORDER BY `cargo`.`nomeCargo` ASC';
         
         var rows = await conexao.ExecutaComando(sql);
 

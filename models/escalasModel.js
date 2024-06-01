@@ -33,7 +33,7 @@ class EscalasModel {
 
     async listarEscalas() {
 
-        let sql = 'SELECT * FROM `escaladetrabalho`';
+        let sql = 'SELECT * FROM `escaladetrabalho` ORDER BY `escaladetrabalho`.`horarioEntrada` ASC';
         
         var rows = await conexao.ExecutaComando(sql);
 

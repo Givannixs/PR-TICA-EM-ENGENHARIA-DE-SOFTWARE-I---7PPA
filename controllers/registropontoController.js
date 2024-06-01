@@ -115,6 +115,17 @@ class ResgistrapontoController {
         console.log(retorno);
         res.send(retorno);
     }
+    
+    async buscarResgistroponto(req, res) {
+        let registraponto = new ResgistrapontoModel();
+        registraponto.funcionario_idFuncionario=req.headers.cookie.split('=')[1];
+        registraponto.funcionarioNome= req.busca;
+        registraponto.entrada =req.body.dataInicio;
+        registraponto.saida = req.body.dataFinal;
+        
+        let lista = await registraponto.buscarResgistroponto();
+        res.render('registroponto/listar', {lista: lista});
+    }
 
 
     async deletarResgistropontoadmin(req, res) {
