@@ -6,6 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <script>
+    function csv()
+{    var csvContent = "";
+ var list=[];
+ `<% lista.map(function(value, index) { %>`
+   var item= '<%= value.datasolicitacao.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datainicio.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datatermino.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.funcionarioNome %>;<%= value.motivo %>;<%= value.status %>;<%= value.respostaGestor %>'
+   csvContent += item + "\r\n";
+    
+      `<% }) %>`     
+ 
+
+      var cabecario = "data:text/csv;charset=utf-8,Data Solicitação;Data Inicio;Data Término;Nome;Motivo;Status;Resposta do Gestor\r\n";
+
+
+csvContent = cabecario+csvContent;
+
+var encodedUri = encodeURI(csvContent);
+window.open(encodedUri);
+
+}
+</script>
   <title>Solicitação de Férias</title>
 </head>
 

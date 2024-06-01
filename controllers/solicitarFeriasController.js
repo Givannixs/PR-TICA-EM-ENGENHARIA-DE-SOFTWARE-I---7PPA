@@ -41,7 +41,7 @@ class SolicitarFeriasController {
         solicitacaoferias.datainicio =req.body.dataInicio;
         solicitacaoferias.datatermino = req.body.dataFinal;
         
-        let lista = await solicitacaoferias.buscarResgistroFerias();
+        let lista = await solicitacaoferias.buscarRegistroFerias();
         res.render('solicitarferias/listar', {lista: lista});
     }
 }

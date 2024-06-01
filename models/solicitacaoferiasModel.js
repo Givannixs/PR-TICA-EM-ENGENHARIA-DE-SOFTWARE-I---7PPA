@@ -189,39 +189,59 @@ class SolicitarFeriasModel {
         return true;
     }
 
-    async buscarResgistroFerias() {
-        let sql = `SELECT feriasfuncionario.idsolicitacaoFerias, 
-        feriasfuncionario.funcionario_idFuncionario, 
-        feriasfuncionario.dataSolicitacao,
-        feriasfuncionario.datainicio, 
-        feriasfuncionario.datatermino, 
-        feriasfuncionario.status, 
-        feriasfuncionario.motivo, 
-        feriasfuncionario.respostaGestor,
-        feriasfuncionario.anoReferencia,
-        fun.funcionarioNome,
-        fun.dataAdmissao,
-        fun.funcionarioStatus FROM solicitacaoferias AS feriasfuncionario
-        INNER JOIN funcionario AS fun ON fun.idFuncionario = feriasfuncionario.funcionario_idFuncionario  WHERE feriasfuncionario.status LIKE '%`+this.status+`%' AND dataSolicitacao BETWEEN '`+this.datainicio+`' AND '`+this.datatermino+`' AND funcionarioStatus = 1 ORDER BY dataSolicitacao DESC`;   
+    async buscarRegistroFerias() {
+        let sql = `
+            SELECT 
+                feriasfuncionario.idsolicitacaoFerias, 
+                feriasfuncionario.dataSolicitacao,
+                feriasfuncionario.datainicio, 
+                feriasfuncionario.datatermino, 
+                feriasfuncionario.status, 
+                feriasfuncionario.motivo, 
+                feriasfuncionario.respostaGestor,
+                feriasfuncionario.anoReferencia,
+                fun.funcionarioNome,
+                fun.dataAdmissao,
+                fun.funcionarioStatus 
+            FROM 
+                solicitacaoferias AS feriasfuncionario
+                INNER JOIN funcionario AS fun ON fun.idFuncionario = feriasfuncionario.funcionario_idFuncionario  
+            WHERE 
+                feriasfuncionario.status LIKE ? 
+                AND dataSolicitacao BETWEEN ? AND ? 
+                AND funcionarioStatus = 1 
+            ORDER BY 
+                dataSolicitacao DESC
+        `;
     
-
+        let values = [`%${this.status}%`, this.datainicio, this.datatermino];
+        var rows = await conexao.ExecutaComando(sql, values);
     
-    var rows = await conexao.ExecutaComando(sql);
-
-    let listaRetorno = [];
-
-    if(rows.length > 0){
-        for(let i=0; i<rows.length; i++){
-            var row = rows[i];
-            listaRetorno.push(new SolicitarFeriasModel(row.idsolicitacaoFerias, row.funcionario_idFuncionario, row.dataSolicitacao, row.datainicio, row.datatermino, row.status, row.motivo, row.respostaGestor, row.anoReferencia, row.funcionarioNome, row.dataAdmissao, row.funcionarioStatus));
-            
-            
+        let listaRetorno = [];
+    
+        if (rows.length > 0) {
+            for (let i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                listaRetorno.push(new SolicitarFeriasModel(
+                    row.idsolicitacaoFerias,
+                    row.dataSolicitacao,
+                    row.datainicio,
+                    row.datatermino,
+                    row.status,
+                    row.motivo,
+                    row.respostaGestor,
+                    row.anoReferencia,
+                    row.funcionario_idFuncionario,
+                    row.diasFeriasDisponiveis,
+                    row.funcionarioNome,
+                    row.dataAdmissao,
+                    row.funcionarioStatus,
+                ));
+            }
         }
+    
+        return listaRetorno;
     }
-
-    return listaRetorno;
-            
-        }
 }
 
 module.exports = SolicitarFeriasModel;
