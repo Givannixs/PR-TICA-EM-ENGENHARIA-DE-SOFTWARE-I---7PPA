@@ -16,6 +16,7 @@ class HomeRoute {
         let auth = new Autenticacao();
         let ctrl = new HomeController();
         this.#router.get('/',auth.usuarioEstaLogado, ctrl.homeView);
+        this.#router.post('/alterarHome',auth.usuarioEstaLogado, ctrl.alterarHome);
         
     }
 }
