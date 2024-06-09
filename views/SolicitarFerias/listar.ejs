@@ -7,39 +7,40 @@
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <script>
-    function csv()
-{    var csvContent = "";
- var list=[];
- `<% lista.map(function(value, index) { %>`
-   var item= '<%= value.datasolicitacao.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datainicio.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datatermino.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.funcionarioNome %>;<%= value.motivo %>;<%= value.status %>;<%= value.respostaGestor %>'
-   csvContent += item + "\r\n";
-    
-      `<% }) %>`     
- 
+    function csv() {
+      var csvContent = "";
+      var list = [];
+      `<% lista.map(function(value, index) { %>`
+      var item = '<%= value.datasolicitacao.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datainicio.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.datatermino.toLocaleString("pt-BR", { dateStyle: "short" }) %>;<%= value.funcionarioNome %>;<%= value.motivo %>;<%= value.status %>;<%= value.respostaGestor %>'
+      csvContent += item + "\r\n";
+
+      `<% }) %>`
+
 
       var cabecario = "data:text/csv;charset=utf-8,Data Solicitação;Data Inicio;Data Término;Nome;Motivo;Status;Resposta do Gestor\r\n";
 
 
-csvContent = cabecario+csvContent;
+      csvContent = cabecario + csvContent;
 
-var encodedUri = encodeURI(csvContent);
-window.open(encodedUri);
+      var encodedUri = encodeURI(csvContent);
+      window.open(encodedUri);
 
-}
-</script>
+    }
+  </script>
   <title>Solicitação de Férias</title>
 </head>
 
 <body>
 
-  <div class="container">
+  <div>
     <h2>Solicitação de Férias</h2>
     <br>
     <!-- Formulário de Solicitação de Férias -->
     <form id="vacationForm" method="post" action="/solicitarferias/cadastrarsolicitacaoferias">
       <div class="form-group">
         <label for="startDate">Data de Início:</label>
-        <input type="date" class="form-control" id="datainicio" name="datainicio" onchange="validateStartDate()" required>
+        <input type="date" class="form-control" id="datainicio" name="datainicio" onchange="validateStartDate()"
+          required>
       </div>
       <div class="form-group">
         <label for="endDate">Data de Término:</label>
@@ -56,117 +57,152 @@ window.open(encodedUri);
       <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
     </form>
     <br>
-    <% if (lista && lista.length > 0) { %>
-        <p><strong>Data de Admissão:</strong> <%= lista[0].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %></p>
-        <p><strong>Dias Disponíveis:</strong> <span id="diasFeriasDisponiveis"><%= lista[0].diasFeriasDisponiveis %></span></p>
-    <% } else { %>
+    <% if (lista && lista.length> 0) { %>
+      <p><strong>Data de Admissão:</strong>
+        <%= lista[0].dataAdmissao.toLocaleString('pt-BR',{dateStyle:"short"}) %>
+      </p>
+      <p><strong>Dias Disponíveis:</strong> <span id="diasFeriasDisponiveis">
+          <%= lista[0].diasFeriasDisponiveis %>
+        </span></p>
+      <% } else { %>
         <p>Nenhum registro de férias disponível</p>
-    <% } %>
+        <% } %>
 
-    <hr>
+          <hr>
 
-    <div id="lastRecords" class="mt-4">
-      <h3>Histórico de Solicitações</h3>
-      <br>
+          <div id="lastRecords" class="mt-4">
+            <h3>Histórico de Solicitações</h3>
+            <br>
 
-      <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-          <form class="d-flex" role="search" method="post" action="/solicitarferias/buscarferias"> 
-            <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca" id="busca">
-            <input class="form-control me-2" type="date" id="dataInicio" name="dataInicio" alt="dataInicio" required="">
-            <input class="form-control me-2" type="date" id="dataFinal" name="dataFinal" alt="dataFinal" required="">
-            <button class="btn btn-outline-success" type="submit">Buscar</button>
-          </form>
-  
-          <button type="button" onclick="csv()" class="btn btn-success">Baixar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
-            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z"></path>
-          </svg></button>
-         <!--
+            <nav class="navbar bg-body-tertiary">
+              <div class="container-fluid">
+                <form class="d-flex" role="search" method="post" action="/solicitarferias/buscarferias">
+                  <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search" name="busca"
+                    id="busca">
+                  <input class="form-control me-2" type="date" id="dataInicio" name="dataInicio" alt="dataInicio"
+                    required="">
+                  <input class="form-control me-2" type="date" id="dataFinal" name="dataFinal" alt="dataFinal"
+                    required="">
+                  <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+
+                <button type="button" onclick="csv()" class="btn btn-success">Baixar <svg
+                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
+                    <path
+                      d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z">
+                    </path>
+                  </svg></button>
+                <!--
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
             data-bs-whatever="@mdo" onclick="document.getElementById('funcionario_idFuncionario').value=document.cookie.split('=')[1]"><i class="fas fa-plus"></i> Cadastrar</button>
-         --> 
-        </div>
-      </nav>
-      
-      <table class="table table-bordered table-hover">
-        <thead class="thead-light">
-          <tr>
-            <th>Data Solicitação</th>
-            <th>Data Início</th>
-            <th>Data Término</th>
-            <th>Motivo</th>
-            <th>Status</th>
-            <th>Resposta do Gestor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (lista && lista.length > 0) { %>
-            <% lista.forEach(function(value, index) { %>
-                <% if (value.motivo && value.status) { %>
-                    <tr>
-                        <td><%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                        <td><%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                        <td><%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %></td>
-                        <td><%= value.motivo %></td>
-                        <td><%= value.status %></td>
-                        <td><%= value.respostaGestor %></td>
-                    </tr>
-                <% } else { %>
-                    <tr>
-                        <td colspan="7">Nenhum registro de férias disponível</td>
-                    </tr>
-                <% } %>
-            <% }); %>
-        <% } else { %>
-            <tr>
-                <td colspan="7">Nenhum registro de férias disponível</td>
-            </tr>
-        <% } %>
-        
-          
-        </tbody>
-      </table>
-    </div>
+         -->
+              </div>
+            </nav>
 
-  <script>
-    function validateStartDate() {
-      var startDateInput = document.getElementById('datainicio');
-      var startDate = new Date(startDateInput.value);
-      var today = new Date();
-      var minDate = new Date(today);
-      minDate.setDate(minDate.getDate() + 7); // Define a data mínima como uma semana após a data atual
-      
-      if (startDate < minDate) {
-        alert("Por favor, escolha uma data de início com pelo menos uma semana de antecedência.");
-        startDateInput.value = ''; // Limpa o campo de data de início
-      }
-    }
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Data Solicitação</th>
+                  <th>Data Início</th>
+                  <th>Data Término</th>
+                  <th>Motivo</th>
+                  <th>Status</th>
+                  <th>Resposta do Gestor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (lista && lista.length> 0) { %>
+                  <% lista.forEach(function(value, index) { %>
+                    <% if (value.motivo && value.status) { %>
+                      <tr>
+                        <td>
+                          <%= value.datasolicitacao.toLocaleString('pt-BR', { dateStyle: "short" }) %>
+                        </td>
+                        <td>
+                          <%= value.datainicio.toLocaleString('pt-BR', { dateStyle: "short" }) %>
+                        </td>
+                        <td>
+                          <%= value.datatermino.toLocaleString('pt-BR', { dateStyle: "short" }) %>
+                        </td>
+                        <td>
+                          <%= value.motivo %>
+                        </td>
+                        <td>
+                          <%= value.status %>
+                        </td>
+                        <td>
+                          <%= value.respostaGestor %>
+                        </td>
+                      </tr>
+                      <% } else { %>
+                        <tr>
 
-    document.getElementById('vacationForm').addEventListener('submit', function(event) {
-      var diasFeriasDisponiveis = parseInt(document.getElementById('diasFeriasDisponiveis').textContent);
-      var dataInicio = new Date(document.getElementById('datainicio').value);
-      var dataTermino = new Date(document.getElementById('datatermino').value);
-      
-      if (!dataInicio || !dataTermino) {
-        alert("Por favor, preencha as datas de início e término.");
-        event.preventDefault();
-        return;
-      }
-      
-      var diffTime = Math.abs(dataTermino - dataInicio);
-      var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Inclui o dia de início nas férias
+                        </tr>
+                        <% } %>
+                          <% }); %>
+                            <% } else { %>
+                              <tr>
+                                <td colspan="7">Nenhum registro de férias disponível</td>
+                              </tr>
+                              <% } %>
 
-      if (diffDays > diasFeriasDisponiveis) {
-        alert("Você não pode solicitar mais dias do que o disponível. Dias solicitados: " + diffDays + ", Dias disponíveis: " + diasFeriasDisponiveis);
-        event.preventDefault();
-        return;
-      }
-      
-      document.getElementById('status').value = 'Pendente';
-      var dataAtual = new Date();
-      document.getElementById('dataSolicitacao').value = dataAtual.toISOString().split('T')[0];
-    });
-  </script>
+
+              </tbody>
+            </table>
+          </div>
+
+          <script>
+            function validateStartDate() {
+              var startDateInput = document.getElementById('datainicio');
+              var endDateInput = document.getElementById('datatermino');
+              var startDate = new Date(startDateInput.value);
+              var endDate = new Date(endDateInput.value);
+
+              if (startDate >= endDate) {
+                alert("A data de término deve ser posterior à data de início.");
+                endDateInput.value = ''; // Limpa o campo de data de término
+              }
+
+              var today = new Date();
+              var minDate = new Date(today);
+              minDate.setDate(minDate.getDate() + 7); // Define a data mínima como uma semana após a data atual
+              if (startDate < minDate) {
+                alert("Por favor, escolha uma data de início com pelo menos uma semana de antecedência.");
+                startDateInput.value = ''; // Limpa o campo de data de início
+              }
+            }
+
+            document.getElementById('vacationForm').addEventListener('submit', function (event) {
+              var dataInicio = new Date(document.getElementById('datainicio').value);
+              var dataTermino = new Date(document.getElementById('datatermino').value);
+
+              if (dataInicio >= dataTermino) {
+                alert("A data de início não pode ser igual ou maior que a data de término.");
+                event.preventDefault(); // Impede o envio do formulário
+                return;
+              }
+
+              if (!dataInicio || !dataTermino) {
+                alert("Por favor, preencha as datas de início e término.");
+                event.preventDefault();
+                return;
+              }
+
+              var diffTime = Math.abs(dataTermino - dataInicio);
+              var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Inclui o dia de início nas férias
+
+              if (diffDays > diasFeriasDisponiveis) {
+                alert("Você não pode solicitar mais dias do que o disponível. Dias solicitados: " + diffDays + ", Dias disponíveis: " + diasFeriasDisponiveis);
+                event.preventDefault();
+                return;
+              }
+
+              document.getElementById('status').value = 'Pendente';
+              var dataAtual = new Date();
+              document.getElementById('dataSolicitacao').value = dataAtual.toISOString().split('T')[0];
+            });
+          </script>
 </body>
 
 </html>
