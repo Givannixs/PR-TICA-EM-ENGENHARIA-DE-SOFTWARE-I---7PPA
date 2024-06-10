@@ -144,28 +144,36 @@ class FuncionariosModel {
         ];
         
         var rows = await conexao.ExecutaComando(sql, values);
-
-        var datetime = new Date();
-        datetime= datetime.toISOString().slice(0,10);
-        console.log(datetime);
+    
+        // Ajustando a data localmente
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = ('0' + (now.getMonth() + 1)).slice(-2);
+        var day = ('0' + now.getDate()).slice(-2);
+        var hours = ('0' + now.getHours()).slice(-2);
+        var minutes = ('0' + now.getMinutes()).slice(-2);
+        var seconds = ('0' + now.getSeconds()).slice(-2);
         
-       
-        let sql2 = "INSERT INTO `registroponto`(`data`,`entrada`, `entradaRepouso`,`saidaRepouso`,`saida`) VALUES ('"+datetime+"','"+new Date().toLocaleTimeString()+"','','','')";
+        var datetime = `${year}-${month}-${day}`;
+        var time = `${hours}:${minutes}:${seconds}`;
+    
+        console.log(datetime);
+    
+        let sql2 = `INSERT INTO \`registroponto\`(\`data\`,\`entrada\`, \`entradaRepouso\`,\`saidaRepouso\`,\`saida\`) VALUES ('${datetime}','${time}','','','')`;
          
-         var rows2 = await conexao.ExecutaComando(sql2);
-         console.log('id inserido' +rows2.insertId);
- 
-        let sql3 = "INSERT INTO `funcionario_has_registroponto` (`funcionario_idFuncionario`, `registroponto_idregistroPonto`) VALUES ('"+rows.insertId+"', '"+rows2.insertId+"')";
-         var rows3 = await conexao.ExecutaComando(sql3);
-
-
-         let sql4 = "INSERT INTO `solicitacaoferias`(`datainicio`, `datatermino`, `status`, `motivo`, `funcionario_idFuncionario`, `respostaGestor`, `anoReferencia`, `dataSolicitacao` ) VALUES ('"+datetime+"', '"+datetime+"','', '', '"+rows.insertId+"', '', '', '"+datetime+"')";
+        var rows2 = await conexao.ExecutaComando(sql2);
+        console.log('id inserido' + rows2.insertId);
+    
+        let sql3 = `INSERT INTO \`funcionario_has_registroponto\` (\`funcionario_idFuncionario\`, \`registroponto_idregistroPonto\`) VALUES ('${rows.insertId}', '${rows2.insertId}')`;
+        var rows3 = await conexao.ExecutaComando(sql3);
+    
+        let sql4 = `INSERT INTO \`solicitacaoferias\`(\`datainicio\`, \`datatermino\`, \`status\`, \`motivo\`, \`funcionario_idFuncionario\`, \`respostaGestor\`, \`anoReferencia\`, \`dataSolicitacao\` ) VALUES ('${datetime}', '${datetime}','', '', '${rows.insertId}', '', '', '${datetime}')`;
         var result = await conexao.ExecutaComando(sql4, values);
-       
     
         return true;
     }
     
+
     async checkIfExists(table, column, value) {
         const sql = `SELECT 1 FROM \`${table}\` WHERE \`${column}\` = ? LIMIT 1`;
         const rows = await conexao.ExecutaComando(sql, [value]);
